@@ -1,0 +1,32 @@
+{
+  "name": "backend-top-up",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@sequelize/postgres": "^7.0.0-alpha.43",
+    "bcrypt": "^5.1.1",
+    "body-parser": "^1.20.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.1",
+    "handlebars": "^4.7.8",
+    "joi": "^17.13.3",
+    "jsonwebtoken": "^9.0.2",
+    "module-alias": "^2.2.3",
+    "nodemon": "^3.1.7"
+  },
+  "devDependencies": {
+    "sequelize": "^6.37.4",
+    "sequelize-cli": "^6.6.2"
+  },
+  "_moduleAliases": {
+    "@": "."
+  }
+}
