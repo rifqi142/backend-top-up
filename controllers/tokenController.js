@@ -4,7 +4,6 @@ const fs = require("fs");
 const path = require("path");
 const handlebars = require("handlebars");
 const nodeMailer = require("nodemailer");
-const exp = require("constants");
 
 const columns = {
   id: "us_id",
@@ -13,16 +12,16 @@ const columns = {
 };
 
 const generateToken = (id, email, name, expiresIn) => {
+  console.log(id, email, name, expiresIn, "generate token");
   const token = jwt.sign(
     {
       [columns.id]: id,
       [columns.email]: email,
       name: name,
-      [columns.active]: true,
     },
     process.env.JWT_SECRET,
     {
-      expiresIn,
+      expiresIn: expiresIn,
     }
   );
   return token;
@@ -63,14 +62,14 @@ const verifyEmail = async (req, res) => {
   try {
     const { token } = req.query;
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const user = await user.findOne({
+    const userData = await user.findOne({
       where: {
         [columns.id]: decoded[columns.id],
         [columns.email]: decoded[columns.email],
       },
     });
 
-    if (!user) {
+    if (!userData) {
       return res.status(401).json({
         status: "error",
         code: 401,
@@ -78,7 +77,7 @@ const verifyEmail = async (req, res) => {
       });
     }
 
-    if (user.us_active) {
+    if (userData.us_active) {
       return res.status(400).json({
         status: "error",
         code: 400,
@@ -88,7 +87,7 @@ const verifyEmail = async (req, res) => {
 
     await user.update(
       {
-        us_active: true,
+        us_is_active: true,
       },
       {
         where: {
@@ -98,29 +97,16 @@ const verifyEmail = async (req, res) => {
       }
     );
 
-    return res.status(200).json({
-      status: "success",
-      code: 200,
-      message: "Email verified",
-    });
+    console.log("Email verified");
+
+    return res.redirect(`${process.env.FRONTEND_URL}/verify-success`);
   } catch (error) {
-    return res.status(401).json({
-      status: "error",
-      code: 401,
-      message: "Token is not valid",
-    });
+    console.log(error.message, "error message");
+    return res.redirect(`${process.env.FRONTEND_URL}/verify-failed`);
   }
 };
 
-const sendEmail = async (
-  username,
-  email,
-  subject,
-  title,
-  token,
-  link,
-  label
-) => {
+const sendEmail = async (username, email, subject, title, link, label) => {
   const emailTemplateSource = fs.readFileSync(
     path.join(__dirname, "../views/templates/emailVerification.hbs"),
     "utf-8"
@@ -133,7 +119,7 @@ const sendEmail = async (
     username: username,
     subject: subject,
     title: title,
-    verificationLink: `${link}?token=${token}`,
+    verificationLink: `${link}`,
     linkLabel: label,
   });
 
@@ -146,7 +132,7 @@ const sendEmail = async (
   });
 
   const mailOptions = {
-    from: `"Rifqi Top Up" - ${process.env.MAIL_USERNAME}`,
+    from: `"Rifqi Top Up"  ${process.env.MAIL_USERNAME}`,
     to: email,
     subject: subject,
     html: htmlToSend,

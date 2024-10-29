@@ -38,14 +38,15 @@ const authRegisterUser = async (req, res) => {
       "1h"
     );
 
+    console.log("Verification Token :" + verificationToken);
+
     // send email
     await sendEmail(
       newUser.us_username,
       newUser.us_email,
       "Verification Email Address",
       "Please verify your email",
-      verificationToken,
-      `${process.env.BASE_URL}/auth/verify-email/${verificationToken}`,
+      `${process.env.BASE_URL}/auth/verify-email?token=${verificationToken}`,
       "Verify Email"
     );
 

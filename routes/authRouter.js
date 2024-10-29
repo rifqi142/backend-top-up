@@ -10,6 +10,8 @@ const {
   updatePassword,
 } = require("@/controllers/authController");
 
+const { verifyEmail } = require("@/controllers/tokenController");
+
 const {
   authBodyValidation,
   authCheckDuplicate,
@@ -26,6 +28,7 @@ router.post("/logout", authLogout);
 router.post("/forgot-password", sendEmailforgotPassword);
 router.put("/update-password", updatePassword);
 router.post("/send-email-verification", sendEmailVerification);
+router.get("/verify-email", verifyEmail);
 
 router.post("/login/google", loginWithGoogleIn);
 
