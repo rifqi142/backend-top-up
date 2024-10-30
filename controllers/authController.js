@@ -1,9 +1,11 @@
 const admin = require("@/controllers/firebaseController");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 const { Op } = require("sequelize");
 const { user, token } = require("@/models");
 const { generateToken, sendEmail } = require("@/controllers/tokenController");
+const generateRandomCharacter = require("@/helpers/generateRandomCharacter");
 
 const authRegisterUser = async (req, res) => {
   try {
@@ -84,11 +86,7 @@ const authLogin = async (req, res) => {
 
     const loginUser = await user.findOne({
       where: {
-        [Op.or]: [
-          { us_email: input },
-          { us_username: input },
-          { us_phone_number: input },
-        ],
+        [Op.or]: [{ us_email: input }, { us_username: input }],
       },
       attributes: [
         "us_id",
@@ -148,9 +146,9 @@ const authLogin = async (req, res) => {
       expires: new Date(new Date().getTime() + 60 * 60 * 1000),
     };
 
-    return res.cookie("user", loginUser, option).json({
+    return res.cookie("user", loginToken, option).status(201).send({
       status: "success",
-      code: 200,
+      code: 201,
       message: "Login success",
       data: loginUser,
     });
@@ -226,8 +224,7 @@ const sendEmailforgotPassword = async (req, res) => {
       userForgotPass.us_email,
       "Forgot Password Rifqi Top Up",
       "Please click the button below to reset your password",
-      forgotPasswordToken,
-      `${process.env.FRONTEND_URL}/auth/reset-password/${forgotPasswordToken}`,
+      `${process.env.FRONTEND_URL}/create-new-password?token=${forgotPasswordToken}`,
       "Reset Password"
     );
 
@@ -306,19 +303,67 @@ const sendEmailVerification = async (req, res) => {
 
 const loginWithGoogleIn = async (req, res) => {
   const { idToken } = req.body;
+  console.log(idToken);
   try {
     const decodedToken = await admin.auth().verifyIdToken(idToken);
-    const uid = decodedToken.uid;
-    res.status(200).json({
-      message: "Login with google success",
-      status: "success",
-      code: 200,
-      data: {
-        uid,
+    let userGoogle = await user.findOne({
+      where: {
+        us_email: decodedToken.email,
       },
     });
+
+    if (!userGoogle) {
+      userGoogle = await user.create({
+        us_username: decodedToken.name,
+        us_email: decodedToken.email,
+        us_phone_number: "08xxxxxxxxxx",
+        us_password: await bcrypt.hash(generateRandomCharacter(10), 10),
+        // us_password: await bcrypt.hash("123456", 10),
+        us_is_active: true,
+        us_is_admin: false,
+        us_created_at: new Date(),
+        us_updated_at: new Date(),
+      });
+    }
+    let milliseconds = 24 * 60 * 60 * 1000;
+    let expiresIn = new Date(Date.now() + milliseconds);
+    // if (rememberMe) {
+    //   expiresIn = new Date(Date.now() + milliseconds * 30); // 30 days
+    // }
+
+    const loginToken = generateToken(
+      userGoogle.us_id,
+      userGoogle.us_email,
+      userGoogle.us_username,
+      "1h"
+    );
+
+    await token.create({
+      tkn_value: loginToken,
+      tkn_type: "LOGIN_TOKEN",
+      tkn_description: `Successfully created token for user ${userGoogle.us_email}`,
+      tkn_us_id: userGoogle.us_id,
+      tkn_expired_on: expiresIn,
+      tkn_is_active: true,
+      tkn_created_at: new Date(),
+      tkn_updated_at: new Date(),
+    });
+    delete userGoogle.dataValues.us_password;
+    userGoogle.dataValues.token = loginToken;
+
+    const option = {
+      httpOnly: false,
+      expires: expiresIn,
+    };
+
+    return res.cookie("user", loginToken, option).status(201).send({
+      status: "success",
+      code: 201,
+      message: "Login success",
+      data: userGoogle,
+    });
   } catch (error) {
-    res.status(400).json({
+    return res.status(400).json({
       message: error.message,
       status: "error",
       code: 400,
@@ -326,22 +371,36 @@ const loginWithGoogleIn = async (req, res) => {
   }
 };
 
-const updatePassword = async (req, res) => {
+const updateResetPassword = async (req, res) => {
   const { us_password } = req.body;
-  const { token } = req.params;
-  const decoded = jwt.verify(token, process.env.JWT_SECRET);
+  const { token } = req.query;
+
+  let decoded;
+  try {
+    decoded = jwt.verify(token, process.env.JWT_SECRET);
+  } catch (err) {
+    return res.status(400).json({
+      message:
+        "Token expired or invalid, please request a new link to reset password",
+      status: "error",
+      code: 400,
+    });
+  }
+
   const { us_id } = decoded;
 
   try {
     const hashedPassword = await bcrypt.hash(us_password, 10);
+
     await user.update({ us_password: hashedPassword }, { where: { us_id } });
-    res.status(200).json({
+
+    return res.status(200).json({
       message: "Password updated successfully",
       status: "success",
       code: 200,
     });
   } catch (error) {
-    res.status(400).json({
+    return res.status(400).json({
       message: error.message,
       status: "error",
       code: 400,
@@ -356,5 +415,5 @@ module.exports = {
   loginWithGoogleIn,
   sendEmailforgotPassword,
   sendEmailVerification,
-  updatePassword,
+  updateResetPassword,
 };

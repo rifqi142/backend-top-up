@@ -1,7 +1,7 @@
 const joi = require("joi");
 const { user } = require("@/models");
 
-const authBodyValidation = (req, res, next) => {
+const registerBodyValidation = (req, res, next) => {
   const bodySchema = joi.object({
     us_username: joi.string().min(3).max(20).required(),
     us_email: joi.string().email().required(),
@@ -17,7 +17,7 @@ const authBodyValidation = (req, res, next) => {
   next();
 };
 
-const authCheckDuplicate = async (req, res, next) => {
+const registerCheckDuplicate = async (req, res, next) => {
   const { us_username, us_email, us_phone_number } = req.body;
 
   try {
@@ -50,7 +50,22 @@ const authCheckDuplicate = async (req, res, next) => {
   }
 };
 
+const loginBodyValidation = (req, res, next) => {
+  const bodySchema = joi.object({
+    input: joi.string().required(),
+    us_password: joi.string().required(),
+  });
+  const validationError = bodySchema.validate(req.body);
+  if (validationError.error) {
+    return res.status(400).json({
+      message: validationError.error.details[0].message,
+    });
+  }
+  next();
+};
+
 module.exports = {
-  authBodyValidation,
-  authCheckDuplicate,
+  registerBodyValidation,
+  registerCheckDuplicate,
+  loginBodyValidation,
 };

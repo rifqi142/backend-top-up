@@ -7,30 +7,31 @@ const {
   loginWithGoogleIn,
   sendEmailforgotPassword,
   sendEmailVerification,
-  updatePassword,
+  updateResetPassword,
 } = require("@/controllers/authController");
 
 const { verifyEmail } = require("@/controllers/tokenController");
 
 const {
-  authBodyValidation,
-  authCheckDuplicate,
+  registerBodyValidation,
+  registerCheckDuplicate,
+  loginBodyValidation,
 } = require("@/validations/authValidation");
 
 router.post(
   "/register",
-  authBodyValidation,
-  authCheckDuplicate,
+  registerBodyValidation,
+  registerCheckDuplicate,
   authRegisterUser
 );
-router.post("/login", authLogin);
+router.post("/login", loginBodyValidation, authLogin);
 router.post("/logout", authLogout);
 router.post("/forgot-password", sendEmailforgotPassword);
-router.put("/update-password", updatePassword);
+router.put("/update-reset-password", updateResetPassword);
 router.post("/send-email-verification", sendEmailVerification);
 router.get("/verify-email", verifyEmail);
 
-router.post("/login/google", loginWithGoogleIn);
+router.post("/google-login", loginWithGoogleIn);
 
 router.post;
 module.exports = router;

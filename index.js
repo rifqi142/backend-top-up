@@ -8,7 +8,15 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const port = process.env.PORT || 8080;
 
-app.use(cors());
+app.use(
+  cors({
+    origin: true,
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    preflightContinue: false,
+    optionsSuccessStatus: 204,
+    credentials: true,
+  })
+);
 app.use(bodyParser.json());
 
 const authRouter = require("@/routes/authRouter");
