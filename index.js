@@ -1,5 +1,7 @@
 require("dotenv").config();
 require("module-alias/register");
+const swaggerUi = require("swagger-ui-express");
+const swaggerFile = require("@/config/swagger-output.json");
 
 const express = require("express");
 
@@ -18,6 +20,7 @@ app.use(
   })
 );
 app.use(bodyParser.json());
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
 const authRouter = require("@/routes/authRouter");
 

@@ -27,7 +27,9 @@
     "module-alias": "^2.2.3",
     "multer": "^1.4.5-lts.1",
     "nodemailer": "^6.9.15",
-    "nodemon": "^3.1.7"
+    "nodemon": "^3.1.7",
+    "postman2openapi": "^1.2.1",
+    "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {
     "sequelize": "^6.37.4",

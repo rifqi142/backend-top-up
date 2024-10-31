@@ -19,6 +19,11 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "rv_pr_id",
         sourceKey: "pr_id",
       });
+      // relation many to one with category
+      models.product.belongsTo(models.category, {
+        foreignKey: "pr_ct_id",
+        targetKey: "ct_id",
+      });
     }
   }
   product.init(
@@ -27,6 +32,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
+      },
+      pr_ct_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
       },
       pr_name: {
         type: DataTypes.STRING,

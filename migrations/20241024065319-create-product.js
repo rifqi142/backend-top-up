@@ -8,6 +8,16 @@ module.exports = {
         primaryKey: true,
         autoIncrement: true,
       },
+      pr_ct_id: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: "categories",
+          key: "ct_id",
+        },
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
+      },
       pr_name: {
         type: Sequelize.STRING,
         allowNull: false,
