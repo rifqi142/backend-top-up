@@ -1,0 +1,169 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Final Project - Rifqi Top Up",
+    "version": "1.0.0",
+    "contact": {}
+  },
+  "servers": [
+    {
+      "url": "http://localhost"
+    }
+  ],
+  "paths": {
+    "/auth/forgot-password": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Send Email Verification",
+        "description": "Send Email Verification",
+        "operationId": "sendEmailVerification",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "us_email": {
+                    "type": "string",
+                    "example": "rekeningbri84@gmail.com"
+                  }
+                }
+              },
+              "examples": {
+                "Send Email Verification": {
+                  "value": {
+                    "us_email": "rekeningbri84@gmail.com"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/auth/register": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Register User",
+        "description": "Register User",
+        "operationId": "registerUser",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "us_email": {
+                    "type": "string",
+                    "example": "rekeningbri84@gmail.com"
+                  },
+                  "us_password": {
+                    "type": "string",
+                    "example": "dandi123"
+                  },
+                  "us_phone_number": {
+                    "type": "string",
+                    "example": "08221133411"
+                  },
+                  "us_username": {
+                    "type": "string",
+                    "example": "dandipram"
+                  }
+                }
+              },
+              "examples": {
+                "Register User": {
+                  "value": {
+                    "us_email": "rekeningbri84@gmail.com",
+                    "us_password": "dandi123",
+                    "us_phone_number": "08221133411",
+                    "us_username": "dandipram"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Login User",
+        "description": "Login User",
+        "operationId": "loginUser",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "input": {
+                    "type": "string",
+                    "example": "dandipram"
+                  },
+                  "us_password": {
+                    "type": "string",
+                    "example": "dandi123"
+                  }
+                }
+              },
+              "examples": {
+                "Login User": {
+                  "value": {
+                    "input": "dandipram",
+                    "us_password": "dandi123"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/home/get-all-category": {
+      "get": {
+        "tags": [
+          "Home"
+        ],
+        "summary": "Get All Category",
+        "description": "Get All Category",
+        "operationId": "getAllCategory",
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "Auth"
+    },
+    {
+      "name": "Home"
+    }
+  ]
+}

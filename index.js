@@ -23,6 +23,7 @@ app.use(bodyParser.json());
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
 const authRouter = require("@/routes/authRouter");
+const homeRouter = require("@/routes/homeRouter");
 
 app.get("/", (req, res) => {
   res.status(200).json({
@@ -34,6 +35,7 @@ app.get("/", (req, res) => {
 app.use(express.static("public"));
 
 app.use("/auth", authRouter);
+app.use("/home", homeRouter);
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);

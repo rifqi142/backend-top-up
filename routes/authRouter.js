@@ -33,5 +33,4 @@ router.get("/verify-email", verifyEmail);
 
 router.post("/google-login", loginWithGoogleIn);
 
-router.post;
 module.exports = router;
