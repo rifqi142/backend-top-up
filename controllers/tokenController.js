@@ -97,8 +97,6 @@ const verifyEmail = async (req, res) => {
       }
     );
 
-    console.log("Email verified");
-
     return res.redirect(`${process.env.FRONTEND_URL}/verify-success`);
   } catch (error) {
     console.log(error.message, "error message");

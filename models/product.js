@@ -41,24 +41,12 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      pr_currency_type: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
       pr_price: {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
       pr_stock_quantity: {
         type: DataTypes.INTEGER,
-        allowNull: false,
-      },
-      pr_description: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-      pr_image: {
-        type: DataTypes.STRING,
         allowNull: false,
       },
       pr_created_at: {

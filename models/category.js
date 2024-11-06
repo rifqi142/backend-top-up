@@ -32,6 +32,12 @@ module.exports = (sequelize, DataTypes) => {
       ct_image: {
         type: DataTypes.STRING,
       },
+      ct_image_cover: {
+        type: DataTypes.STRING,
+      },
+      ct_currency_type_image: {
+        type: DataTypes.STRING,
+      },
       ct_created_at: {
         type: DataTypes.DATE,
         allowNull: false,

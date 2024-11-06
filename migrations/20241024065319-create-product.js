@@ -22,24 +22,12 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      pr_currency_type: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
       pr_price: {
         type: Sequelize.INTEGER,
         allowNull: false,
       },
       pr_stock_quantity: {
         type: Sequelize.INTEGER,
-        allowNull: false,
-      },
-      pr_description: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
-      pr_image: {
-        type: Sequelize.STRING,
         allowNull: false,
       },
       pr_created_at: {
