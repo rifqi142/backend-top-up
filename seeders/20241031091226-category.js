@@ -566,7 +566,7 @@ module.exports = {
           "https://res.cloudinary.com/dqbdwqxsk/image/upload/v1730364830/img-seal_gezy0i.webp",
         ct_image_cover:
           "https://res.cloudinary.com/dqbdwqxsk/image/upload/v1730865408/SEAL_M_SEA_BANNER_1-0697-original_oc91vs.webp",
-        ct_currency_type: "Seal",
+        ct_currency_type: "Ruby",
         ct_currency_type_image:
           "https://res.cloudinary.com/dqbdwqxsk/image/upload/v1730879269/seal-currency_nvdi4c.webp",
         ct_steps: JSON.stringify([
@@ -921,7 +921,7 @@ module.exports = {
           "https://res.cloudinary.com/dqbdwqxsk/image/upload/v1730364825/img-genshin_iejsnu.webp",
         ct_image_cover:
           "https://res.cloudinary.com/dqbdwqxsk/image/upload/v1730865407/genshin_jgrhhv.webp",
-        ct_currency_type: "Crystals",
+        ct_currency_type: "Genesis Crystals",
         ct_currency_type_image:
           "https://res.cloudinary.com/dqbdwqxsk/image/upload/v1730879268/genshin-currency_h832it.webp",
         ct_steps: JSON.stringify([
@@ -1116,7 +1116,7 @@ module.exports = {
           "https://res.cloudinary.com/dqbdwqxsk/image/upload/v1730364824/img-sausage-man_lsprha.webp",
         ct_image_cover:
           "https://res.cloudinary.com/dqbdwqxsk/image/upload/v1730865406/Sausage-man_nqvj0m.webp",
-        ct_currency_type: "Sausage",
+        ct_currency_type: "Candy",
         ct_currency_type_image:
           "https://res.cloudinary.com/dqbdwqxsk/image/upload/v1730879274/sausage-man-currency_jszuky.webp",
         ct_steps: JSON.stringify([
