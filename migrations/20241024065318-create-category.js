@@ -20,8 +20,14 @@ module.exports = {
       ct_image_cover: {
         type: Sequelize.STRING,
       },
+      ct_currency_type: {
+        type: Sequelize.STRING,
+      },
       ct_currency_type_image: {
         type: Sequelize.STRING,
+      },
+      ct_steps: {
+        type: Sequelize.JSON,
       },
       ct_created_at: {
         type: Sequelize.DATE,
