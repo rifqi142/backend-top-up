@@ -26,6 +26,9 @@ module.exports = (sequelize, DataTypes) => {
       ct_name: {
         type: DataTypes.STRING,
       },
+      ct_code: {
+        type: DataTypes.STRING,
+      },
       ct_game_publisher: {
         type: DataTypes.STRING,
       },

@@ -15,6 +15,7 @@ module.exports = {
     return queryInterface.bulkInsert("categories", [
       {
         ct_name: "Ragnarok Origin",
+        ct_code: "RAGNAROKORIGIN",
         ct_game_publisher: "Gravity",
         ct_image:
           "https://res.cloudinary.com/dqbdwqxsk/image/upload/v1730364839/img-ragnarok_k5bse4.webp",
@@ -54,6 +55,7 @@ module.exports = {
       },
       {
         ct_name: "Arena of Valor",
+        ct_code: "ARENAOFAVALOR",
         ct_game_publisher: "Garena",
         ct_image:
           "https://res.cloudinary.com/dqbdwqxsk/image/upload/v1730364839/img-aov_myppsw.webp",
@@ -93,6 +95,7 @@ module.exports = {
       },
       {
         ct_name: "Undawn",
+        ct_code: "UNDAWN",
         ct_game_publisher: "Garena",
         ct_image:
           "https://res.cloudinary.com/dqbdwqxsk/image/upload/v1730364838/img-undawn_dyvt4z.webp",
@@ -132,6 +135,7 @@ module.exports = {
       },
       {
         ct_name: "Teamfight Tactics",
+        ct_code: "TEAMFIGHTTACTICS",
         ct_game_publisher: "Riot Games",
         ct_image:
           "https://res.cloudinary.com/dqbdwqxsk/image/upload/v1730364837/img-team-fight_nrzelb.webp",
@@ -171,6 +175,7 @@ module.exports = {
       },
       {
         ct_name: "Black Clover",
+        ct_code: "BLACKCLOVER",
         ct_game_publisher: "Garena",
         ct_image:
           "https://res.cloudinary.com/dqbdwqxsk/image/upload/v1730364837/img-black-clover_sakboc.webp",
@@ -210,6 +215,7 @@ module.exports = {
       },
       {
         ct_name: "Brawl Stars",
+        ct_code: "BRAWLSTARS",
         ct_game_publisher: "Supercell",
         ct_image:
           "https://res.cloudinary.com/dqbdwqxsk/image/upload/v1730364836/img-brawl-starts_uynkks.webp",
@@ -249,6 +255,7 @@ module.exports = {
       },
       {
         ct_name: "Tarisland",
+        ct_code: "TARISLAND",
         ct_game_publisher: "Tencent Games",
         ct_image:
           "https://res.cloudinary.com/dqbdwqxsk/image/upload/v1730364836/img-taris-land_vlzpaq.webp",
@@ -288,6 +295,7 @@ module.exports = {
       },
       {
         ct_name: "Super SUS",
+        ct_code: "SUPERSUS",
         ct_game_publisher: "PT. Productions Pte. Ltd.",
         ct_image:
           "https://res.cloudinary.com/dqbdwqxsk/image/upload/v1730862084/img-supersus_hqpogf.webp",
@@ -327,6 +335,7 @@ module.exports = {
       },
       {
         ct_name: "Blood Strike",
+        ct_code: "BLOODSTRIKE",
         ct_game_publisher: "NetEase Games",
         ct_image:
           "https://res.cloudinary.com/dqbdwqxsk/image/upload/v1730862390/img-blood-strikes_u6dzn2.webp",
@@ -366,6 +375,7 @@ module.exports = {
       },
       {
         ct_name: "Arknights",
+        ct_code: "ARKNIGHTS",
         ct_game_publisher: "Yostar Limited",
         ct_image:
           "https://res.cloudinary.com/dqbdwqxsk/image/upload/v1730364833/img-arknights_wugobw.webp",
@@ -405,6 +415,7 @@ module.exports = {
       },
       {
         ct_name: "Pokemon United",
+        ct_code: "POKEMONUNITED",
         ct_game_publisher: "The Pokemon Company",
         ct_image:
           "https://res.cloudinary.com/dqbdwqxsk/image/upload/v1730364832/img-pokemon-unite_x5aibo.webp",
@@ -444,6 +455,7 @@ module.exports = {
       },
       {
         ct_name: "8 Ball Pool",
+        ct_code: "8BALLPOOL",
         ct_game_publisher: "Miniclip",
         ct_image:
           "https://res.cloudinary.com/dqbdwqxsk/image/upload/v1730364832/img-8-ball_wcogre.webp",
@@ -483,6 +495,7 @@ module.exports = {
       },
       {
         ct_name: "FC Mobile",
+        ct_code: "FCMOBILE",
         ct_game_publisher: "EA Sports",
         ct_image:
           "https://res.cloudinary.com/dqbdwqxsk/image/upload/v1730364831/img-fifa_a06avu.webp",
@@ -522,6 +535,7 @@ module.exports = {
       },
       {
         ct_name: "Warewolf",
+        ct_code: "WAREWOLF",
         ct_game_publisher: "Walkman",
         ct_image:
           "https://res.cloudinary.com/dqbdwqxsk/image/upload/v1730364830/img-warewolf_lj8qsn.webp",
@@ -561,6 +575,7 @@ module.exports = {
       },
       {
         ct_name: "Seal M Sea",
+        ct_code: "SEALMSEA",
         ct_game_publisher: "PLAYWITH GAMES Inc",
         ct_image:
           "https://res.cloudinary.com/dqbdwqxsk/image/upload/v1730364830/img-seal_gezy0i.webp",
@@ -600,6 +615,7 @@ module.exports = {
       },
       {
         ct_name: "Metal Slug: Awekening",
+        ct_code: "METALSLUGAWAKENING",
         ct_game_publisher: "VNGGAMES",
         ct_image:
           "https://res.cloudinary.com/dqbdwqxsk/image/upload/v1730364830/img-metal-slug_dea9df.webp",
@@ -639,6 +655,7 @@ module.exports = {
       },
       {
         ct_name: "Free Fire",
+        ct_code: "FREEFIRE",
         ct_game_publisher: "Garena",
         ct_image:
           "https://res.cloudinary.com/dqbdwqxsk/image/upload/v1730364829/img-free-fire_tedp5o.webp",
@@ -678,6 +695,7 @@ module.exports = {
       },
       {
         ct_name: "One Punch Man: The Strongest",
+        ct_code: "ONEPUNCHMAN",
         ct_game_publisher: "Finger Fun",
         ct_image:
           "https://res.cloudinary.com/dqbdwqxsk/image/upload/v1730364828/img-one-punch-man_mwo44g.webp",
@@ -717,6 +735,7 @@ module.exports = {
       },
       {
         ct_name: "Luna Online New World",
+        ct_code: "LUNAONLINE",
         ct_game_publisher: "Lyto Games",
         ct_image:
           "https://res.cloudinary.com/dqbdwqxsk/image/upload/v1730364828/img-luna-online_fzdd1p.webp",
@@ -756,6 +775,7 @@ module.exports = {
       },
       {
         ct_name: "Mobile Legends",
+        ct_code: "MOBILELEGEND",
         ct_game_publisher: "Moonton",
         ct_image:
           "https://res.cloudinary.com/dqbdwqxsk/image/upload/v1730364827/img-mobile-legend_cekwoh.webp",
@@ -799,6 +819,7 @@ module.exports = {
       },
       {
         ct_name: "Honor of Kings",
+        ct_code: "HONOROFKINGS",
         ct_game_publisher: "Tencent Games",
         ct_image:
           "https://res.cloudinary.com/dqbdwqxsk/image/upload/v1730364827/img-honor-of-kings_tef806.webp",
@@ -838,6 +859,7 @@ module.exports = {
       },
       {
         ct_name: "Valorant",
+        ct_code: "VALORANT",
         ct_game_publisher: "Riot Games",
         ct_image:
           "https://res.cloudinary.com/dqbdwqxsk/image/upload/v1730364826/img-valorant_ahcesf.webp",
@@ -877,6 +899,7 @@ module.exports = {
       },
       {
         ct_name: "PUBG Mobile",
+        ct_code: "PUBGMOBILE",
         ct_game_publisher: "PUBG Corporation",
         ct_image:
           "https://res.cloudinary.com/dqbdwqxsk/image/upload/v1730364825/img-pubg_w5q7hr.webp",
@@ -916,6 +939,7 @@ module.exports = {
       },
       {
         ct_name: "Genshin Impact",
+        ct_code: "GENSHINIMPACT",
         ct_game_publisher: "miHoYo",
         ct_image:
           "https://res.cloudinary.com/dqbdwqxsk/image/upload/v1730364825/img-genshin_iejsnu.webp",
@@ -955,6 +979,7 @@ module.exports = {
       },
       {
         ct_name: "League of Legends: Wild Rift",
+        ct_code: "WILDRIFT",
         ct_game_publisher: "Riot Games",
         ct_image:
           "https://res.cloudinary.com/dqbdwqxsk/image/upload/v1730364825/img-lol_qgtanc.webp",
@@ -994,6 +1019,7 @@ module.exports = {
       },
       {
         ct_name: "Honkai: Star Rail",
+        ct_code: "HONKAI",
         ct_game_publisher: "miHoYo",
         ct_image:
           "https://res.cloudinary.com/dqbdwqxsk/image/upload/v1730364825/img-honkai-starail_tz64ny.webp",
@@ -1033,6 +1059,7 @@ module.exports = {
       },
       {
         ct_name: "Call of Duty: Mobile",
+        ct_code: "CALLOFDUTY",
         ct_game_publisher: "Activision",
         ct_image:
           "https://res.cloudinary.com/dqbdwqxsk/image/upload/v1730364825/img-cod_bedp55.webp",
@@ -1072,6 +1099,7 @@ module.exports = {
       },
       {
         ct_name: "Clash of Clans",
+        ct_code: "CLASHOFCLANS",
         ct_game_publisher: "Supercell",
         ct_image:
           "https://res.cloudinary.com/dqbdwqxsk/image/upload/v1730364825/img-coc_a9qhvg.webp",
@@ -1111,6 +1139,7 @@ module.exports = {
       },
       {
         ct_name: "Sausage Man",
+        ct_code: "SAUSAGEMAN",
         ct_game_publisher: "X.D. Network",
         ct_image:
           "https://res.cloudinary.com/dqbdwqxsk/image/upload/v1730364824/img-sausage-man_lsprha.webp",
@@ -1150,6 +1179,7 @@ module.exports = {
       },
       {
         ct_name: "Solo Leveling: Arise",
+        ct_code: "SOLOLEVELING",
         ct_game_publisher: "Netmarble",
         ct_image:
           "https://res.cloudinary.com/dqbdwqxsk/image/upload/v1730364824/img-solo-leveling_npfgjh.webp",

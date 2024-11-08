@@ -11,6 +11,9 @@ module.exports = {
       ct_name: {
         type: Sequelize.STRING,
       },
+      ct_code: {
+        type: Sequelize.STRING,
+      },
       ct_game_publisher: {
         type: Sequelize.STRING,
       },
