@@ -145,11 +145,41 @@
     "/home/get-all-category": {
       "get": {
         "tags": [
-          "Home"
+          "Category"
         ],
         "summary": "Get All Category",
         "description": "Get All Category",
         "operationId": "getAllCategory",
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/product/get-all-product": {
+      "get": {
+        "tags": [
+          "Product"
+        ],
+        "summary": "Get All Product",
+        "description": "Get All Product",
+        "operationId": "getAllProduct",
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/product/get-product-detail/1": {
+      "get": {
+        "tags": [
+          "Product"
+        ],
+        "summary": "Get By Id",
+        "description": "Get By Id",
+        "operationId": "getById",
         "responses": {
           "200": {
             "description": ""
@@ -163,7 +193,10 @@
       "name": "Auth"
     },
     {
-      "name": "Home"
+      "name": "Category"
+    },
+    {
+      "name": "Product"
     }
   ]
 }

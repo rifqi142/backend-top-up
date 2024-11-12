@@ -36,25 +36,26 @@ module.exports = (sequelize, DataTypes) => {
       or_us_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
+        defaultValue: 1,
       },
       or_pr_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
+      or_data: {
+        type: DataTypes.JSON,
+        allowNull: true,
+      },
       or_status: {
         type: DataTypes.ENUM("ordered", "finished", "reviewed", "canceled"),
         allowNull: false,
       },
-      or_quantity: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-      },
-      or_total_price: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-      },
-      or_payment_method: {
+      or_token_id: {
         type: DataTypes.STRING,
+        allowNull: true,
+      },
+      or_payment_status: {
+        type: DataTypes.ENUM("pending", "paid", "failed"),
         allowNull: false,
       },
       or_created_at: {
@@ -66,6 +67,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.DATE,
         allowNull: false,
         defaultValue: DataTypes.NOW,
+      },
+      or_vaNumber: {
+        type: DataTypes.STRING,
+        allowNull: true,
       },
     },
     {

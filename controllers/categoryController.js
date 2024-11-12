@@ -22,7 +22,6 @@ const getAllCategory = async (req, res) => {
 
 const getCategoryByName = async (req, res) => {
   const { categoryName } = req.params;
-  console.log(categoryName);
 
   try {
     const categoryDetail = await category.findOne({
