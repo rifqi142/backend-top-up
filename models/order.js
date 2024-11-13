@@ -1,32 +1,22 @@
 "use strict";
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
-  class order extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
+  class Order extends Model {
     static associate(models) {
-      // define association here
-      // relation one to many with user
-      models.order.belongsTo(models.user, {
+      // Define association here
+      // Relation one-to-many with User
+      models.Order.belongsTo(models.user, {
         foreignKey: "or_us_id",
         targetKey: "us_id",
       });
-      // relation one to many with product
-      models.order.belongsTo(models.product, {
-        foreignKey: "or_pr_id",
-        targetKey: "pr_id",
-      });
-      // relation one to one with payment
-      models.order.hasOne(models.payment, {
-        foreignKey: "py_or_id",
-        sourceKey: "or_id",
+      // Relation one-to-one with OrderItem
+      models.Order.hasOne(models.OrderItem, {
+        foreignKey: "oi_or_id",
+        targetKey: "or_id",
       });
     }
   }
-  order.init(
+  Order.init(
     {
       or_id: {
         type: DataTypes.INTEGER,
@@ -36,27 +26,31 @@ module.exports = (sequelize, DataTypes) => {
       or_us_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        defaultValue: 1,
-      },
-      or_pr_id: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-      },
-      or_data: {
-        type: DataTypes.JSON,
-        allowNull: true,
+        defaultValue: 777,
       },
       or_status: {
-        type: DataTypes.ENUM("ordered", "finished", "reviewed", "canceled"),
+        type: DataTypes.STRING,
         allowNull: false,
       },
-      or_token_id: {
+      or_platform_id: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      or_platform_token: {
         type: DataTypes.STRING,
         allowNull: true,
       },
       or_payment_status: {
-        type: DataTypes.ENUM("pending", "paid", "failed"),
+        type: DataTypes.STRING,
         allowNull: false,
+      },
+      or_vaNumber: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      or_total_amount: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
       },
       or_created_at: {
         type: DataTypes.DATE,
@@ -68,18 +62,14 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         defaultValue: DataTypes.NOW,
       },
-      or_vaNumber: {
-        type: DataTypes.STRING,
-        allowNull: true,
-      },
     },
     {
       sequelize,
-      modelName: "order",
+      modelName: "Order",
       tableName: "orders",
       createdAt: "or_created_at",
       updatedAt: "or_updated_at",
     }
   );
-  return order;
+  return Order;
 };

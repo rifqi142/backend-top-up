@@ -1,5 +1,4 @@
 "use strict";
-/** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable("orders", {
@@ -18,31 +17,29 @@ module.exports = {
         onDelete: "CASCADE",
         onUpdate: "CASCADE",
       },
-      or_pr_id: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        references: {
-          model: "products",
-          key: "pr_id",
-        },
-        onDelete: "CASCADE",
-        onUpdate: "CASCADE",
-      },
       or_status: {
-        type: Sequelize.ENUM("ordered", "finished", "reviewed", "canceled"),
-        allowNull: false,
-      },
-      or_quantity: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-      },
-      or_total_price: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-      },
-      or_payment_method: {
         type: Sequelize.STRING,
         allowNull: false,
+      },
+      or_platform_id: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      or_platform_token: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
+      or_payment_status: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      or_vaNumber: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
+      or_total_amount: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
       },
       or_created_at: {
         type: Sequelize.DATE,

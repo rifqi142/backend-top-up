@@ -15,6 +15,7 @@ module.exports = {
      */
     return queryInterface.bulkInsert("users", [
       {
+        us_id: 1,
         us_username: "fadlan123",
         us_email: "fadlan123@gmail.com",
         us_phone_number: "08221155448",
@@ -24,10 +25,21 @@ module.exports = {
         us_updated_at: new Date(),
       },
       {
+        us_id: 2,
         us_username: "rifqi142",
         us_email: "muhrifqi@gmail.com",
         us_phone_number: "08122554478",
         us_password: await bcrypt.hash("rifqi142", 10),
+        us_is_active: true,
+        us_created_at: new Date(),
+        us_updated_at: new Date(),
+      },
+      {
+        us_id: 777,
+        us_username: "guest",
+        us_email: "777@rifqitopup.com",
+        us_phone_number: "088221155778",
+        us_password: await bcrypt.hash("guest", 10),
         us_is_active: true,
         us_created_at: new Date(),
         us_updated_at: new Date(),

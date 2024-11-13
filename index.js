@@ -25,6 +25,7 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerFile));
 const authRouter = require("@/routes/authRouter");
 const categoryRouter = require("@/routes/categoryRouter");
 const productRouter = require("@/routes/productRouter");
+const orderRouter = require("@/routes/orderRouter");
 
 app.get("/", (req, res) => {
   res.status(200).json({
@@ -38,6 +39,7 @@ app.use(express.static("public"));
 app.use("/auth", authRouter);
 app.use("/category", categoryRouter);
 app.use("/product", productRouter);
+app.use("/order", orderRouter);
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
