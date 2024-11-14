@@ -156,20 +156,26 @@ const verifyTransaction = async (req, res) => {
       transaction.transaction_status === "success"
     ) {
       statusOrder = "settlement";
+
       const promo = order?.orderItem?.oi_product?.find(
         (product) => product.type === "promo"
       );
-      const promotion = await Promotion.findOne({
-        where: {
-          prm_id: promo.id,
-        },
-      });
-      if (promotion && order.or_status === "pending") {
-        await promotion.update({ prm_quantity: promotion.prm_quantity - 1 });
+
+      if (promo) {
+        const promotion = await Promotion.findOne({
+          where: {
+            prm_id: promo.id,
+          },
+        });
+
+        if (promotion && order.or_status === "pending") {
+          await promotion.update({ prm_quantity: promotion.prm_quantity - 1 });
+          console.log(`Voucher quantity reduced for promo ${promo.id}`);
+        }
       }
     } else if (transaction.transaction_status === "cancel") {
       statusOrder = "cancelled";
-    } else if (transaction.transactionStatus === "expire") {
+    } else if (transaction.transaction_status === "expire") {
       statusOrder = "expired";
     }
 
@@ -178,6 +184,7 @@ const verifyTransaction = async (req, res) => {
       or_payment_status: transaction.transaction_status,
       or_updated_at: new Date(),
     };
+
     if (transaction.va_numbers) {
       updateData.or_vaNumber = transaction.va_numbers;
     }
