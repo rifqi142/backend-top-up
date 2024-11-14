@@ -34,7 +34,7 @@ module.exports = {
         allowNull: false,
       },
       or_vaNumber: {
-        type: Sequelize.STRING,
+        type: Sequelize.JSON,
         allowNull: true,
       },
       or_total_amount: {

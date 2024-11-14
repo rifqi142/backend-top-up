@@ -13,6 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       models.Order.hasOne(models.OrderItem, {
         foreignKey: "oi_or_id",
         targetKey: "or_id",
+        as: "orderItem",
       });
     }
   }
@@ -45,7 +46,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
       },
       or_vaNumber: {
-        type: DataTypes.STRING,
+        type: DataTypes.JSON,
         allowNull: true,
       },
       or_total_amount: {

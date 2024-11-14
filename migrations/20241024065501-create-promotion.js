@@ -9,7 +9,7 @@ module.exports = {
         autoIncrement: true,
       },
       prm_type: {
-        type: Sequelize.ENUM("discount", "voucher"),
+        type: Sequelize.STRING,
         allowNull: false,
       },
       prm_code_value: {

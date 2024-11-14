@@ -1,7 +1,7 @@
 "use strict";
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
-  class promotion extends Model {
+  class Promotion extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -9,13 +9,9 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      models.promotion.hasMany(models.product_promo, {
-        foreignKey: "pp_prm_id",
-        sourceKey: "prm_id",
-      });
     }
   }
-  promotion.init(
+  Promotion.init(
     {
       prm_id: {
         type: DataTypes.INTEGER,
@@ -23,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
         autoIncrement: true,
       },
       prm_type: {
-        type: DataTypes.ENUM("discount", "voucher"),
+        type: DataTypes.STRING,
         allowNull: false,
       },
       prm_code_value: {
@@ -55,11 +51,11 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: "promotion",
+      modelName: "Promotion",
       tableName: "promotions",
       createdAt: "prm_created_at",
       updatedAt: false,
     }
   );
-  return promotion;
+  return Promotion;
 };

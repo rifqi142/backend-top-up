@@ -1,25 +1,27 @@
-const { Order, OrderItem } = require("@/models");
+const { Order, OrderItem, Promotion } = require("@/models");
 const generateRandomString = require("@/helpers/generateRandomString");
 const {
   midtransCreateSnapTransaction,
   midtransVerifyTransaction,
   midtransCancelTransaction,
 } = require("@/services/midtrans");
+const { Op } = require("sequelize");
 
 const createOrderAndSnapTransaction = async (req, res) => {
-  const { oi_product, or_total_amount, userId, email } = req.body;
+  const { oi_product, or_total_amount, userId, email, voucher_code } = req.body;
   const randomChar1 = generateRandomString(5);
   const randomChar2 = generateRandomString(5);
-
-  console.log(oi_product, "oi product");
 
   const order_id = `RfqTopup-${randomChar1}-${randomChar2}`;
 
   try {
-    const transactionDetails = {
+    let totalAmount = or_total_amount;
+    let priceDiscount = 0;
+
+    let transactionDetails = {
       transaction_details: {
         order_id,
-        gross_amount: or_total_amount,
+        gross_amount: totalAmount,
       },
       customer_details: {
         email,
@@ -28,8 +30,8 @@ const createOrderAndSnapTransaction = async (req, res) => {
         secure: true,
       },
       callbacks: {
-        finish: `${process.env.FRONTEND_URL}/order/finish`,
-        error: `${process.env.FRONTEND_URL}/order/error`,
+        finish: `${process.env.FRONTEND_URL}`,
+        error: `${process.env.FRONTEND_URL}`,
       },
       item_details: oi_product.map((item) => ({
         id: item.id,
@@ -39,8 +41,54 @@ const createOrderAndSnapTransaction = async (req, res) => {
       })),
     };
 
+    if (voucher_code) {
+      const promotion = await Promotion.findOne({
+        where: {
+          prm_code_value: voucher_code,
+          prm_is_active: true,
+          prm_expired_on: { [Op.gte]: new Date() },
+          prm_quantity: { [Op.gt]: 0 },
+        },
+      });
+
+      if (promotion) {
+        const discount =
+          (promotion.prm_discount_percentage / 100) * totalAmount;
+        totalAmount -= discount;
+        priceDiscount = discount;
+        transactionDetails.item_details.push({
+          id: promotion.prm_id,
+          name: promotion.prm_code_value,
+          price: -priceDiscount,
+          quantity: 1,
+          type: "promo",
+        });
+        oi_product.push({
+          id: promotion.prm_id,
+          name: promotion.prm_code_value,
+          price: -priceDiscount,
+          quantity: 1,
+          type: "promo",
+        });
+        transactionDetails.transaction_details.gross_amount -= priceDiscount;
+      } else {
+        return res.status(400).json({
+          status: "error",
+          message: "Invalid or expired voucher code",
+        });
+      }
+    }
     const transaction = await midtransCreateSnapTransaction(transactionDetails);
-    console.log("Transaction details from Midtrans:", transaction);
+
+    await Order.destroy({
+      where: {
+        or_us_id: userId,
+        or_status: "pending",
+        or_vaNumber: {
+          [Op.eq]: null,
+        },
+      },
+    });
 
     const newOrder = await Order.create({
       or_us_id: userId,
@@ -49,7 +97,7 @@ const createOrderAndSnapTransaction = async (req, res) => {
       or_platform_token: transaction?.token,
       or_payment_status: "pending",
       or_vaNumber: null,
-      or_total_amount,
+      or_total_amount: totalAmount,
       or_created_at: new Date(),
       or_updated_at: new Date(),
     });
@@ -85,7 +133,13 @@ const verifyTransaction = async (req, res) => {
     const transaction = await midtransVerifyTransaction(orderId);
 
     let order = await Order.findOne({
-      where: { or_platform_id: transaction.orderId },
+      where: { or_platform_id: transaction.order_id },
+      include: [
+        {
+          model: OrderItem,
+          as: "orderItem",
+        },
+      ],
     });
 
     if (!order) {
@@ -98,30 +152,39 @@ const verifyTransaction = async (req, res) => {
     let statusOrder = order.or_status;
 
     if (
-      transaction.transactionStatus === "settlement" ||
-      transaction.transactionStatus === "success"
+      transaction.transaction_status === "settlement" ||
+      transaction.transaction_status === "success"
     ) {
       statusOrder = "settlement";
-    }
-
-    if (transaction.transactionStatus === "cancel") {
+      const promo = order?.orderItem?.oi_product?.find(
+        (product) => product.type === "promo"
+      );
+      const promotion = await Promotion.findOne({
+        where: {
+          prm_id: promo.id,
+        },
+      });
+      if (promotion && order.or_status === "pending") {
+        await promotion.update({ prm_quantity: promotion.prm_quantity - 1 });
+      }
+    } else if (transaction.transaction_status === "cancel") {
       statusOrder = "cancelled";
-    }
-
-    if (transaction.transactionStatus === "expire") {
+    } else if (transaction.transactionStatus === "expire") {
       statusOrder = "expired";
     }
 
-    await Order.update(
-      {
-        or_status: statusOrder,
-        or_payment_status: transaction.transactionStatus,
-        or_updated_at: new Date(),
-      },
-      {
-        where: { or_platform_id: transaction.orderId },
-      }
-    );
+    const updateData = {
+      or_status: statusOrder,
+      or_payment_status: transaction.transaction_status,
+      or_updated_at: new Date(),
+    };
+    if (transaction.va_numbers) {
+      updateData.or_vaNumber = transaction.va_numbers;
+    }
+
+    await Order.update(updateData, {
+      where: { or_platform_id: transaction.order_id },
+    });
 
     return res.status(200).json({
       status: "success",
@@ -144,7 +207,7 @@ const cancelTransaction = async (req, res) => {
     const transaction = await midtransCancelTransaction(orderId);
 
     let order = await Order.findOne({
-      where: { or_platform_id: transaction.orderId },
+      where: { or_platform_id: transaction.order_id },
     });
 
     if (!order) {
@@ -162,7 +225,7 @@ const cancelTransaction = async (req, res) => {
           or_updated_at: new Date(),
         },
         {
-          where: { or_platform_id: transaction.orderId },
+          where: { or_platform_id: transaction.order_id },
         }
       );
     }
@@ -177,7 +240,7 @@ const cancelTransaction = async (req, res) => {
             or_updated_at: new Date(),
           },
           {
-            where: { or_platform_id: transaction.orderId },
+            where: { or_platform_id: transaction.order_id },
           }
         );
       } else {
@@ -188,7 +251,7 @@ const cancelTransaction = async (req, res) => {
             or_updated_at: new Date(),
           },
           {
-            where: { or_platform_id: transaction.orderId },
+            where: { or_platform_id: transaction.order_id },
           }
         );
       }
