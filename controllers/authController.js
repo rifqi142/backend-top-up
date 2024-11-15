@@ -37,6 +37,7 @@ const authRegisterUser = async (req, res) => {
       newUser.us_id,
       newUser.us_email,
       newUser.us_username,
+      newUser.us_is_admin,
       "1h"
     );
 
@@ -124,6 +125,7 @@ const authLogin = async (req, res) => {
       loginUser.us_id,
       loginUser.us_email,
       loginUser.us_username,
+      loginUser.us_is_admin,
       "1h"
     );
 
@@ -146,7 +148,7 @@ const authLogin = async (req, res) => {
       expires: new Date(new Date().getTime() + 60 * 60 * 1000),
     };
 
-    return res.cookie("user", loginToken, option).status(201).send({
+    return res.cookie("Authentication", loginToken, option).status(201).send({
       status: "success",
       code: 201,
       message: "Login success",
