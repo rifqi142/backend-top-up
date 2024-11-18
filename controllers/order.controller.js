@@ -1,4 +1,4 @@
-const { Order, OrderItem, Promotion } = require("@/models");
+const { Order, OrderItem, Promotion, category } = require("@/models");
 const generateRandomString = require("@/helpers/generateRandomString");
 const {
   midtransCreateSnapTransaction,
@@ -277,8 +277,44 @@ const cancelTransaction = async (req, res) => {
     });
   }
 };
+
+const getAllOrderByUserId = async (req, res) => {
+  const { userId } = req.params;
+
+  try {
+    const orders = await Order.findAll({
+      where: { or_us_id: userId },
+      attributes: {
+        exclude: ["or_updated_at"],
+      },
+      include: [
+        {
+          model: OrderItem,
+          as: "orderItem",
+          attributes: {
+            exclude: ["oi_created_at", "oi_updated_at"],
+          },
+        },
+      ],
+    });
+
+    return res.status(200).json({
+      status: "success",
+      message: "Order retrieved successfully",
+      data: orders,
+    });
+  } catch (error) {
+    console.error("Error during order retrieval:", error);
+    return res.status(500).json({
+      status: "error",
+      message: "Failed to retrieve order",
+    });
+  }
+};
+
 module.exports = {
   createOrderAndSnapTransaction,
   verifyTransaction,
   cancelTransaction,
+  getAllOrderByUserId,
 };
