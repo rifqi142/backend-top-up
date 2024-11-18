@@ -4,6 +4,7 @@ const swaggerUi = require("swagger-ui-express");
 const swaggerFile = require("@/config/swagger-output.json");
 
 const express = require("express");
+const cookieParser = require("cookie-parser");
 
 const app = express();
 const bodyParser = require("body-parser");
@@ -20,12 +21,14 @@ app.use(
   })
 );
 app.use(bodyParser.json());
+app.use(cookieParser());
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
 const authRouter = require("@/routes/authRouter");
 const categoryRouter = require("@/routes/categoryRouter");
 const productRouter = require("@/routes/productRouter");
 const orderRouter = require("@/routes/orderRouter");
+const promotionRouter = require("@/routes/promotionRouter");
 
 app.get("/", (req, res) => {
   res.status(200).json({
@@ -40,7 +43,12 @@ app.use("/auth", authRouter);
 app.use("/category", categoryRouter);
 app.use("/product", productRouter);
 app.use("/order", orderRouter);
+app.use("/promotion", promotionRouter);
 
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
-});
+if (require.main === module) {
+  app.listen(port, () => {
+    console.log(`Server is running on port ${port}`);
+  });
+}
+
+module.exports = app;

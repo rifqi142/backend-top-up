@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest --coverage",
     "start": "node ./helpers/postman2openapi.js && nodemon index.js",
     "migration:up": "npx sequelize-cli db:migrate",
     "migration:down": "npx sequelize-cli db:migrate:undo:all",
@@ -34,9 +34,11 @@
     "nodemailer": "^6.9.15",
     "nodemon": "^3.1.7",
     "postman2openapi": "^1.2.1",
+    "supertest": "^7.0.0",
     "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {
+    "jest": "^29.7.0",
     "sequelize": "^6.37.4",
     "sequelize-cli": "^6.6.2"
   },
