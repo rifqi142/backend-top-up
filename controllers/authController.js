@@ -1,7 +1,6 @@
 const admin = require("@/controllers/firebaseController");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-
 const { Op } = require("sequelize");
 const { user, token } = require("@/models");
 const { generateToken, sendEmail } = require("@/controllers/tokenController");
@@ -40,8 +39,6 @@ const authRegisterUser = async (req, res) => {
       newUser.us_is_admin,
       "1h"
     );
-
-    console.log("Verification Token :" + verificationToken);
 
     // send email
     await sendEmail(
@@ -165,14 +162,27 @@ const authLogin = async (req, res) => {
 
 const authLogout = async (req, res) => {
   try {
-    if (req.cookies.user) {
-      const { us_id } = req.cookies.user;
-      await token.update(
-        { tkn_is_active: false },
-        { where: { tkn_us_id: us_id } }
-      );
+    const tokens = req.cookies.Authentication;
+
+    if (tokens) {
+      const decodedToken = jwt.decode(tokens);
+
+      if (decodedToken && decodedToken.us_id) {
+        const { us_id } = decodedToken;
+
+        const userToken = await token.findOne({
+          where: { tkn_us_id: us_id },
+        });
+
+        if (userToken) {
+          await userToken.update({ tkn_is_active: false });
+        }
+      }
     }
-    return res.clearCookie("user").json({
+
+    res.clearCookie("Authentication");
+
+    return res.json({
       status: "success",
       code: 200,
       message: "Logout successfully",
