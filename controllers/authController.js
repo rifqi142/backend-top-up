@@ -217,6 +217,7 @@ const sendEmailforgotPassword = async (req, res) => {
       userForgotPass.us_id,
       userForgotPass.us_email,
       userForgotPass.us_username,
+      userForgotPass.us_is_admin,
       "1h"
     );
 
@@ -275,6 +276,7 @@ const sendEmailVerification = async (req, res) => {
       user.us_id,
       user.us_email,
       user.us_username,
+      user.us_is_admin,
       "1h"
     );
 
@@ -347,6 +349,7 @@ const loginWithGoogleIn = async (req, res) => {
       userGoogle.us_id,
       userGoogle.us_email,
       userGoogle.us_username,
+      userGoogle.us_is_admin,
       "1h"
     );
 

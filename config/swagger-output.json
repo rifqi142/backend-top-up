@@ -219,6 +219,21 @@
           }
         }
       }
+    },
+    "/admin/get-user-count": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "get user",
+        "description": "get user",
+        "operationId": "getUser",
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
     }
   },
   "tags": [
@@ -236,6 +251,9 @@
     },
     {
       "name": "Promotion"
+    },
+    {
+      "name": "Admin"
     }
   ]
 }
