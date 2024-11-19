@@ -29,6 +29,7 @@ const categoryRouter = require("@/routes/categoryRouter");
 const productRouter = require("@/routes/productRouter");
 const orderRouter = require("@/routes/orderRouter");
 const promotionRouter = require("@/routes/promotionRouter");
+const adminRouter = require("@/routes/admin.route");
 
 app.get("/", (req, res) => {
   res.status(200).json({
@@ -44,6 +45,7 @@ app.use("/category", categoryRouter);
 app.use("/product", productRouter);
 app.use("/order", orderRouter);
 app.use("/promotion", promotionRouter);
+app.use("/admin", adminRouter);
 
 if (require.main === module) {
   app.listen(port, () => {

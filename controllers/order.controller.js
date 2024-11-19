@@ -1,4 +1,4 @@
-const { Order, OrderItem, Promotion, category } = require("@/models");
+const { Order, OrderItem, Promotion } = require("@/models");
 const generateRandomString = require("@/helpers/generateRandomString");
 const {
   midtransCreateSnapTransaction,

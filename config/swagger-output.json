@@ -204,6 +204,21 @@
           }
         }
       }
+    },
+    "/promotion/get-all-promotion": {
+      "get": {
+        "tags": [
+          "Promotion"
+        ],
+        "summary": "New Request",
+        "description": "New Request",
+        "operationId": "newRequest",
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
     }
   },
   "tags": [
@@ -218,6 +233,9 @@
     },
     {
       "name": "Order"
+    },
+    {
+      "name": "Promotion"
     }
   ]
 }
