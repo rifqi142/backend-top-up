@@ -44,9 +44,6 @@ module.exports = (sequelize, DataTypes) => {
       ct_currency_type_image: {
         type: DataTypes.STRING,
       },
-      ct_steps: {
-        type: DataTypes.JSON,
-      },
       ct_created_at: {
         type: DataTypes.DATE,
         allowNull: false,

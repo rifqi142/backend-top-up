@@ -14,21 +14,6 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "or_us_id",
         sourceKey: "us_id",
       });
-      // relation one to many with ticket
-      models.user.hasMany(models.ticket, {
-        foreignKey: "tkt_us_id",
-        sourceKey: "us_id",
-      });
-      // relation one to many with ticket_comment
-      models.user.hasMany(models.ticket_comment, {
-        foreignKey: "tc_us_id",
-        sourceKey: "us_id",
-      });
-      // relation one to many with review
-      models.user.hasMany(models.review, {
-        foreignKey: "rv_us_id",
-        sourceKey: "us_id",
-      });
     }
   }
   user.init(

@@ -235,6 +235,47 @@
         }
       }
     },
+    "/admin/categories/{categoryId}/products": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "get all product by id",
+        "description": "get all product by id",
+        "operationId": "getAllProductById",
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      },
+      "parameters": [
+        {
+          "name": "categoryId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "example": ""
+          }
+        }
+      ]
+    },
+    "/admin/get-all-product": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "get all product",
+        "description": "get all product",
+        "operationId": "getAllProduct1",
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
     "/admin/create-user": {
       "post": {
         "tags": [

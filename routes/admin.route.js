@@ -12,12 +12,13 @@ const {
   getAllUser,
   updateUser,
   deleteUser,
-  getAllCategory,
+  getNameCategory,
   createProduct,
   getProductByCategory,
   deleteProduct,
   updateProduct,
   getAllProducts,
+  getAllCategory,
 } = require("@/controllers/admin.controller");
 const {
   registerBodyValidation,
@@ -46,11 +47,13 @@ router.put(
 router.delete("/delete-user/:userId", deleteUser);
 
 // products
-router.get("/get-all-category", getAllCategory);
+router.get("/get-name-category", getNameCategory);
 router.post("/create-product", createProduct);
 router.get("/categories/:categoryId/products", getProductByCategory);
 router.put("/update-product/:productId", updateProduct);
 router.delete("/delete-product/:productId", deleteProduct);
 router.get("/get-all-product", getAllProducts);
 
+// categories
+router.get("/get-all-category", getAllCategory);
 module.exports = router;

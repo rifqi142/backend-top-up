@@ -9,11 +9,6 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      // relation one to many with review
-      models.product.hasMany(models.review, {
-        foreignKey: "rv_pr_id",
-        sourceKey: "pr_id",
-      });
       // relation many to one with category
       models.product.belongsTo(models.category, {
         foreignKey: "pr_ct_id",
@@ -37,10 +32,6 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
       },
       pr_price: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-      },
-      pr_stock_quantity: {
         type: DataTypes.INTEGER,
         allowNull: false,
       },

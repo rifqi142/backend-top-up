@@ -395,7 +395,7 @@ const deleteUser = async (req, res) => {
 };
 
 // get all category
-const getAllCategory = async (req, res) => {
+const getNameCategory = async (req, res) => {
   try {
     const allCategory = await category.findAll({
       attributes: ["ct_id", "ct_name"],
@@ -665,6 +665,30 @@ const getAllProducts = async (req, res) => {
   }
 };
 
+// categories
+// get all category
+const getAllCategory = async (req, res) => {
+  try {
+    const allCategory = await category.findAll({
+      attributes: {
+        exclude: ["ct_created_at", "ct_updated_at"],
+      },
+    });
+
+    return res.status(200).json({
+      status: "success",
+      code: 200,
+      data: allCategory,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      status: "error",
+      code: 500,
+      message: error.message,
+    });
+  }
+};
+
 module.exports = {
   getUserCount,
   getProductCount,
@@ -676,10 +700,11 @@ module.exports = {
   getAllUser,
   updateUser,
   deleteUser,
-  getAllCategory,
+  getNameCategory,
   createProduct,
   getProductByCategory,
   updateProduct,
   deleteProduct,
   getAllProducts,
+  getAllCategory,
 };

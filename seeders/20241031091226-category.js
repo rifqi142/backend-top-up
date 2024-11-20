@@ -24,32 +24,6 @@ module.exports = {
         ct_currency_type: "Nyan Berry",
         ct_currency_type_image:
           "https://res.cloudinary.com/dqbdwqxsk/image/upload/v1730879273/ragnarok-currency_ttjrar.webp",
-        ct_steps: JSON.stringify([
-          {
-            step: 1,
-            description: "Enter your Secret Code, Server, and Nickname",
-          },
-          {
-            step: 2,
-            description: "Select Purchase Amount",
-          },
-          {
-            step: 3,
-            description: "Select Payment Methods",
-          },
-          {
-            step: 4,
-            description: "Enter Promo Code (if applicable)",
-          },
-          {
-            step: 5,
-            description: "Fill in Email for transaction receipt",
-          },
-          {
-            step: 6,
-            description: "Click 'Buy Now' and complete the payment",
-          },
-        ]),
         ct_created_at: new Date(),
         ct_updated_at: new Date(),
       },
@@ -64,32 +38,6 @@ module.exports = {
         ct_currency_type: "Voucher",
         ct_currency_type_image:
           "https://res.cloudinary.com/dqbdwqxsk/image/upload/v1730879307/aov-currency_mujcea.webp",
-        ct_steps: JSON.stringify([
-          {
-            step: 1,
-            description: "Enter your User ID",
-          },
-          {
-            step: 2,
-            description: "Select Purchase Amount",
-          },
-          {
-            step: 3,
-            description: "Select Payment Methods",
-          },
-          {
-            step: 4,
-            description: "Enter Promo Code (if applicable)",
-          },
-          {
-            step: 5,
-            description: "Fill in Email for transaction receipt",
-          },
-          {
-            step: 6,
-            description: "Click 'Buy Now' and complete the payment",
-          },
-        ]),
         ct_created_at: new Date(),
         ct_updated_at: new Date(),
       },
@@ -104,32 +52,6 @@ module.exports = {
         ct_currency_type: "RC",
         ct_currency_type_image:
           "https://res.cloudinary.com/dqbdwqxsk/image/upload/v1730879995/undawn-currency_zyczci.webp",
-        ct_steps: JSON.stringify([
-          {
-            step: 1,
-            description: "Enter your User ID",
-          },
-          {
-            step: 2,
-            description: "Select Purchase Amount",
-          },
-          {
-            step: 3,
-            description: "Select Payment Methods",
-          },
-          {
-            step: 4,
-            description: "Enter Promo Code (if applicable)",
-          },
-          {
-            step: 5,
-            description: "Fill in Email for transaction receipt",
-          },
-          {
-            step: 6,
-            description: "Click 'Buy Now' and complete the payment",
-          },
-        ]),
         ct_created_at: new Date(),
         ct_updated_at: new Date(),
       },
@@ -144,32 +66,6 @@ module.exports = {
         ct_currency_type: "TFT Coins",
         ct_currency_type_image:
           "https://res.cloudinary.com/dqbdwqxsk/image/upload/v1730879273/tft-currency_pf6ats.webp",
-        ct_steps: JSON.stringify([
-          {
-            step: 1,
-            description: "Enter your Riot ID",
-          },
-          {
-            step: 2,
-            description: "Select Purchase Amount",
-          },
-          {
-            step: 3,
-            description: "Select Payment Methods",
-          },
-          {
-            step: 4,
-            description: "Enter Promo Code (if applicable)",
-          },
-          {
-            step: 5,
-            description: "Fill in Email for transaction receipt",
-          },
-          {
-            step: 6,
-            description: "Click 'Buy Now' and complete the payment",
-          },
-        ]),
         ct_created_at: new Date(),
         ct_updated_at: new Date(),
       },
@@ -184,32 +80,6 @@ module.exports = {
         ct_currency_type: "BC Crystal",
         ct_currency_type_image:
           "https://res.cloudinary.com/dqbdwqxsk/image/upload/v1730879272/black-clover-currency_yuhlog.webp",
-        ct_steps: JSON.stringify([
-          {
-            step: 1,
-            description: "Enter your Account ID",
-          },
-          {
-            step: 2,
-            description: "Select Purchase Amount",
-          },
-          {
-            step: 3,
-            description: "Select Payment Methods",
-          },
-          {
-            step: 4,
-            description: "Enter Promo Code (if applicable)",
-          },
-          {
-            step: 5,
-            description: "Fill in Email for transaction receipt",
-          },
-          {
-            step: 6,
-            description: "Click 'Buy Now' and complete the payment",
-          },
-        ]),
         ct_created_at: new Date(),
         ct_updated_at: new Date(),
       },
@@ -224,32 +94,6 @@ module.exports = {
         ct_currency_type: "Gems",
         ct_currency_type_image:
           "https://res.cloudinary.com/dqbdwqxsk/image/upload/v1730879307/brawl-start-currency_v4aai3.webp",
-        ct_steps: JSON.stringify([
-          {
-            step: 1,
-            description: "Enter your Player ID",
-          },
-          {
-            step: 2,
-            description: "Select Purchase Amount",
-          },
-          {
-            step: 3,
-            description: "Select Payment Methods",
-          },
-          {
-            step: 4,
-            description: "Enter Promo Code (if applicable)",
-          },
-          {
-            step: 5,
-            description: "Fill in Email for transaction receipt",
-          },
-          {
-            step: 6,
-            description: "Click 'Buy Now' and complete the payment",
-          },
-        ]),
         ct_created_at: new Date(),
         ct_updated_at: new Date(),
       },
@@ -264,32 +108,6 @@ module.exports = {
         ct_currency_type: "Crystal",
         ct_currency_type_image:
           "https://res.cloudinary.com/dqbdwqxsk/image/upload/v1730879272/taris-land-currency_wolf8v.webp",
-        ct_steps: JSON.stringify([
-          {
-            step: 1,
-            description: "Enter your User ID and Server",
-          },
-          {
-            step: 2,
-            description: "Select Purchase Amount",
-          },
-          {
-            step: 3,
-            description: "Select Payment Methods",
-          },
-          {
-            step: 4,
-            description: "Enter Promo Code (if applicable)",
-          },
-          {
-            step: 5,
-            description: "Fill in Email for transaction receipt",
-          },
-          {
-            step: 6,
-            description: "Click 'Buy Now' and complete the payment",
-          },
-        ]),
         ct_created_at: new Date(),
         ct_updated_at: new Date(),
       },
@@ -304,32 +122,6 @@ module.exports = {
         ct_currency_type: "Golden Star",
         ct_currency_type_image:
           "https://res.cloudinary.com/dqbdwqxsk/image/upload/v1730879271/super-sus-currency_qgz4wd.webp",
-        ct_steps: JSON.stringify([
-          {
-            step: 1,
-            description: "Enter your ID Space",
-          },
-          {
-            step: 2,
-            description: "Select Purchase Amount",
-          },
-          {
-            step: 3,
-            description: "Select Payment Methods",
-          },
-          {
-            step: 4,
-            description: "Enter Promo Code (if applicable)",
-          },
-          {
-            step: 5,
-            description: "Fill in Email for transaction receipt",
-          },
-          {
-            step: 6,
-            description: "Click 'Buy Now' and complete the payment",
-          },
-        ]),
         ct_created_at: new Date(),
         ct_updated_at: new Date(),
       },
@@ -344,32 +136,6 @@ module.exports = {
         ct_currency_type: "Gold",
         ct_currency_type_image:
           "https://res.cloudinary.com/dqbdwqxsk/image/upload/v1730880355/bs-currency_gawmry.webp",
-        ct_steps: JSON.stringify([
-          {
-            step: 1,
-            description: "Enter your User ID and Server",
-          },
-          {
-            step: 2,
-            description: "Select Purchase Amount",
-          },
-          {
-            step: 3,
-            description: "Select Payment Methods",
-          },
-          {
-            step: 4,
-            description: "Enter Promo Code (if applicable)",
-          },
-          {
-            step: 5,
-            description: "Fill in Email for transaction receipt",
-          },
-          {
-            step: 6,
-            description: "Click 'Buy Now' and complete the payment",
-          },
-        ]),
         ct_created_at: new Date(),
         ct_updated_at: new Date(),
       },
@@ -384,32 +150,6 @@ module.exports = {
         ct_currency_type: "Originium",
         ct_currency_type_image:
           "https://res.cloudinary.com/dqbdwqxsk/image/upload/v1730879270/arknight-currency_eysgmk.webp",
-        ct_steps: JSON.stringify([
-          {
-            step: 1,
-            description: "Enter your User ID",
-          },
-          {
-            step: 2,
-            description: "Select Purchase Amount",
-          },
-          {
-            step: 3,
-            description: "Select Payment Methods",
-          },
-          {
-            step: 4,
-            description: "Enter Promo Code (if applicable)",
-          },
-          {
-            step: 5,
-            description: "Fill in Email for transaction receipt",
-          },
-          {
-            step: 6,
-            description: "Click 'Buy Now' and complete the payment",
-          },
-        ]),
         ct_created_at: new Date(),
         ct_updated_at: new Date(),
       },
@@ -424,32 +164,6 @@ module.exports = {
         ct_currency_type: "Aeos Gems",
         ct_currency_type_image:
           "https://res.cloudinary.com/dqbdwqxsk/image/upload/v1730879270/pokemon-currency_kswzhp.webp",
-        ct_steps: JSON.stringify([
-          {
-            step: 1,
-            description: "Enter your Support ID",
-          },
-          {
-            step: 2,
-            description: "Select Purchase Amount",
-          },
-          {
-            step: 3,
-            description: "Select Payment Methods",
-          },
-          {
-            step: 4,
-            description: "Enter Promo Code (if applicable)",
-          },
-          {
-            step: 5,
-            description: "Fill in Email for transaction receipt",
-          },
-          {
-            step: 6,
-            description: "Click 'Buy Now' and complete the payment",
-          },
-        ]),
         ct_created_at: new Date(),
         ct_updated_at: new Date(),
       },
@@ -464,32 +178,6 @@ module.exports = {
         ct_currency_type: "Cash",
         ct_currency_type_image:
           "https://res.cloudinary.com/dqbdwqxsk/image/upload/v1730879269/8ball-currency_cjjtdr.webp",
-        ct_steps: JSON.stringify([
-          {
-            step: 1,
-            description: "Enter your User ID",
-          },
-          {
-            step: 2,
-            description: "Select Purchase Amount",
-          },
-          {
-            step: 3,
-            description: "Select Payment Methods",
-          },
-          {
-            step: 4,
-            description: "Enter Promo Code (if applicable)",
-          },
-          {
-            step: 5,
-            description: "Fill in Email for transaction receipt",
-          },
-          {
-            step: 6,
-            description: "Click 'Buy Now' and complete the payment",
-          },
-        ]),
         ct_created_at: new Date(),
         ct_updated_at: new Date(),
       },
@@ -504,32 +192,6 @@ module.exports = {
         ct_currency_type: "FC Points",
         ct_currency_type_image:
           "https://res.cloudinary.com/dqbdwqxsk/image/upload/v1730879269/fc-mobile_fdouzz.webp",
-        ct_steps: JSON.stringify([
-          {
-            step: 1,
-            description: "Enter your User ID",
-          },
-          {
-            step: 2,
-            description: "Select Purchase Amount",
-          },
-          {
-            step: 3,
-            description: "Select Payment Methods",
-          },
-          {
-            step: 4,
-            description: "Enter Promo Code (if applicable)",
-          },
-          {
-            step: 5,
-            description: "Fill in Email for transaction receipt",
-          },
-          {
-            step: 6,
-            description: "Click 'Buy Now' and complete the payment",
-          },
-        ]),
         ct_created_at: new Date(),
         ct_updated_at: new Date(),
       },
@@ -544,32 +206,6 @@ module.exports = {
         ct_currency_type: "Diamonds",
         ct_currency_type_image:
           "https://res.cloudinary.com/dqbdwqxsk/image/upload/v1730879270/warewolf-currency_i121q4.webp",
-        ct_steps: JSON.stringify([
-          {
-            step: 1,
-            description: "Enter your User ID & Nickname",
-          },
-          {
-            step: 2,
-            description: "Select Purchase Amount",
-          },
-          {
-            step: 3,
-            description: "Select Payment Methods",
-          },
-          {
-            step: 4,
-            description: "Enter Promo Code (if applicable)",
-          },
-          {
-            step: 5,
-            description: "Fill in Email for transaction receipt",
-          },
-          {
-            step: 6,
-            description: "Click 'Buy Now' and complete the payment",
-          },
-        ]),
         ct_created_at: new Date(),
         ct_updated_at: new Date(),
       },
@@ -584,32 +220,6 @@ module.exports = {
         ct_currency_type: "Ruby",
         ct_currency_type_image:
           "https://res.cloudinary.com/dqbdwqxsk/image/upload/v1730879269/seal-currency_nvdi4c.webp",
-        ct_steps: JSON.stringify([
-          {
-            step: 1,
-            description: "Enter your CS Code & Server",
-          },
-          {
-            step: 2,
-            description: "Select Purchase Amount",
-          },
-          {
-            step: 3,
-            description: "Select Payment Methods",
-          },
-          {
-            step: 4,
-            description: "Enter Promo Code (if applicable)",
-          },
-          {
-            step: 5,
-            description: "Fill in Email for transaction receipt",
-          },
-          {
-            step: 6,
-            description: "Click 'Buy Now' and complete the payment",
-          },
-        ]),
         ct_created_at: new Date(),
         ct_updated_at: new Date(),
       },
@@ -624,32 +234,6 @@ module.exports = {
         ct_currency_type: "Ruby",
         ct_currency_type_image:
           "https://res.cloudinary.com/dqbdwqxsk/image/upload/v1730879269/metal-slug-currency_j6b5nt.webp",
-        ct_steps: JSON.stringify([
-          {
-            step: 1,
-            description: "Enter your User ID",
-          },
-          {
-            step: 2,
-            description: "Select Purchase Amount",
-          },
-          {
-            step: 3,
-            description: "Select Payment Methods",
-          },
-          {
-            step: 4,
-            description: "Enter Promo Code (if applicable)",
-          },
-          {
-            step: 5,
-            description: "Fill in Email for transaction receipt",
-          },
-          {
-            step: 6,
-            description: "Click 'Buy Now' and complete the payment",
-          },
-        ]),
         ct_created_at: new Date(),
         ct_updated_at: new Date(),
       },
@@ -664,32 +248,6 @@ module.exports = {
         ct_currency_type: "Diamond",
         ct_currency_type_image:
           "https://res.cloudinary.com/dqbdwqxsk/image/upload/v1730879268/free-fire-currency_s3sczk.webp",
-        ct_steps: JSON.stringify([
-          {
-            step: 1,
-            description: "Enter your User ID",
-          },
-          {
-            step: 2,
-            description: "Select Purchase Amount",
-          },
-          {
-            step: 3,
-            description: "Select Payment Methods",
-          },
-          {
-            step: 4,
-            description: "Enter Promo Code (if applicable)",
-          },
-          {
-            step: 5,
-            description: "Fill in Email for transaction receipt",
-          },
-          {
-            step: 6,
-            description: "Click 'Buy Now' and complete the payment",
-          },
-        ]),
         ct_created_at: new Date(),
         ct_updated_at: new Date(),
       },
@@ -704,32 +262,6 @@ module.exports = {
         ct_currency_type: "Coupon",
         ct_currency_type_image:
           "https://res.cloudinary.com/dqbdwqxsk/image/upload/v1730879268/one-punch-man-currency_l4al23.webp",
-        ct_steps: JSON.stringify([
-          {
-            step: 1,
-            description: "Enter your user ID and Server ID",
-          },
-          {
-            step: 2,
-            description: "Select Purchase Amount",
-          },
-          {
-            step: 3,
-            description: "Select Payment Methods",
-          },
-          {
-            step: 4,
-            description: "Enter Promo Code (if applicable)",
-          },
-          {
-            step: 5,
-            description: "Fill in Email for transaction receipt",
-          },
-          {
-            step: 6,
-            description: "Click 'Buy Now' and complete the payment",
-          },
-        ]),
         ct_created_at: new Date(),
         ct_updated_at: new Date(),
       },
@@ -744,32 +276,6 @@ module.exports = {
         ct_currency_type: "Coin",
         ct_currency_type_image:
           "https://res.cloudinary.com/dqbdwqxsk/image/upload/v1730879268/luna-currency_lyv0fc.webp",
-        ct_steps: JSON.stringify([
-          {
-            step: 1,
-            description: "Enter your Character ID & Server",
-          },
-          {
-            step: 2,
-            description: "Select Purchase Amount",
-          },
-          {
-            step: 3,
-            description: "Select Payment Methods",
-          },
-          {
-            step: 4,
-            description: "Enter Promo Code (if applicable)",
-          },
-          {
-            step: 5,
-            description: "Fill in Email for transaction receipt",
-          },
-          {
-            step: 6,
-            description: "Click 'Buy Now' and complete the payment",
-          },
-        ]),
         ct_created_at: new Date(),
         ct_updated_at: new Date(),
       },
@@ -784,36 +290,6 @@ module.exports = {
         ct_currency_type: "Diamond",
         ct_currency_type_image:
           "https://res.cloudinary.com/dqbdwqxsk/image/upload/v1730879269/ml-currency_dnvuvd.webp",
-        ct_steps: JSON.stringify([
-          {
-            step: 1,
-            description: "Enter your User ID & Zone ID",
-          },
-          {
-            step: 2,
-            description: "Example: 1234567 (1234)",
-          },
-          {
-            step: 3,
-            description: "Select Purchase Amount",
-          },
-          {
-            step: 4,
-            description: "Select Payment Methods",
-          },
-          {
-            step: 5,
-            description: "Enter Promo Code (if applicable)",
-          },
-          {
-            step: 6,
-            description: "Fill in Email for transaction receipt",
-          },
-          {
-            step: 7,
-            description: "Click 'Buy Now' and complete the payment",
-          },
-        ]),
         ct_created_at: new Date(),
         ct_updated_at: new Date(),
       },
@@ -828,32 +304,6 @@ module.exports = {
         ct_currency_type: "Tokens",
         ct_currency_type_image:
           "https://res.cloudinary.com/dqbdwqxsk/image/upload/v1730879273/hok-currency_opdp2e.webp",
-        ct_steps: JSON.stringify([
-          {
-            step: 1,
-            description: "Enter your User Id",
-          },
-          {
-            step: 2,
-            description: "Select Purchase Amount",
-          },
-          {
-            step: 3,
-            description: "Select Payment Methods",
-          },
-          {
-            step: 4,
-            description: "Enter Promo Code (if applicable)",
-          },
-          {
-            step: 5,
-            description: "Fill in Email for transaction receipt",
-          },
-          {
-            step: 6,
-            description: "Click 'Buy Now' and complete the payment",
-          },
-        ]),
         ct_created_at: new Date(),
         ct_updated_at: new Date(),
       },
@@ -868,32 +318,6 @@ module.exports = {
         ct_currency_type: "Valorant Points",
         ct_currency_type_image:
           "https://res.cloudinary.com/dqbdwqxsk/image/upload/v1730879308/valorant-currency_khcr6l.webp",
-        ct_steps: JSON.stringify([
-          {
-            step: 1,
-            description: "Enter your Riot ID",
-          },
-          {
-            step: 2,
-            description: "Select Purchase Amount",
-          },
-          {
-            step: 3,
-            description: "Select Payment Methods",
-          },
-          {
-            step: 4,
-            description: "Enter Promo Code (if applicable)",
-          },
-          {
-            step: 5,
-            description: "Fill in Email for transaction receipt",
-          },
-          {
-            step: 6,
-            description: "Click 'Buy Now' and complete the payment",
-          },
-        ]),
         ct_created_at: new Date(),
         ct_updated_at: new Date(),
       },
@@ -908,32 +332,6 @@ module.exports = {
         ct_currency_type: "UC",
         ct_currency_type_image:
           "https://res.cloudinary.com/dqbdwqxsk/image/upload/v1730879269/uc-currency_k6j9qj.webp",
-        ct_steps: JSON.stringify([
-          {
-            step: 1,
-            description: "Enter your Character ID",
-          },
-          {
-            step: 2,
-            description: "Select Purchase Amount",
-          },
-          {
-            step: 3,
-            description: "Select Payment Methods",
-          },
-          {
-            step: 4,
-            description: "Enter Promo Code (if applicable)",
-          },
-          {
-            step: 5,
-            description: "Fill in Email for transaction receipt",
-          },
-          {
-            step: 6,
-            description: "Click 'Buy Now' and complete the payment",
-          },
-        ]),
         ct_created_at: new Date(),
         ct_updated_at: new Date(),
       },
@@ -948,32 +346,6 @@ module.exports = {
         ct_currency_type: "Genesis Crystals",
         ct_currency_type_image:
           "https://res.cloudinary.com/dqbdwqxsk/image/upload/v1730879268/genshin-currency_h832it.webp",
-        ct_steps: JSON.stringify([
-          {
-            step: 1,
-            description: "Enter your UID & Server",
-          },
-          {
-            step: 2,
-            description: "Select Purchase Amount",
-          },
-          {
-            step: 3,
-            description: "Select Payment Methods",
-          },
-          {
-            step: 4,
-            description: "Enter Promo Code (if applicable)",
-          },
-          {
-            step: 5,
-            description: "Fill in Email for transaction receipt",
-          },
-          {
-            step: 6,
-            description: "Click 'Buy Now' and complete the payment",
-          },
-        ]),
         ct_created_at: new Date(),
         ct_updated_at: new Date(),
       },
@@ -988,32 +360,6 @@ module.exports = {
         ct_currency_type: "Wild Cores",
         ct_currency_type_image:
           "https://res.cloudinary.com/dqbdwqxsk/image/upload/v1730879269/lol-currency_yffh0d.webp",
-        ct_steps: JSON.stringify([
-          {
-            step: 1,
-            description: "Enter your Riot ID",
-          },
-          {
-            step: 2,
-            description: "Select Purchase Amount",
-          },
-          {
-            step: 3,
-            description: "Select Payment Methods",
-          },
-          {
-            step: 4,
-            description: "Enter Promo Code (if applicable)",
-          },
-          {
-            step: 5,
-            description: "Fill in Email for transaction receipt",
-          },
-          {
-            step: 6,
-            description: "Click 'Buy Now' and complete the payment",
-          },
-        ]),
         ct_created_at: new Date(),
         ct_updated_at: new Date(),
       },
@@ -1028,32 +374,6 @@ module.exports = {
         ct_currency_type: "Oneiric Shard",
         ct_currency_type_image:
           "https://res.cloudinary.com/dqbdwqxsk/image/upload/v1730879268/honkai-currency_jwibzx.webp",
-        ct_steps: JSON.stringify([
-          {
-            step: 1,
-            description: "Enter your UID & Server",
-          },
-          {
-            step: 2,
-            description: "Select Purchase Amount",
-          },
-          {
-            step: 3,
-            description: "Select Payment Methods",
-          },
-          {
-            step: 4,
-            description: "Enter Promo Code (if applicable)",
-          },
-          {
-            step: 5,
-            description: "Fill in Email for transaction receipt",
-          },
-          {
-            step: 6,
-            description: "Click 'Buy Now' and complete the payment",
-          },
-        ]),
         ct_created_at: new Date(),
         ct_updated_at: new Date(),
       },
@@ -1068,32 +388,6 @@ module.exports = {
         ct_currency_type: "CP",
         ct_currency_type_image:
           "https://res.cloudinary.com/dqbdwqxsk/image/upload/v1730879269/cod-currency_a505se.webp",
-        ct_steps: JSON.stringify([
-          {
-            step: 1,
-            description: "Enter your UID & Server",
-          },
-          {
-            step: 2,
-            description: "Select Purchase Amount",
-          },
-          {
-            step: 3,
-            description: "Select Payment Methods",
-          },
-          {
-            step: 4,
-            description: "Enter Promo Code (if applicable)",
-          },
-          {
-            step: 5,
-            description: "Fill in Email for transaction receipt",
-          },
-          {
-            step: 6,
-            description: "Click 'Buy Now' and complete the payment",
-          },
-        ]),
         ct_created_at: new Date(),
         ct_updated_at: new Date(),
       },
@@ -1108,32 +402,6 @@ module.exports = {
         ct_currency_type: "Gems",
         ct_currency_type_image:
           "https://res.cloudinary.com/dqbdwqxsk/image/upload/v1730879307/coc-currency_cbem8a.webp",
-        ct_steps: JSON.stringify([
-          {
-            step: 1,
-            description: "Enter your Player ID & Player Tag",
-          },
-          {
-            step: 2,
-            description: "Select Purchase Amount",
-          },
-          {
-            step: 3,
-            description: "Select Payment Methods",
-          },
-          {
-            step: 4,
-            description: "Enter Promo Code (if applicable)",
-          },
-          {
-            step: 5,
-            description: "Fill in Email for transaction receipt",
-          },
-          {
-            step: 6,
-            description: "Click 'Buy Now' and complete the payment",
-          },
-        ]),
         ct_created_at: new Date(),
         ct_updated_at: new Date(),
       },
@@ -1148,32 +416,6 @@ module.exports = {
         ct_currency_type: "Candy",
         ct_currency_type_image:
           "https://res.cloudinary.com/dqbdwqxsk/image/upload/v1730879274/sausage-man-currency_jszuky.webp",
-        ct_steps: JSON.stringify([
-          {
-            step: 1,
-            description: "Enter your User ID",
-          },
-          {
-            step: 2,
-            description: "Select Purchase Amount",
-          },
-          {
-            step: 3,
-            description: "Select Payment Methods",
-          },
-          {
-            step: 4,
-            description: "Enter Promo Code (if applicable)",
-          },
-          {
-            step: 5,
-            description: "Fill in Email for transaction receipt",
-          },
-          {
-            step: 6,
-            description: "Click 'Buy Now' and complete the payment",
-          },
-        ]),
         ct_created_at: new Date(),
         ct_updated_at: new Date(),
       },
@@ -1188,32 +430,6 @@ module.exports = {
         ct_currency_type: "Diamond",
         ct_currency_type_image:
           "https://res.cloudinary.com/dqbdwqxsk/image/upload/v1730879273/solo-leveling-currency_spdwub.webp",
-        ct_steps: JSON.stringify([
-          {
-            step: 1,
-            description: "Enter your User ID & Server",
-          },
-          {
-            step: 2,
-            description: "Select Purchase Amount",
-          },
-          {
-            step: 3,
-            description: "Select Payment Methods",
-          },
-          {
-            step: 4,
-            description: "Enter Promo Code (if applicable)",
-          },
-          {
-            step: 5,
-            description: "Fill in Email for transaction receipt",
-          },
-          {
-            step: 6,
-            description: "Click 'Buy Now' and complete the payment",
-          },
-        ]),
         ct_created_at: new Date(),
         ct_updated_at: new Date(),
       },

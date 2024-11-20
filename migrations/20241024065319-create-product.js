@@ -26,10 +26,6 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
       },
-      pr_stock_quantity: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-      },
       pr_created_at: {
         type: Sequelize.DATE,
         allowNull: false,
