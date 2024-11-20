@@ -234,6 +234,170 @@
           }
         }
       }
+    },
+    "/admin/create-user": {
+      "post": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Create User",
+        "description": "Create User",
+        "operationId": "createUser",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "us_email": {
+                    "type": "string",
+                    "example": "rekeningbri84@gmail.com"
+                  },
+                  "us_password": {
+                    "type": "string",
+                    "example": "dandi123"
+                  },
+                  "us_phone_number": {
+                    "type": "string",
+                    "example": "08221133411"
+                  },
+                  "us_username": {
+                    "type": "string",
+                    "example": "dandipram"
+                  }
+                }
+              },
+              "examples": {
+                "Create User": {
+                  "value": {
+                    "us_email": "rekeningbri84@gmail.com",
+                    "us_password": "dandi123",
+                    "us_phone_number": "08221133411",
+                    "us_username": "dandipram"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/admin/get-all-user": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "get all user",
+        "description": "get all user",
+        "operationId": "getAllUser",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "us_email": {
+                    "type": "string",
+                    "example": "rekeningbri84@gmail.com"
+                  },
+                  "us_password": {
+                    "type": "string",
+                    "example": "dandi123"
+                  },
+                  "us_phone_number": {
+                    "type": "string",
+                    "example": "08221133411"
+                  },
+                  "us_username": {
+                    "type": "string",
+                    "example": "dandipram"
+                  }
+                }
+              },
+              "examples": {
+                "get all user": {
+                  "value": {
+                    "us_email": "rekeningbri84@gmail.com",
+                    "us_password": "dandi123",
+                    "us_phone_number": "08221133411",
+                    "us_username": "dandipram"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/admin/update-user/14": {
+      "put": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Update Delete",
+        "description": "Update Delete",
+        "operationId": "updateDelete",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "us_email": {
+                    "type": "string",
+                    "example": "rekeningbri84@gmail.com"
+                  },
+                  "us_password": {
+                    "type": "string",
+                    "example": "muhali123"
+                  },
+                  "us_phone_number": {
+                    "type": "string",
+                    "example": "08221133411"
+                  },
+                  "us_username": {
+                    "type": "string",
+                    "example": "muhali123"
+                  }
+                }
+              },
+              "examples": {
+                "Delete User": {
+                  "value": {
+                    "us_email": "rekeningbri84@gmail.com",
+                    "us_password": "muhali123",
+                    "us_phone_number": "08221133411",
+                    "us_username": "muhali123"
+                  }
+                },
+                "Update Delete": {
+                  "value": {
+                    "us_email": "rekeningbri84@gmail.com",
+                    "us_password": "muhali123",
+                    "us_phone_number": "08221133411",
+                    "us_username": "muhali123"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
     }
   },
   "tags": [

@@ -1,6 +1,8 @@
-const { user, product, Order, OrderItem } = require("@/models");
+const { user, product, Order, OrderItem, category } = require("@/models");
 const { Op } = require("sequelize");
 const bcrypt = require("bcrypt");
+const { midtransVerifyTransaction } = require("@/services/midtrans");
+const { uploadImage } = require("@/services/cloudinary.service");
 
 // get all user count
 const getUserCount = async (req, res) => {
@@ -87,15 +89,82 @@ const getTotalAmount = async (req, res) => {
 // get all order
 const getAllOrder = async (req, res) => {
   try {
-    const allOrder = await Order.findAll();
+    const allOrder = await Order.findAll({
+      attributes: {
+        exclude: ["or_updated_at"],
+      },
+      include: [
+        {
+          model: OrderItem,
+          as: "orderItem",
+          attributes: {
+            exclude: ["oi_created_at", "oi_updated_at"],
+          },
+        },
+      ],
+    });
+
+    if (!allOrder || allOrder.length === 0) {
+      return res.status(404).json({
+        status: "error",
+        code: 404,
+        message: "Orders not found",
+      });
+    }
+
+    const updatedOrders = await Promise.all(
+      allOrder.map(async (order) => {
+        try {
+          const transaction = await midtransVerifyTransaction(
+            order.or_platform_id
+          );
+
+          if (!transaction) {
+            console.warn(
+              `Transaction not found for order ID: ${order.or_platform_id}`
+            );
+            return order.toJSON();
+          }
+
+          let statusOrder = order.or_status;
+
+          if (transaction.transaction_status === "settlement") {
+            statusOrder = "settlement";
+          } else if (transaction.transaction_status === "expire") {
+            statusOrder = "expire";
+          } else if (transaction.transaction_status === "cancel") {
+            statusOrder = "cancel";
+          }
+
+          const updateData = {
+            or_status: statusOrder,
+            or_payment_status: transaction.transaction_status,
+            or_updated_at: new Date(),
+          };
+
+          if (transaction.va_numbers) {
+            updateData.or_vaNumber = transaction.va_numbers;
+          }
+
+          await Order.update(updateData, {
+            where: { or_platform_id: transaction.order_id },
+          });
+
+          return { ...order.toJSON(), ...updateData };
+        } catch (error) {
+          console.error(`Error updating order ${order.or_platform_id}:`, error);
+          return order.toJSON();
+        }
+      })
+    );
+
     return res.status(200).json({
       status: "success",
       code: 200,
-      data: {
-        allOrder: allOrder,
-      },
+      data: updatedOrders,
     });
   } catch (error) {
+    console.error("Error fetching orders:", error);
     return res.status(500).json({
       status: "error",
       code: 500,
@@ -325,6 +394,277 @@ const deleteUser = async (req, res) => {
   }
 };
 
+// get all category
+const getAllCategory = async (req, res) => {
+  try {
+    const allCategory = await category.findAll({
+      attributes: ["ct_id", "ct_name"],
+    });
+
+    return res.status(200).json({
+      status: "success",
+      code: 200,
+      data: allCategory,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      status: "error",
+      code: 500,
+      message: error.message,
+    });
+  }
+};
+
+// create product
+const createProduct = async (req, res) => {
+  try {
+    const { pr_ct_id, pr_name, pr_price, pr_stock_quantity } = req.body;
+
+    if (!pr_ct_id || !pr_name || !pr_price || !pr_stock_quantity) {
+      return res.status(400).json({
+        status: "error",
+        code: 400,
+        message: "Please fill all required fields",
+      });
+    }
+
+    const categoryExists = await category.findOne({
+      where: { ct_id: pr_ct_id },
+    });
+
+    if (!categoryExists) {
+      return res.status(404).json({
+        status: "error",
+        code: 404,
+        message: "Category not found",
+      });
+    }
+
+    if (pr_price <= 0 || pr_stock_quantity < 0) {
+      return res.status(400).json({
+        status: "error",
+        code: 400,
+        message: "Price must be greater than 0 and stock must be non-negative",
+      });
+    }
+
+    const existingProduct = await product.findOne({
+      where: {
+        pr_name: {
+          [Op.iLike]: pr_name,
+        },
+      },
+    });
+
+    if (existingProduct) {
+      return res.status(400).json({
+        status: "error",
+        code: 400,
+        message: "Product name already exists",
+      });
+    }
+
+    const newProduct = await product.create({
+      pr_ct_id,
+      pr_name,
+      pr_price,
+      pr_stock_quantity,
+      pr_created_at: new Date(),
+      pr_updated_at: new Date(),
+    });
+
+    return res.status(201).json({
+      status: "success",
+      code: 201,
+      message: "Product created successfully",
+      data: newProduct,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      status: "error",
+      code: 500,
+      message: error.message,
+    });
+  }
+};
+
+const getProductByCategory = async (req, res) => {
+  try {
+    const { categoryId } = req.params;
+
+    const products = await product.findAll({
+      where: {
+        pr_ct_id: categoryId,
+      },
+      attributes: {
+        exclude: ["pr_created_at", "pr_updated_at"],
+      },
+      include: [
+        {
+          model: category,
+          as: "category",
+          attributes: ["ct_name"],
+        },
+      ],
+    });
+
+    return res.status(200).json({
+      status: "success",
+      code: 200,
+      data: products,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      status: "error",
+      code: 500,
+      message: error.message,
+    });
+  }
+};
+
+const updateProduct = async (req, res) => {
+  try {
+    const { pr_ct_id, pr_name, pr_price, pr_stock_quantity } = req.body;
+    const { productId } = req.params;
+
+    if (!pr_ct_id || !pr_name || !pr_price || !pr_stock_quantity) {
+      return res.status(400).json({
+        status: "error",
+        code: 400,
+        message: "Please fill all required fields",
+      });
+    }
+
+    const oldProduct = await product.findOne({
+      where: { pr_id: productId },
+    });
+
+    if (!oldProduct) {
+      return res.status(404).json({
+        status: "error",
+        code: 404,
+        message: "Product not found",
+      });
+    }
+
+    const previousDataProduct = {
+      pr_id: oldProduct.pr_id,
+      pr_ct_id: oldProduct.pr_ct_id,
+      pr_name: oldProduct.pr_name,
+      pr_price: oldProduct.pr_price,
+      pr_stock_quantity: oldProduct.pr_stock_quantity,
+    };
+
+    if (pr_price <= 0 || pr_stock_quantity < 0) {
+      return res.status(400).json({
+        status: "error",
+        code: 400,
+        message: "Price must be greater than 0 and stock must be non-negative",
+      });
+    }
+
+    await product.update(
+      {
+        pr_ct_id,
+        pr_name,
+        pr_price,
+        pr_stock_quantity,
+        pr_updated_at: new Date(),
+      },
+      {
+        where: { pr_id: productId },
+      }
+    );
+
+    const updatedProduct = await product.findOne({
+      where: { pr_id: productId },
+      attributes: {
+        exclude: ["pr_created_at", "pr_updated_at"],
+      },
+    });
+
+    return res.status(200).json({
+      status: "success",
+      code: 200,
+      message: "Product updated successfully",
+      data: {
+        previousData: previousDataProduct,
+        updatedData: updatedProduct,
+      },
+    });
+  } catch (error) {
+    return res.status(500).json({
+      status: "error",
+      code: 500,
+      message: error.message,
+    });
+  }
+};
+
+const deleteProduct = async (req, res) => {
+  try {
+    const { productId } = req.params;
+
+    const productToDelete = await product.findOne({
+      where: { pr_id: productId },
+    });
+
+    if (!productToDelete) {
+      return res.status(404).json({
+        status: "error",
+        code: 404,
+        message: "Product not found",
+      });
+    }
+
+    await product.destroy({
+      where: { pr_id: productId },
+    });
+
+    return res.status(200).json({
+      status: "success",
+      code: 200,
+      message: "Product deleted successfully",
+      data: productToDelete,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      status: "error",
+      code: 500,
+      message: error.message,
+    });
+  }
+};
+
+const getAllProducts = async (req, res) => {
+  try {
+    const products = await product.findAll({
+      attributes: {
+        exclude: ["pr_created_at", "pr_updated_at"],
+      },
+      include: [
+        {
+          model: category,
+          as: "category",
+          attributes: ["ct_name"],
+        },
+      ],
+    });
+
+    return res.status(200).json({
+      status: "success",
+      code: 200,
+      data: products,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      status: "error",
+      code: 500,
+      message: error.message,
+    });
+  }
+};
+
 module.exports = {
   getUserCount,
   getProductCount,
@@ -336,4 +676,10 @@ module.exports = {
   getAllUser,
   updateUser,
   deleteUser,
+  getAllCategory,
+  createProduct,
+  getProductByCategory,
+  updateProduct,
+  deleteProduct,
+  getAllProducts,
 };

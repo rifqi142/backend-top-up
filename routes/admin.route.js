@@ -12,6 +12,12 @@ const {
   getAllUser,
   updateUser,
   deleteUser,
+  getAllCategory,
+  createProduct,
+  getProductByCategory,
+  deleteProduct,
+  updateProduct,
+  getAllProducts,
 } = require("@/controllers/admin.controller");
 const {
   registerBodyValidation,
@@ -38,5 +44,13 @@ router.put(
   registerCheckDuplicate
 );
 router.delete("/delete-user/:userId", deleteUser);
+
+// products
+router.get("/get-all-category", getAllCategory);
+router.post("/create-product", createProduct);
+router.get("/categories/:categoryId/products", getProductByCategory);
+router.put("/update-product/:productId", updateProduct);
+router.delete("/delete-product/:productId", deleteProduct);
+router.get("/get-all-product", getAllProducts);
 
 module.exports = router;
