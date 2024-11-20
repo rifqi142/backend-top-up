@@ -1,13 +1,13 @@
 const cloudinary = require("@/utils/cloudinary");
 const { BadRequest } = require("http-errors");
 
-const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
+const allowedTypes = ["image/jpeg", "image/png", "image/jpg", "image/webp"];
 const MAX_SIZE = 10 * 1024 * 1024;
 
 const uploadImage = (file) => {
   if (!allowedTypes.includes(file.mimetype)) {
     throw new BadRequest(
-      "Invalid file type. Only JPEG, PNG, and JPG are allowed."
+      "Invalid file type. Only JPEG, PNG, and JPG, WEBP are allowed."
     );
   }
 
@@ -18,7 +18,7 @@ const uploadImage = (file) => {
   return new Promise((resolve, reject) => {
     const upload = cloudinary.uploader.upload_stream(
       {
-        folder: "menus",
+        folder: "final-project-img/img-uploads",
         transformation: [
           { gravity: "auto", height: 215, width: 215, crop: "fill" },
         ],
