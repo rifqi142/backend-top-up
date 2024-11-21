@@ -1,4 +1,5 @@
 const { category } = require("@/models");
+const { Op } = require("sequelize");
 
 const getAllCategory = async (req, res) => {
   try {
@@ -20,12 +21,12 @@ const getAllCategory = async (req, res) => {
   }
 };
 
-const getCategoryByName = async (req, res) => {
-  const { categoryName } = req.params;
+const getCategoryByCode = async (req, res) => {
+  const { categoryCode } = req.params;
 
   try {
     const categoryDetail = await category.findOne({
-      where: { ct_code: categoryName },
+      where: { ct_code: categoryCode },
     });
 
     if (!categoryDetail) {
@@ -46,7 +47,39 @@ const getCategoryByName = async (req, res) => {
   }
 };
 
+const searchCategory = async (req, res) => {
+  const { categoryName } = req.query;
+
+  try {
+    const categoryDetail = await category.findAll({
+      where: {
+        ct_name: {
+          [Op.iLike]: `%${categoryName}%`,
+        },
+      },
+      attributes: ["ct_code", "ct_name", "ct_image"],
+    });
+
+    if (categoryDetail.length === 0) {
+      return res.status(404).json({ message: "No categories found" });
+    }
+
+    return res.status(200).json({
+      status: "success",
+      code: 200,
+      data: categoryDetail,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      status: "error",
+      code: 500,
+      message: error.message,
+    });
+  }
+};
+
 module.exports = {
   getAllCategory,
-  getCategoryByName,
+  getCategoryByCode,
+  searchCategory,
 };

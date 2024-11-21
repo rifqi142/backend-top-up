@@ -312,9 +312,41 @@ const getAllOrderByUserId = async (req, res) => {
   }
 };
 
+const getAllOrder = async (req, res) => {
+  try {
+    const orders = await Order.findAll({
+      attributes: {
+        exclude: ["or_updated_at", "or_updated_at"],
+      },
+      include: [
+        {
+          model: OrderItem,
+          as: "orderItem",
+          attributes: {
+            exclude: ["oi_created_at", "oi_updated_at"],
+          },
+        },
+      ],
+    });
+
+    return res.status(200).json({
+      status: "success",
+      message: "Order retrieved successfully",
+      data: orders,
+    });
+  } catch (error) {
+    console.error("Error during order retrieval:", error);
+    return res.status(500).json({
+      status: "error",
+      message: "Failed to retrieve order",
+    });
+  }
+};
+
 module.exports = {
   createOrderAndSnapTransaction,
   verifyTransaction,
   cancelTransaction,
   getAllOrderByUserId,
+  getAllOrder,
 };

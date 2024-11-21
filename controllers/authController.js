@@ -70,6 +70,7 @@ const authRegisterUser = async (req, res) => {
       data: newUser,
     });
   } catch (error) {
+    console.log(error);
     res.status(400).json({
       status: "error",
       code: 400,

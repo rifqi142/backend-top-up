@@ -3,10 +3,12 @@ const router = express.Router();
 
 const {
   getAllCategory,
-  getCategoryByName,
+  getCategoryByCode,
+  searchCategory,
 } = require("@/controllers/categoryController");
 
 router.get("/get-all-category", getAllCategory);
-router.get("/get-category-detail/:categoryName", getCategoryByName);
+router.get("/get-category-detail/:categoryCode", getCategoryByCode);
+router.get("/search-category", searchCategory);
 
 module.exports = router;
