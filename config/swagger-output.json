@@ -19,9 +19,9 @@
         "tags": [
           "Auth"
         ],
-        "summary": "Send Email Verification",
-        "description": "Send Email Verification",
-        "operationId": "sendEmailVerification",
+        "summary": "Send Email Forgot Pas",
+        "description": "Send Email Forgot Pas",
+        "operationId": "sendEmailForgotPas",
         "requestBody": {
           "content": {
             "application/json": {
@@ -35,6 +35,11 @@
                 }
               },
               "examples": {
+                "Send Email Forgot Pas": {
+                  "value": {
+                    "us_email": "rekeningbri84@gmail.com"
+                  }
+                },
                 "Send Email Verification": {
                   "value": {
                     "us_email": "rekeningbri84@gmail.com"

@@ -81,7 +81,7 @@ const authRegisterUser = async (req, res) => {
 
 const authLogin = async (req, res) => {
   try {
-    const { input, us_password } = req.body;
+    const { input, us_password, rememberMe } = req.body;
 
     const loginUser = await user.findOne({
       where: {
@@ -119,12 +119,24 @@ const authLogin = async (req, res) => {
       });
     }
 
+    if (!loginUser.us_is_active) {
+      return res.status(400).json({
+        status: "error",
+        code: 400,
+        message: "Please verify your email first",
+        data: loginUser.us_email,
+      });
+    }
+
+    const tokenDuration = rememberMe ? "7d" : "1h";
+    const cookieExpiry = rememberMe ? 7 * 24 * 60 * 60 * 1000 : 60 * 60 * 1000;
+
     const loginToken = generateToken(
       loginUser.us_id,
       loginUser.us_email,
       loginUser.us_username,
       loginUser.us_is_admin,
-      "1h"
+      tokenDuration
     );
 
     await token.create({
@@ -132,7 +144,7 @@ const authLogin = async (req, res) => {
       tkn_type: "LOGIN_TOKEN",
       tkn_description: `Successfully created token for user ${loginUser.us_email}`,
       tkn_us_id: loginUser.us_id,
-      tkn_expired_on: new Date(new Date().getTime() + 60 * 60 * 1000),
+      tkn_expired_on: new Date(new Date().getTime() + cookieExpiry),
       tkn_is_active: true,
       tkn_created_at: new Date(),
       tkn_updated_at: new Date(),
@@ -143,7 +155,7 @@ const authLogin = async (req, res) => {
 
     const option = {
       httpOnly: false,
-      expires: new Date(new Date().getTime() + 60 * 60 * 1000),
+      expires: new Date(new Date().getTime() + cookieExpiry),
     };
 
     return res.cookie("Authentication", loginToken, option).status(201).send({
@@ -260,12 +272,12 @@ const sendEmailVerification = async (req, res) => {
   try {
     const { us_email } = req.body;
 
-    const user = await user.findOne({
+    const userSendEmail = await user.findOne({
       where: { us_email },
       attributes: ["us_id", "us_email", "us_username"],
     });
 
-    if (!user) {
+    if (!userSendEmail) {
       return res.status(400).json({
         status: "error",
         code: 400,
@@ -273,11 +285,19 @@ const sendEmailVerification = async (req, res) => {
       });
     }
 
+    if (userSendEmail.us_is_active) {
+      return res.status(400).json({
+        status: "error",
+        code: 400,
+        message: "Email already verified",
+      });
+    }
+
     const verificationToken = generateToken(
-      user.us_id,
-      user.us_email,
-      user.us_username,
-      user.us_is_admin,
+      userSendEmail.us_id,
+      userSendEmail.us_email,
+      userSendEmail.us_username,
+      userSendEmail.us_is_admin,
       "1h"
     );
 
@@ -285,7 +305,7 @@ const sendEmailVerification = async (req, res) => {
       tkn_value: verificationToken,
       tkn_type: "VERIFICATION_TOKEN",
       tkn_description: `Successfully created token for user ${user.us_email}`,
-      tkn_us_id: user.us_id,
+      tkn_us_id: userSendEmail.us_id,
       tkn_expired_on: new Date(new Date().getTime() + 60 * 60 * 1000),
       tkn_is_active: true,
       tkn_created_at: new Date(),
@@ -293,13 +313,12 @@ const sendEmailVerification = async (req, res) => {
     });
 
     await sendEmail(
-      user.us_username,
-      user.us_email,
+      userSendEmail.us_username,
+      userSendEmail.us_email,
       "Verification Email Address",
       "Please verify your email",
-      "Verify Email",
-      verificationToken,
-      `${process.env.BASE_URL}/auth/verify-email/${verificationToken}`
+      `${process.env.BASE_URL}/auth/verify-email?token=${verificationToken}`,
+      "Verify Email"
     );
 
     return res.status(200).json({
@@ -316,11 +335,12 @@ const sendEmailVerification = async (req, res) => {
   }
 };
 
-const loginWithGoogleIn = async (req, res) => {
-  const { idToken } = req.body;
-  console.log(idToken);
+const loginWithGoogle = async (req, res) => {
+  const { idToken, rememberMe } = req.body;
   try {
     const decodedToken = await admin.auth().verifyIdToken(idToken);
+    console.log("decoded token", decodedToken);
+
     let userGoogle = await user.findOne({
       where: {
         us_email: decodedToken.email,
@@ -333,25 +353,25 @@ const loginWithGoogleIn = async (req, res) => {
         us_email: decodedToken.email,
         us_phone_number: "08xxxxxxxxxx",
         us_password: await bcrypt.hash(generateRandomCharacter(10), 10),
-        // us_password: await bcrypt.hash("123456", 10),
         us_is_active: true,
         us_is_admin: false,
         us_created_at: new Date(),
         us_updated_at: new Date(),
       });
     }
+
     let milliseconds = 24 * 60 * 60 * 1000;
-    let expiresIn = new Date(Date.now() + milliseconds);
-    // if (rememberMe) {
-    //   expiresIn = new Date(Date.now() + milliseconds * 30); // 30 days
-    // }
+    if (rememberMe) {
+      milliseconds *= 30;
+    }
+    const expiresIn = new Date(Date.now() + milliseconds);
 
     const loginToken = generateToken(
       userGoogle.us_id,
       userGoogle.us_email,
       userGoogle.us_username,
       userGoogle.us_is_admin,
-      "1h"
+      rememberMe ? "30d" : "1h"
     );
 
     await token.create({
@@ -364,6 +384,7 @@ const loginWithGoogleIn = async (req, res) => {
       tkn_created_at: new Date(),
       tkn_updated_at: new Date(),
     });
+
     delete userGoogle.dataValues.us_password;
     userGoogle.dataValues.token = loginToken;
 
@@ -372,7 +393,7 @@ const loginWithGoogleIn = async (req, res) => {
       expires: expiresIn,
     };
 
-    return res.cookie("user", loginToken, option).status(201).send({
+    return res.cookie("Authentication", loginToken, option).status(201).send({
       status: "success",
       code: 201,
       message: "Login success",
@@ -428,7 +449,7 @@ module.exports = {
   authLogin,
   authLogout,
   authRegisterUser,
-  loginWithGoogleIn,
+  loginWithGoogle,
   sendEmailforgotPassword,
   sendEmailVerification,
   updateResetPassword,

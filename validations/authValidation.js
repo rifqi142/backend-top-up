@@ -54,6 +54,7 @@ const loginBodyValidation = (req, res, next) => {
   const bodySchema = joi.object({
     input: joi.string().required(),
     us_password: joi.string().required(),
+    rememberMe: joi.boolean(),
   });
   const validationError = bodySchema.validate(req.body);
   if (validationError.error) {

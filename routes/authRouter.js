@@ -4,7 +4,7 @@ const {
   authLogin,
   authLogout,
   authRegisterUser,
-  loginWithGoogleIn,
+  loginWithGoogle,
   sendEmailforgotPassword,
   sendEmailVerification,
   updateResetPassword,
@@ -31,6 +31,6 @@ router.put("/update-reset-password", updateResetPassword);
 router.post("/send-email-verification", sendEmailVerification);
 router.get("/verify-email", verifyEmail);
 
-router.post("/google-login", loginWithGoogleIn);
+router.post("/google-login", loginWithGoogle);
 
 module.exports = router;

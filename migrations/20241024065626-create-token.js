@@ -13,7 +13,7 @@ module.exports = {
         allowNull: false,
       },
       tkn_value: {
-        type: Sequelize.STRING,
+        type: Sequelize.TEXT,
         allowNull: false,
       },
       tkn_description: {
