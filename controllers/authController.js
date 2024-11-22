@@ -37,6 +37,7 @@ const authRegisterUser = async (req, res) => {
       newUser.us_email,
       newUser.us_username,
       newUser.us_is_admin,
+      newUser.us_phone_number,
       "1h"
     );
 
@@ -136,6 +137,7 @@ const authLogin = async (req, res) => {
       loginUser.us_email,
       loginUser.us_username,
       loginUser.us_is_admin,
+      loginUser.us_phone_number,
       tokenDuration
     );
 
@@ -231,6 +233,7 @@ const sendEmailforgotPassword = async (req, res) => {
       userForgotPass.us_email,
       userForgotPass.us_username,
       userForgotPass.us_is_admin,
+      userForgotPass.us_phone_number,
       "1h"
     );
 
@@ -298,6 +301,7 @@ const sendEmailVerification = async (req, res) => {
       userSendEmail.us_email,
       userSendEmail.us_username,
       userSendEmail.us_is_admin,
+      userSendEmail.us_phone_number,
       "1h"
     );
 
@@ -371,6 +375,7 @@ const loginWithGoogle = async (req, res) => {
       userGoogle.us_email,
       userGoogle.us_username,
       userGoogle.us_is_admin,
+      userGoogle.us_phone_number,
       rememberMe ? "30d" : "1h"
     );
 

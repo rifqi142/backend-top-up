@@ -10,9 +10,10 @@ const columns = {
   email: "us_email",
   active: "us_is_active",
   admin: "us_is_admin",
+  phone: "us_phone_number",
 };
 
-const generateToken = (id, email, name, admin, expiresIn) => {
+const generateToken = (id, email, name, admin, phone, expiresIn) => {
   console.log(id, email, name, expiresIn, "generate token");
   const token = jwt.sign(
     {
@@ -20,6 +21,7 @@ const generateToken = (id, email, name, admin, expiresIn) => {
       [columns.email]: email,
       name: name,
       [columns.admin]: admin,
+      [columns.phone]: phone,
     },
     process.env.JWT_SECRET,
     {
