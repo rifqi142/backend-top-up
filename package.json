@@ -39,7 +39,7 @@
   },
   "devDependencies": {
     "jest": "^29.7.0",
-    "sequelize": "^6.37.4",
+    "sequelize": "^6.37.5",
     "sequelize-cli": "^6.6.2"
   },
   "_moduleAliases": {
