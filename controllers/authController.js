@@ -155,12 +155,7 @@ const authLogin = async (req, res) => {
     delete loginUser.dataValues.us_password;
     loginUser.dataValues.token = loginToken;
 
-    const option = {
-      httpOnly: false,
-      expires: new Date(new Date().getTime() + cookieExpiry),
-    };
-
-    return res.cookie("Authentication", loginToken, option).status(201).send({
+    return res.status(201).json({
       status: "success",
       code: 201,
       message: "Login success",
@@ -393,12 +388,7 @@ const loginWithGoogle = async (req, res) => {
     delete userGoogle.dataValues.us_password;
     userGoogle.dataValues.token = loginToken;
 
-    const option = {
-      httpOnly: false,
-      expires: expiresIn,
-    };
-
-    return res.cookie("Authentication", loginToken, option).status(201).send({
+    return res.status(201).json({
       status: "success",
       code: 201,
       message: "Login success",
