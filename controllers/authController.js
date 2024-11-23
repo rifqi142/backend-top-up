@@ -111,7 +111,6 @@ const authLogin = async (req, res) => {
       us_password,
       loginUser.us_password
     );
-
     if (!isPasswordMatch) {
       return res.status(400).json({
         status: "error",
@@ -129,8 +128,8 @@ const authLogin = async (req, res) => {
       });
     }
 
-    const tokenDuration = rememberMe ? "7d" : "1h";
-    const cookieExpiry = rememberMe ? 7 * 24 * 60 * 60 * 1000 : 60 * 60 * 1000;
+    const tokenDurationInDays = rememberMe ? 30 : 7;
+    const cookieExpiry = tokenDurationInDays * 24 * 60 * 60 * 1000;
 
     const loginToken = generateToken(
       loginUser.us_id,
@@ -138,7 +137,7 @@ const authLogin = async (req, res) => {
       loginUser.us_username,
       loginUser.us_is_admin,
       loginUser.us_phone_number,
-      tokenDuration
+      tokenDurationInDays + "d"
     );
 
     await token.create({
@@ -154,6 +153,7 @@ const authLogin = async (req, res) => {
 
     delete loginUser.dataValues.us_password;
     loginUser.dataValues.token = loginToken;
+    loginUser.dataValues.rememberMe = tokenDurationInDays;
 
     return res.status(201).json({
       status: "success",
@@ -359,11 +359,10 @@ const loginWithGoogle = async (req, res) => {
       });
     }
 
-    let milliseconds = 24 * 60 * 60 * 1000;
-    if (rememberMe) {
-      milliseconds *= 30;
-    }
-    const expiresIn = new Date(Date.now() + milliseconds);
+    const tokenDuration = rememberMe ? 30 : 7;
+    const cookieExpiry = rememberMe
+      ? 30 * 24 * 60 * 60 * 1000
+      : 7 * 24 * 60 * 60 * 1000;
 
     const loginToken = generateToken(
       userGoogle.us_id,
@@ -371,7 +370,7 @@ const loginWithGoogle = async (req, res) => {
       userGoogle.us_username,
       userGoogle.us_is_admin,
       userGoogle.us_phone_number,
-      rememberMe ? "30d" : "1h"
+      tokenDuration + "d"
     );
 
     await token.create({
@@ -379,7 +378,7 @@ const loginWithGoogle = async (req, res) => {
       tkn_type: "LOGIN_TOKEN",
       tkn_description: `Successfully created token for user ${userGoogle.us_email}`,
       tkn_us_id: userGoogle.us_id,
-      tkn_expired_on: expiresIn,
+      tkn_expired_on: cookieExpiry,
       tkn_is_active: true,
       tkn_created_at: new Date(),
       tkn_updated_at: new Date(),
@@ -387,6 +386,7 @@ const loginWithGoogle = async (req, res) => {
 
     delete userGoogle.dataValues.us_password;
     userGoogle.dataValues.token = loginToken;
+    userGoogle.dataValues.rememberMe = tokenDuration;
 
     return res.status(201).json({
       status: "success",

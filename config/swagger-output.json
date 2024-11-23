@@ -10,6 +10,9 @@
       "url": "http://localhost"
     },
     {
+      "url": "https://backend-top-up.onrender.com"
+    },
+    {
       "url": "{{BASE_URL\n}}"
     }
   ],
@@ -76,11 +79,11 @@
                   },
                   "us_password": {
                     "type": "string",
-                    "example": "dandi123"
+                    "example": "dandi12344"
                   },
                   "us_phone_number": {
                     "type": "string",
-                    "example": "08221133411"
+                    "example": "082123423432"
                   },
                   "us_username": {
                     "type": "string",
@@ -92,8 +95,8 @@
                 "Register User": {
                   "value": {
                     "us_email": "rekeningbri84@gmail.com",
-                    "us_password": "dandi123",
-                    "us_phone_number": "08221133411",
+                    "us_password": "dandi12344",
+                    "us_phone_number": "082123423432",
                     "us_username": "dandipram"
                   }
                 }
