@@ -45,8 +45,8 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      or_vaNumber: {
-        type: DataTypes.JSON,
+      or_payment_type: {
+        type: DataTypes.STRING,
         allowNull: true,
       },
       or_total_amount: {

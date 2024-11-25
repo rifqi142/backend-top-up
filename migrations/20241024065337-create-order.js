@@ -33,8 +33,8 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      or_vaNumber: {
-        type: Sequelize.JSON,
+      or_payment_type: {
+        type: Sequelize.STRING,
         allowNull: true,
       },
       or_total_amount: {

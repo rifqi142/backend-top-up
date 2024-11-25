@@ -1,5 +1,5 @@
 const { Order, OrderItem, Promotion } = require("@/models");
-const generateRandomString = require("@/helpers/generateRandomString");
+const { generateOrderId } = require("@/utils/generateOrderId");
 const {
   midtransCreateSnapTransaction,
   midtransVerifyTransaction,
@@ -9,10 +9,8 @@ const { Op } = require("sequelize");
 
 const createOrderAndSnapTransaction = async (req, res) => {
   const { oi_product, or_total_amount, userId, email, voucher_code } = req.body;
-  const randomChar1 = generateRandomString(5);
-  const randomChar2 = generateRandomString(5);
 
-  const order_id = `RfqTopup-${randomChar1}-${randomChar2}`;
+  const order_id = generateOrderId();
 
   try {
     let totalAmount = or_total_amount;
@@ -84,7 +82,7 @@ const createOrderAndSnapTransaction = async (req, res) => {
       where: {
         or_us_id: userId,
         or_status: "pending",
-        or_vaNumber: {
+        or_payment_type: {
           [Op.eq]: null,
         },
       },
@@ -96,7 +94,7 @@ const createOrderAndSnapTransaction = async (req, res) => {
       or_platform_id: order_id,
       or_platform_token: transaction?.token,
       or_payment_status: "pending",
-      or_vaNumber: null,
+      or_or_payment_type: null,
       or_total_amount: totalAmount,
       or_created_at: new Date(),
       or_updated_at: new Date(),
@@ -131,6 +129,7 @@ const verifyTransaction = async (req, res) => {
 
   try {
     const transaction = await midtransVerifyTransaction(orderId);
+    console.log("transaction", transaction);
 
     let order = await Order.findOne({
       where: { or_platform_id: transaction.order_id },
@@ -170,7 +169,6 @@ const verifyTransaction = async (req, res) => {
 
         if (promotion && order.or_status === "pending") {
           await promotion.update({ prm_quantity: promotion.prm_quantity - 1 });
-          console.log(`Voucher quantity reduced for promo ${promo.id}`);
         }
       }
     } else if (transaction.transaction_status === "cancel") {
@@ -185,8 +183,10 @@ const verifyTransaction = async (req, res) => {
       or_updated_at: new Date(),
     };
 
-    if (transaction.va_numbers) {
-      updateData.or_vaNumber = transaction.va_numbers;
+    if (transaction.payment_type === "bank_transfer") {
+      updateData.or_payment_type = "bank transfer";
+    } else {
+      updateData.or_payment_type = transaction.payment_type;
     }
 
     await Order.update(updateData, {

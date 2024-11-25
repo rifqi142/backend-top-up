@@ -142,8 +142,8 @@ const getAllOrder = async (req, res) => {
             or_updated_at: new Date(),
           };
 
-          if (transaction.va_numbers) {
-            updateData.or_vaNumber = transaction.va_numbers;
+          if (transaction.payment_type) {
+            updateData.or_payment_type = transaction.payment_type;
           }
 
           await Order.update(updateData, {
