@@ -1,12 +1,18 @@
 module.exports = {
   rootDir: ".",
   testEnvironment: "node",
+  testTimeout: 5000,
   moduleDirectories: ["node_modules"],
   coverageDirectory: "coverage",
   collectCoverage: true,
   collectCoverageFrom: [
     "controllers/**/*.js",
     "routes/**/*.js",
+    "validations/**/*.js",
+    "services/**/*.js",
+    "utils/**/*.js",
+    "helpers/**/*.js",
+    "middlewares/**/*.js",
     "!**/app.js",
     "!**/node_modules/**",
   ],

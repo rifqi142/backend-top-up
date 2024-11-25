@@ -10,14 +10,6 @@ const authRegisterUser = async (req, res) => {
   try {
     const { us_username, us_email, us_phone_number, us_password } = req.body;
 
-    if (!us_username || !us_email || !us_phone_number || !us_password) {
-      return res.status(400).json({
-        status: "error",
-        code: 400,
-        message: "All fields are required",
-      });
-    }
-
     const hashedPassword = await bcrypt.hash(us_password, 10);
 
     const newUser = await user.create({
@@ -71,11 +63,11 @@ const authRegisterUser = async (req, res) => {
       data: newUser,
     });
   } catch (error) {
-    console.log(error);
-    res.status(400).json({
+    res.status(500).json({
       status: "error",
-      code: 400,
-      message: error.message,
+      code: 500,
+      message: "Internal server error",
+      error: error.message,
     });
   }
 };
@@ -155,16 +147,16 @@ const authLogin = async (req, res) => {
     loginUser.dataValues.token = loginToken;
     loginUser.dataValues.rememberMe = tokenDurationInDays;
 
-    return res.status(201).json({
+    return res.status(200).json({
       status: "success",
-      code: 201,
+      code: 200,
       message: "Login success",
       data: loginUser,
     });
   } catch (error) {
-    res.status(400).json({
+    res.status(500).json({
       status: "error",
-      code: 400,
+      code: 500,
       message: error.message,
     });
   }
@@ -190,7 +182,7 @@ const authLogout = async (req, res) => {
       }
     }
 
-    res.clearCookie("Authentication");
+    res.clearCookie("Authentication-User-Rifqi-Topup");
 
     return res.json({
       status: "success",
@@ -258,9 +250,9 @@ const sendEmailforgotPassword = async (req, res) => {
       message: "Email sent successfully",
     });
   } catch (error) {
-    res.status(400).json({
+    res.status(500).json({
       status: "error",
-      code: 400,
+      code: 500,
       message: error.message,
     });
   }
@@ -284,9 +276,9 @@ const sendEmailVerification = async (req, res) => {
     }
 
     if (userSendEmail.us_is_active) {
-      return res.status(400).json({
+      return res.status(500).json({
         status: "error",
-        code: 400,
+        code: 500,
         message: "Email already verified",
       });
     }
@@ -326,9 +318,9 @@ const sendEmailVerification = async (req, res) => {
       message: "Email sent successfully",
     });
   } catch (error) {
-    res.status(400).json({
+    res.status(500).json({
       status: "error",
-      code: 400,
+      code: 500,
       message: error.message,
     });
   }
@@ -386,9 +378,9 @@ const loginWithGoogle = async (req, res) => {
     userGoogle.dataValues.token = loginToken;
     userGoogle.dataValues.rememberMe = tokenDuration;
 
-    return res.status(201).json({
+    return res.status(200).json({
       status: "success",
-      code: 201,
+      code: 200,
       message: "Login success",
       data: userGoogle,
     });
