@@ -338,7 +338,6 @@ const loginWithGoogle = async (req, res) => {
   const { idToken, rememberMe } = req.body;
   try {
     const decodedToken = await admin.auth().verifyIdToken(idToken);
-    console.log("decoded token", decodedToken);
 
     let userGoogle = await user.findOne({
       where: {
@@ -353,7 +352,6 @@ const loginWithGoogle = async (req, res) => {
         us_phone_number: "08xxxxxxxxxx",
         us_password: await bcrypt.hash(generateRandomCharacter(10), 10),
         us_is_active: true,
-        us_is_admin: false,
         us_created_at: new Date(),
         us_updated_at: new Date(),
       });

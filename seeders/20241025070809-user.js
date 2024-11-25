@@ -15,7 +15,6 @@ module.exports = {
      */
     return queryInterface.bulkInsert("users", [
       {
-        us_id: 1,
         us_username: "admin",
         us_email: "rfqtopup@admin.com",
         us_phone_number: "08123456789",
@@ -26,7 +25,6 @@ module.exports = {
         us_updated_at: new Date(),
       },
       {
-        us_id: 2,
         us_username: "fadlan123",
         us_email: "fadlan123@gmail.com",
         us_phone_number: "08221155448",
@@ -37,7 +35,6 @@ module.exports = {
         us_updated_at: new Date(),
       },
       {
-        us_id: 3,
         us_username: "rifqi142",
         us_email: "muhrifqi@gmail.com",
         us_phone_number: "08122554478",
@@ -48,7 +45,6 @@ module.exports = {
         us_updated_at: new Date(),
       },
       {
-        us_id: 777,
         us_username: "guest",
         us_email: "777@rifqitopup.com",
         us_phone_number: "088221155778",
