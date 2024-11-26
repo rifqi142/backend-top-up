@@ -4,10 +4,7 @@ const app = require("@/index");
 const admin = require("@/controllers/firebaseController");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const { Op } = require("sequelize");
 const { user, token } = require("@/models");
-// const { sendEmail } = require("@/controllers/tokenController");
-const adminFirebase = require("@/controllers/firebaseController");
 
 jest.mock("@/models", () => ({
   user: {
@@ -583,10 +580,8 @@ describe("PUT /auth/update-reset-password", () => {
   });
 
   it("should return 400 when password hashing fails", async () => {
-    // Mock jwt.verify untuk mendekode token
     jwt.verify.mockReturnValue({ us_id: 1 });
 
-    // Simulasi error pada bcrypt.hash
     bcrypt.hash.mockImplementation(() => {
       throw new Error("Hashing error");
     });

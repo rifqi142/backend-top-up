@@ -11,6 +11,7 @@ const getUserCount = async (req, res) => {
     return res.status(200).json({
       status: "success",
       code: 200,
+      message: "Get all user count successfully",
       data: {
         totalUser: userCount,
       },
@@ -30,6 +31,7 @@ const getProductCount = async (req, res) => {
     const productCount = await product.count();
     return res.status(200).json({
       status: "success",
+      message: "Get all product count successfully",
       code: 200,
       data: {
         totalProduct: productCount,
@@ -51,6 +53,7 @@ const getOrderCount = async (req, res) => {
     return res.status(200).json({
       status: "success",
       code: 200,
+      message: "Get all order count successfully",
       data: {
         totalOrder: orderCount,
       },
@@ -72,6 +75,7 @@ const getTotalAmount = async (req, res) => {
     });
     return res.status(200).json({
       status: "success",
+      message: "Get total amount successfully",
       code: 200,
       data: {
         totalAmount: totalAmount,
@@ -152,7 +156,6 @@ const getAllOrder = async (req, res) => {
 
           return { ...order.toJSON(), ...updateData };
         } catch (error) {
-          console.error(`Error updating order ${order.or_platform_id}:`, error);
           return order.toJSON();
         }
       })
@@ -160,11 +163,11 @@ const getAllOrder = async (req, res) => {
 
     return res.status(200).json({
       status: "success",
+      message: "Get all orders successfully",
       code: 200,
       data: updatedOrders,
     });
   } catch (error) {
-    console.error("Error fetching orders:", error);
     return res.status(500).json({
       status: "error",
       code: 500,
@@ -221,14 +224,6 @@ const getOrderToday = async (req, res) => {
 const createUser = async (req, res) => {
   try {
     const { us_username, us_email, us_phone_number, us_password } = req.body;
-
-    if (!us_username || !us_email || !us_phone_number || !us_password) {
-      return res.status(400).json({
-        status: "error",
-        code: 400,
-        message: "Please fill all required fields",
-      });
-    }
 
     const hashedPassword = await bcrypt.hash(us_password, 10);
 
@@ -289,14 +284,6 @@ const updateUser = async (req, res) => {
   try {
     const { us_username, us_email, us_phone_number, us_password } = req.body;
     const { userId } = req.params;
-
-    if (!us_username || !us_email || !us_phone_number || !us_password) {
-      return res.status(400).json({
-        status: "error",
-        code: 400,
-        message: "Please fill all required fields",
-      });
-    }
 
     const oldUser = await user.findOne({
       where: { us_id: userId },
@@ -365,6 +352,9 @@ const deleteUser = async (req, res) => {
 
     const userToDelete = await user.findOne({
       where: { us_id: userId },
+      attributes: {
+        exclude: ["us_password", "us_updated_at", "us_created_at"],
+      },
     });
 
     if (!userToDelete) {
@@ -403,6 +393,7 @@ const getNameCategory = async (req, res) => {
 
     return res.status(200).json({
       status: "success",
+      message: "Get all category successfully",
       code: 200,
       data: allCategory,
     });
@@ -656,18 +647,10 @@ const createCategory = async (req, res) => {
   try {
     const { ct_name, ct_code, ct_game_publisher, ct_currency_type } = req.body;
 
-    if (!ct_name || !ct_code || !ct_game_publisher || !ct_currency_type) {
-      return res.status(400).json({
-        status: "error",
-        code: 400,
-        message: "Please fill all required fields",
-      });
-    }
-
     if (!req?.files) {
-      return res.status(400).json({
+      return res.status(404).json({
         status: "error",
-        code: 400,
+        code: 404,
         message: "Please upload an image",
       });
     }
@@ -679,9 +662,9 @@ const createCategory = async (req, res) => {
     );
 
     if (!ct_image || !ct_image_cover || !ct_currency_type_image) {
-      return res.status(500).json({
+      return res.status(404).json({
         status: "error",
-        code: 500,
+        code: 404,
         message: "Failed to upload image",
       });
     }

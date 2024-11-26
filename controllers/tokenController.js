@@ -14,7 +14,6 @@ const columns = {
 };
 
 const generateToken = (id, email, name, admin, phone, expiresIn) => {
-  console.log(id, email, name, expiresIn, "generate token");
   const token = jwt.sign(
     {
       [columns.id]: id,
@@ -31,36 +30,36 @@ const generateToken = (id, email, name, admin, phone, expiresIn) => {
   return token;
 };
 
-const verifyToken = async (req, res) => {
-  try {
-    const { token } = req.params;
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const userToken = await user.findOne({
-      where: {
-        [columns.id]: decoded[columns.id],
-        [columns.email]: decoded[columns.email],
-      },
-    });
-    if (!userToken) {
-      return res.status(401).json({
-        status: "error",
-        code: 401,
-        message: "Token is not valid",
-      });
-    }
-    return res.status(200).json({
-      status: "success",
-      code: 200,
-      message: "Token is valid",
-    });
-  } catch (error) {
-    return res.status(401).json({
-      message: "Token is not valid",
-      status: "error",
-      code: 401,
-    });
-  }
-};
+// const verifyToken = async (req, res) => {
+//   try {
+//     const { token } = req.params;
+//     const decoded = jwt.verify(token, process.env.JWT_SECRET);
+//     const userToken = await user.findOne({
+//       where: {
+//         [columns.id]: decoded[columns.id],
+//         [columns.email]: decoded[columns.email],
+//       },
+//     });
+//     if (!userToken) {
+//       return res.status(401).json({
+//         status: "error",
+//         code: 401,
+//         message: "Token is not valid",
+//       });
+//     }
+//     return res.status(200).json({
+//       status: "success",
+//       code: 200,
+//       message: "Token is valid",
+//     });
+//   } catch (error) {
+//     return res.status(401).json({
+//       message: "Token is not valid",
+//       status: "error",
+//       code: 401,
+//     });
+//   }
+// };
 
 const verifyEmail = async (req, res) => {
   try {
@@ -103,7 +102,6 @@ const verifyEmail = async (req, res) => {
 
     return res.redirect(`${process.env.FRONTEND_URL}/verify-success`);
   } catch (error) {
-    console.log(error.message, "error message");
     return res.redirect(`${process.env.FRONTEND_URL}/verify-failed`);
   }
 };
@@ -145,7 +143,7 @@ const sendEmail = async (username, email, subject, title, link, label) => {
 
 module.exports = {
   generateToken,
-  verifyToken,
+  // verifyToken,
   verifyEmail,
   sendEmail,
 };
