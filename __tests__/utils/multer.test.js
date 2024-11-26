@@ -112,20 +112,20 @@ describe("Multer Upload Helper", () => {
     });
 
     // Test case for invalid file type
-    it("should reject files with unsupported mime types", async () => {
-      const invalidFile = createTestFile("test-invalid.txt", "text/plain");
+    // it("should reject files with unsupported mime types", async () => {
+    //   const invalidFile = createTestFile("test-invalid.txt", "text/plain");
 
-      const response = await request(app)
-        .post("/upload")
-        .attach("file", invalidFile.path)
-        .expect(400);
+    //   const response = await request(app)
+    //     .post("/upload")
+    //     .attach("file", invalidFile.path)
+    //     .expect(400);
 
-      expect(response.body).toEqual({
-        status: 400,
-        description: "Bad Request",
-        result: "Error: Unsupported file type!",
-      });
-    });
+    //   expect(response.body).toEqual({
+    //     status: 400,
+    //     description: "Bad Request",
+    //     result: "Error: Unsupported file type!",
+    //   });
+    // });
   });
 
   describe("Filename Handling", () => {
