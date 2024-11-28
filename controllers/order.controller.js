@@ -92,7 +92,7 @@ const createOrderAndSnapTransaction = async (req, res) => {
       or_us_id: userId,
       or_status: "pending",
       or_platform_id: order_id,
-      or_platform_token: transaction?.token_id,
+      or_platform_token: transaction?.token,
       or_payment_status: "pending",
       or_or_payment_type: null,
       or_total_amount: totalAmount,
