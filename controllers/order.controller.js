@@ -92,7 +92,7 @@ const createOrderAndSnapTransaction = async (req, res) => {
       or_us_id: userId,
       or_status: "pending",
       or_platform_id: order_id,
-      or_platform_token: transaction?.token,
+      or_platform_token: transaction?.token_id,
       or_payment_status: "pending",
       or_or_payment_type: null,
       or_total_amount: totalAmount,
@@ -116,7 +116,6 @@ const createOrderAndSnapTransaction = async (req, res) => {
       },
     });
   } catch (error) {
-    console.error("Error during order creation:", error);
     return res.status(500).json({
       status: "error",
       message: "Failed to create order",
@@ -129,7 +128,6 @@ const verifyTransaction = async (req, res) => {
 
   try {
     const transaction = await midtransVerifyTransaction(orderId);
-    console.log("transaction", transaction);
 
     let order = await Order.findOne({
       where: { or_platform_id: transaction.order_id },
@@ -199,7 +197,6 @@ const verifyTransaction = async (req, res) => {
       data: transaction,
     });
   } catch (error) {
-    console.error("Error during transaction verification:", error);
     return res.status(500).json({
       status: "error",
       message: "Failed to verify transaction",
@@ -237,40 +234,12 @@ const cancelTransaction = async (req, res) => {
       );
     }
 
-    if (order.or_platform_id && order.or_platform_token === null) {
-      const transaction = await midtransCancelTransaction(orderId);
-      if (transaction.status_code === "404") {
-        await Order.update(
-          {
-            or_status: "cancelled",
-            or_payment_status: "cancel",
-            or_updated_at: new Date(),
-          },
-          {
-            where: { or_platform_id: transaction.order_id },
-          }
-        );
-      } else {
-        await Order.update(
-          {
-            or_status: "cancelled",
-            or_payment_status: "cancel",
-            or_updated_at: new Date(),
-          },
-          {
-            where: { or_platform_id: transaction.order_id },
-          }
-        );
-      }
-    }
-
     return res.status(200).json({
       status: "success",
       message: "Transaction cancelled successfully",
       data: transaction,
     });
   } catch (error) {
-    console.error("Error during transaction cancellation:", error);
     return res.status(500).json({
       status: "error",
       message: "Failed to cancel transaction",
@@ -304,7 +273,6 @@ const getAllOrderByUserId = async (req, res) => {
       data: orders,
     });
   } catch (error) {
-    console.error("Error during order retrieval:", error);
     return res.status(500).json({
       status: "error",
       message: "Failed to retrieve order",
@@ -335,7 +303,6 @@ const getAllOrder = async (req, res) => {
       data: orders,
     });
   } catch (error) {
-    console.error("Error during order retrieval:", error);
     return res.status(500).json({
       status: "error",
       message: "Failed to retrieve order",
