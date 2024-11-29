@@ -401,57 +401,6 @@ describe("GET /admin/get-all-order", () => {
     ];
 
     const mockTransaction = {
-      transaction_status: "expire",
-      order_id: "ORDER123",
-      payment_type: "credit_card",
-    };
-
-    Order.findAll.mockResolvedValue(mockOrders);
-
-    midtransVerifyTransaction.mockResolvedValue(mockTransaction);
-
-    Order.update.mockResolvedValue([1]);
-
-    const response = await request(app).get("/admin/get-all-order");
-
-    expect(response.statusCode).toBe(200);
-    expect(response.body).toHaveProperty("status", "success");
-    expect(response.body).toHaveProperty("code", 200);
-    expect(response.body).toHaveProperty(
-      "message",
-      "Get all orders successfully"
-    );
-    expect(response.body).toHaveProperty("data");
-    expect(response.body.data).toHaveLength(1);
-    expect(response.body.data[0]).toHaveProperty("or_platform_id", "ORDER123");
-    expect(response.body.data[0]).toHaveProperty("or_status", "expire");
-
-    expect(Order.findAll).toHaveBeenCalledTimes(1);
-    expect(midtransVerifyTransaction).toHaveBeenCalledWith("ORDER123");
-    expect(Order.update).toHaveBeenCalledWith(
-      {
-        or_status: "expire",
-        or_payment_status: "expire",
-        or_payment_type: "credit_card",
-        or_updated_at: expect.any(Date),
-      },
-      { where: { or_platform_id: "ORDER123" } }
-    );
-  });
-
-  it("should change transaction status to cancel if transaction status is cancel", async () => {
-    const mockOrders = [
-      {
-        or_platform_id: "ORDER123",
-        or_status: "pending",
-        toJSON: jest.fn().mockReturnValue({
-          or_platform_id: "ORDER123",
-          or_status: "pending",
-        }),
-      },
-    ];
-
-    const mockTransaction = {
       transaction_status: "cancel",
       order_id: "ORDER123",
       payment_type: "credit_card",
@@ -483,6 +432,58 @@ describe("GET /admin/get-all-order", () => {
       {
         or_status: "cancel",
         or_payment_status: "cancel",
+        or_payment_type: "credit_card",
+        or_updated_at: expect.any(Date),
+      },
+      { where: { or_platform_id: "ORDER123" } }
+    );
+  });
+
+  //! TODO HERE YELLOW COVERAGE
+  it("should change transaction status to cancel if transaction status is cancel", async () => {
+    const mockOrders = [
+      {
+        or_platform_id: "ORDER123",
+        or_status: "pending",
+        toJSON: jest.fn().mockReturnValue({
+          or_platform_id: "ORDER123",
+          or_status: "pending",
+        }),
+      },
+    ];
+
+    const mockTransaction = {
+      transaction_status: "expire",
+      order_id: "ORDER123",
+      payment_type: "credit_card",
+    };
+
+    Order.findAll.mockResolvedValue(mockOrders);
+
+    midtransVerifyTransaction.mockResolvedValue(mockTransaction);
+
+    Order.update.mockResolvedValue([1]);
+
+    const response = await request(app).get("/admin/get-all-order");
+
+    expect(response.statusCode).toBe(200);
+    expect(response.body).toHaveProperty("status", "success");
+    expect(response.body).toHaveProperty("code", 200);
+    expect(response.body).toHaveProperty(
+      "message",
+      "Get all orders successfully"
+    );
+    expect(response.body).toHaveProperty("data");
+    expect(response.body.data).toHaveLength(1);
+    expect(response.body.data[0]).toHaveProperty("or_platform_id", "ORDER123");
+    expect(response.body.data[0]).toHaveProperty("or_status", "expire");
+
+    expect(Order.findAll).toHaveBeenCalledTimes(1);
+    expect(midtransVerifyTransaction).toHaveBeenCalledWith("ORDER123");
+    expect(Order.update).toHaveBeenCalledWith(
+      {
+        or_status: "expire",
+        or_payment_status: "expire",
         or_payment_type: "credit_card",
         or_updated_at: expect.any(Date),
       },
@@ -839,6 +840,59 @@ describe("PUT /admin/update-user/:userId", () => {
   });
 });
 
+describe("PUT /admin/set-active0user/:userId", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it("should set a user to active successfully", async () => {
+    const mockUser = {
+      us_id: 1,
+      us_username: "John Doe",
+      us_email: "johndoe@gmail.com",
+      us_phone_number: "08123456789",
+      us_is_active: false,
+      us_is_admin: false,
+    };
+
+    user.findOne.mockResolvedValue(mockUser);
+    user.update.mockResolvedValue([1]);
+
+    const response = await request(app).put("/admin/set-active-user/1");
+
+    expect(response.statusCode).toBe(200);
+    expect(response.body).toHaveProperty("status", "success");
+    expect(response.body).toHaveProperty("code", 200);
+    expect(response.body).toHaveProperty(
+      "message",
+      "User set to active successfully"
+    );
+    expect(response.body.data).toEqual(mockUser);
+  });
+
+  it("should return 404 if user not found", async () => {
+    user.findOne.mockResolvedValue(null);
+
+    const response = await request(app).put("/admin/set-active-user/999");
+
+    expect(response.statusCode).toBe(404);
+    expect(response.body).toHaveProperty("status", "error");
+    expect(response.body).toHaveProperty("code", 404);
+    expect(response.body).toHaveProperty("message", "User not found");
+  });
+
+  it("should return 500 if an error occurs", async () => {
+    user.findOne.mockRejectedValue(new Error("Database error"));
+
+    const response = await request(app).put("/admin/set-active-user/1");
+
+    expect(response.statusCode).toBe(500);
+    expect(response.body).toHaveProperty("status", "error");
+    expect(response.body).toHaveProperty("code", 500);
+    expect(response.body).toHaveProperty("message", "Database error");
+  });
+});
+
 describe("DELETE /admin/delete-user/:userId", () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -864,7 +918,7 @@ describe("DELETE /admin/delete-user/:userId", () => {
     expect(response.body).toHaveProperty("code", 200);
     expect(response.body).toHaveProperty(
       "message",
-      "User deleted successfully"
+      "User set to inactive successfully"
     );
     expect(response.body.data).toEqual(mockUser);
   });
@@ -1311,10 +1365,284 @@ describe("GET /admin/get-all-category", () => {
 });
 
 //! TODO: create and update belom
+describe("POST /create-category", () => {
+  const mockImageFile = {
+    buffer: Buffer.from("test image"),
+    originalname: "test.jpg",
+    mimetype: "image/jpeg",
+  };
+
+  const validCategoryData = {
+    ct_name: "Test Category",
+    ct_code: "TEST001",
+    ct_game_publisher: "Test Publisher",
+    ct_currency_type: "USD",
+  };
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it("should successfully create a category with valid data", async () => {
+    uploadImage.mockResolvedValue({
+      secure_url: "https://example.com/image.jpg",
+    });
+
+    category.create.mockResolvedValue({
+      ...validCategoryData,
+      ct_image: "https://example.com/image.jpg",
+      ct_image_cover: "https://example.com/image-cover.jpg",
+      ct_currency_type_image: "https://example.com/currency.jpg",
+    });
+
+    const res = await request(app)
+      .post("/admin/create-category")
+      .field("ct_name", validCategoryData.ct_name)
+      .field("ct_code", validCategoryData.ct_code)
+      .field("ct_game_publisher", validCategoryData.ct_game_publisher)
+      .field("ct_currency_type", validCategoryData.ct_currency_type)
+      .attach("ct_image", mockImageFile.buffer, mockImageFile.originalname)
+      .attach(
+        "ct_image_cover",
+        mockImageFile.buffer,
+        mockImageFile.originalname
+      )
+      .attach(
+        "ct_currency_type_image",
+        mockImageFile.buffer,
+        mockImageFile.originalname
+      );
+
+    expect(res.status).toBe(201);
+    expect(res.body.status).toBe("success");
+    expect(res.body.message).toBe("Category created successfully");
+    expect(res.body.data).toHaveProperty("ct_name", validCategoryData.ct_name);
+
+    expect(uploadImage).toHaveBeenCalledTimes(3);
+    expect(category.create).toHaveBeenCalledTimes(1);
+  });
+
+  it("should return 500 if image upload fails", async () => {
+    uploadImage.mockResolvedValue(null);
+
+    const res = await request(app)
+      .post("/admin/create-category")
+      .field("ct_name", validCategoryData.ct_name)
+      .field("ct_code", validCategoryData.ct_code)
+      .field("ct_game_publisher", validCategoryData.ct_game_publisher)
+      .field("ct_currency_type", validCategoryData.ct_currency_type)
+      .attach("ct_image", mockImageFile.buffer, mockImageFile.originalname)
+      .attach(
+        "ct_image_cover",
+        mockImageFile.buffer,
+        mockImageFile.originalname
+      )
+      .attach(
+        "ct_currency_type_image",
+        mockImageFile.buffer,
+        mockImageFile.originalname
+      );
+
+    expect(res.status).toBe(404);
+    expect(res.body.status).toBe("error");
+    expect(res.body.message).toBe("Failed to upload image");
+  });
+
+  it("should return 400 if required fields are missing", async () => {
+    const res = await request(app).post("/admin/create-category");
+
+    expect(res.status).toBe(400);
+    expect(res.body.status).toBe(undefined);
+    expect(res.body.message).toBe("Please fill all required fields");
+  });
+
+  it("should handle internal server error", async () => {
+    category.create.mockRejectedValue(new Error("Database connection error"));
+
+    uploadImage.mockResolvedValue({
+      secure_url: "https://example.com/image.jpg",
+    });
+
+    const res = await request(app)
+      .post("/admin/create-category")
+      .field("ct_name", validCategoryData.ct_name)
+      .field("ct_code", validCategoryData.ct_code)
+      .field("ct_game_publisher", validCategoryData.ct_game_publisher)
+      .field("ct_currency_type", validCategoryData.ct_currency_type)
+      .attach("ct_image", mockImageFile.buffer, mockImageFile.originalname)
+      .attach(
+        "ct_image_cover",
+        mockImageFile.buffer,
+        mockImageFile.originalname
+      )
+      .attach(
+        "ct_currency_type_image",
+        mockImageFile.buffer,
+        mockImageFile.originalname
+      );
+
+    expect(res.status).toBe(500);
+    expect(res.body.status).toBe("error");
+    expect(res.body.message).toBe("Database connection error");
+  });
+});
+
+describe("PUT /update-category/:categoryId", () => {
+  const mockImageFile = {
+    buffer: Buffer.from("test image"),
+    originalname: "test.jpg",
+    mimetype: "image/jpeg",
+  };
+
+  const validCategoryData = {
+    ct_name: "Test Category",
+    ct_code: "TEST001",
+    ct_game_publisher: "Test Publisher",
+    ct_currency_type: "USD",
+  };
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it("should successfully update a category with valid data", async () => {
+    const mockCategory = {
+      ct_id: 1,
+      ct_name: "Old Category",
+      ct_code: "OLD001",
+      ct_game_publisher: "Old Publisher",
+      ct_currency_type: "USD",
+      ct_image: "https://example.com",
+      ct_image_cover: "https://example.com",
+      ct_currency_type_image: "https://example.com",
+    };
+
+    uploadImage.mockResolvedValue({
+      secure_url: "https://example.com/image.jpg",
+    });
+
+    category.findOne.mockResolvedValue(mockCategory);
+
+    category.update.mockResolvedValue([1]);
+
+    category.findOne.mockResolvedValue({
+      ...validCategoryData,
+      ct_image: "https://example.com/image.jpg",
+      ct_image_cover: "https://example",
+      ct_currency_type_image: "https://example.com",
+    });
+
+    const res = await request(app)
+      .put("/admin/update-category/1")
+      .field("ct_name", validCategoryData.ct_name)
+      .field("ct_code", validCategoryData.ct_code)
+      .field("ct_game_publisher", validCategoryData.ct_game_publisher)
+      .field("ct_currency_type", validCategoryData.ct_currency_type)
+      .attach("ct_image", mockImageFile.buffer, mockImageFile.originalname)
+      .attach(
+        "ct_image_cover",
+        mockImageFile.buffer,
+        mockImageFile.originalname
+      )
+      .attach(
+        "ct_currency_type_image",
+        mockImageFile.buffer,
+        mockImageFile.originalname
+      );
+
+    expect(res.status).toBe(200);
+    expect(res.body.status).toBe("success");
+    expect(res.body.message).toBe("Category updated successfully");
+    expect(res.body.data).toHaveProperty("ct_name", validCategoryData.ct_name);
+
+    expect(uploadImage).toHaveBeenCalledTimes(3);
+    expect(category.update).toHaveBeenCalledTimes(1);
+  });
+
+  it("should return 500 if image upload fails", async () => {
+    uploadImage.mockResolvedValue(null);
+
+    const res = await request(app)
+      .put("/admin/update-category/1")
+      .field("ct_name", validCategoryData.ct_name)
+      .field("ct_code", validCategoryData.ct_code)
+      .field("ct_game_publisher", validCategoryData.ct_game_publisher)
+      .field("ct_currency_type", validCategoryData.ct_currency_type)
+      .attach("ct_image", mockImageFile.buffer, mockImageFile.originalname)
+      .attach(
+        "ct_image_cover",
+        mockImageFile.buffer,
+        mockImageFile.originalname
+      )
+      .attach(
+        "ct_currency_type_image",
+        mockImageFile.buffer,
+        mockImageFile.originalname
+      );
+
+    expect(res.status).toBe(500);
+    expect(res.body.status).toBe("error");
+    expect(res.body.message).toBe(
+      "Cannot read properties of null (reading 'secure_url')"
+    );
+  });
+
+  it("should return 404 if category not found", async () => {
+    category.findOne.mockResolvedValue(null);
+
+    const res = await request(app)
+      .put("/admin/update-category/999")
+      .field("ct_name", validCategoryData.ct_name)
+      .field("ct_code", validCategoryData.ct_code)
+      .field("ct_game_publisher", validCategoryData.ct_game_publisher)
+      .field("ct_currency_type", validCategoryData.ct_currency_type)
+      .attach("ct_image", mockImageFile.buffer, mockImageFile.originalname)
+      .attach(
+        "ct_image_cover",
+        mockImageFile.buffer,
+        mockImageFile.originalname
+      )
+      .attach(
+        "ct_currency_type_image",
+        mockImageFile.buffer,
+        mockImageFile.originalname
+      );
+
+    expect(res.status).toBe(404);
+    expect(res.body.status).toBe("error");
+    expect(res.body.message).toBe("Category not found");
+  });
+
+  it("should return 500 if an error occurs", async () => {
+    category.findOne.mockRejectedValue(new Error("Database error"));
+
+    const res = await request(app)
+      .put("/admin/update-category/1")
+      .field("ct_name", validCategoryData.ct_name)
+      .field("ct_code", validCategoryData.ct_code)
+      .field("ct_game_publisher", validCategoryData.ct_game_publisher)
+      .field("ct_currency_type", validCategoryData.ct_currency_type)
+      .attach("ct_image", mockImageFile.buffer, mockImageFile.originalname)
+      .attach(
+        "ct_image_cover",
+        mockImageFile.buffer,
+        mockImageFile.originalname
+      )
+      .attach(
+        "ct_currency_type_image",
+        mockImageFile.buffer,
+        mockImageFile.originalname
+      );
+
+    expect(res.status).toBe(500);
+    expect(res.body.status).toBe("error");
+    expect(res.body.message).toBe("Database error");
+  });
+});
 
 describe("DELETE /delete-category/:categoryId", () => {
   it("should return status 404 if category is not found", async () => {
-    category.findOne.mockResolvedValue(null); // Simulasi kategori tidak ditemukan
+    category.findOne.mockResolvedValue(null);
 
     const res = await request(app).delete("/admin/delete-category/1");
 

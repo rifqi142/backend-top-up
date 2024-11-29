@@ -10,6 +10,7 @@ const {
   getAllOrder,
   getOrderToday,
   createUser,
+  setActiveUser,
   getAllUser,
   updateUser,
   deleteUser,
@@ -55,6 +56,7 @@ router.put(
   registerCheckDuplicate
 );
 router.delete("/delete-user/:userId", deleteUser);
+router.put("/set-active-user/:userId", setActiveUser);
 
 // products
 router.get("/get-name-category", getNameCategory);

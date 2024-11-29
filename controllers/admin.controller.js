@@ -365,15 +365,63 @@ const deleteUser = async (req, res) => {
       });
     }
 
-    await user.destroy({
-      where: { us_id: userId },
-    });
+    await user.update(
+      {
+        us_is_active: false,
+      },
+      {
+        where: { us_id: userId },
+      }
+    );
 
     return res.status(200).json({
       status: "success",
       code: 200,
-      message: "User deleted successfully",
+      message: "User set to inactive successfully",
       data: userToDelete,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      status: "error",
+      code: 500,
+      message: error.message,
+    });
+  }
+};
+
+const setActiveUser = async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    const userToActive = await user.findOne({
+      where: { us_id: userId },
+      attributes: {
+        exclude: ["us_password", "us_updated_at", "us_created_at"],
+      },
+    });
+
+    if (!userToActive) {
+      return res.status(404).json({
+        status: "error",
+        code: 404,
+        message: "User not found",
+      });
+    }
+
+    await user.update(
+      {
+        us_is_active: true,
+      },
+      {
+        where: { us_id: userId },
+      }
+    );
+
+    return res.status(200).json({
+      status: "success",
+      code: 200,
+      message: "User set to active successfully",
+      data: userToActive,
     });
   } catch (error) {
     return res.status(500).json({
@@ -647,14 +695,6 @@ const createCategory = async (req, res) => {
   try {
     const { ct_name, ct_code, ct_game_publisher, ct_currency_type } = req.body;
 
-    if (!req?.files) {
-      return res.status(404).json({
-        status: "error",
-        code: 404,
-        message: "Please upload an image",
-      });
-    }
-
     const ct_image = await uploadImage(req?.files?.ct_image[0]);
     const ct_image_cover = await uploadImage(req?.files?.ct_image_cover[0]);
     const ct_currency_type_image = await uploadImage(
@@ -702,22 +742,6 @@ const updateCategory = async (req, res) => {
     const { ct_name, ct_code, ct_game_publisher, ct_currency_type } = req.body;
     const { categoryId } = req.params;
 
-    if (!ct_name || !ct_code || !ct_game_publisher || !ct_currency_type) {
-      return res.status(400).json({
-        status: "error",
-        code: 400,
-        message: "Please fill all required fields",
-      });
-    }
-
-    if (!req?.files) {
-      return res.status(400).json({
-        status: "error",
-        code: 400,
-        message: "Please upload an image",
-      });
-    }
-
     const oldCategory = await category.findOne({
       where: { ct_id: categoryId },
     });
@@ -746,14 +770,6 @@ const updateCategory = async (req, res) => {
     const ct_currency_type_image = await uploadImage(
       req?.files?.ct_currency_type_image[0]
     );
-
-    if (!ct_image || !ct_image_cover || !ct_currency_type_image) {
-      return res.status(500).json({
-        status: "error",
-        code: 500,
-        message: "Failed to upload image",
-      });
-    }
 
     await category.update(
       {
@@ -839,6 +855,7 @@ module.exports = {
   getAllOrder,
   getOrderToday,
   createUser,
+  setActiveUser,
   getAllUser,
   updateUser,
   deleteUser,

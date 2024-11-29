@@ -254,7 +254,7 @@ describe("POST /auth/login", () => {
 
     const response = await request(app).post("/auth/login").send(loginData);
     expect(response.statusCode).toBe(400);
-    expect(response.body).toHaveProperty("message", "User not found");
+    expect(response.body).toHaveProperty("message", "Login Failed");
   });
 
   it("should return 400 when password does not match", async () => {
@@ -274,7 +274,7 @@ describe("POST /auth/login", () => {
 
     const response = await request(app).post("/auth/login").send(loginData);
     expect(response.statusCode).toBe(400);
-    expect(response.body).toHaveProperty("message", "Password is incorrect");
+    expect(response.body).toHaveProperty("message", "Login Failed");
   });
 
   it("should return 400 when email is not verified", async () => {

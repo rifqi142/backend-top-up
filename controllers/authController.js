@@ -95,7 +95,7 @@ const authLogin = async (req, res) => {
       return res.status(400).json({
         status: "error",
         code: 400,
-        message: "User not found",
+        message: "Login Failed",
       });
     }
 
@@ -107,7 +107,7 @@ const authLogin = async (req, res) => {
       return res.status(400).json({
         status: "error",
         code: 400,
-        message: "Password is incorrect",
+        message: "Login Failed",
       });
     }
 
