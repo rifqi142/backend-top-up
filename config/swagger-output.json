@@ -3,438 +3,1155 @@
   "info": {
     "title": "Final Project - Rifqi Top Up",
     "version": "1.0.0",
-    "contact": {}
+    "description": "This is the API documentation for the Rifqi Top Up platform. This platform allows users to manage and process their top-up transactions efficiently. The API allows for the management of orders, promotions, products, and payment verification, enabling users to create, track, and manage their top-up requests.",
+    "contact": {
+      "name": "Rifqi Top Up Support",
+      "email": "muhrifqis100@gmail.com",
+      "url": "https://rifqitopup.my.id"
+    }
   },
   "servers": [
     {
-      "url": "http://localhost"
+      "url": "https://backend-top-up.onrender.com",
+      "description": "Main Production server"
     },
     {
-      "url": "https://backend-top-up.onrender.com"
-    },
-    {
-      "url": "{{BASE_URL\n}}"
+      "url": "http://localhost:8080",
+      "description": "Local server"
     }
   ],
   "paths": {
-    "/auth/forgot-password": {
-      "post": {
-        "tags": [
-          "Auth"
-        ],
-        "summary": "Send Email Forgot Pas",
-        "description": "Send Email Forgot Pas",
-        "operationId": "sendEmailForgotPas",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "us_email": {
-                    "type": "string",
-                    "example": "rekeningbri84@gmail.com"
-                  }
-                }
-              },
-              "examples": {
-                "Send Email Forgot Pas": {
-                  "value": {
-                    "us_email": "rekeningbri84@gmail.com"
-                  }
-                },
-                "Send Email Verification": {
-                  "value": {
-                    "us_email": "rekeningbri84@gmail.com"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": ""
-          }
-        }
-      }
-    },
     "/auth/register": {
       "post": {
-        "tags": [
-          "Auth"
-        ],
-        "summary": "Register User",
-        "description": "Register User",
+        "summary": "Register a new user",
+        "description": "Registers a new user and sends a verification email.",
         "operationId": "registerUser",
+        "tags": ["auth"],
         "requestBody": {
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "properties": {
-                  "us_email": {
-                    "type": "string",
-                    "example": "rekeningbri84@gmail.com"
-                  },
-                  "us_password": {
-                    "type": "string",
-                    "example": "dandi12344"
-                  },
-                  "us_phone_number": {
-                    "type": "string",
-                    "example": "082123423432"
-                  },
-                  "us_username": {
-                    "type": "string",
-                    "example": "dandipram"
-                  }
-                }
-              },
-              "examples": {
-                "Register User": {
-                  "value": {
-                    "us_email": "rekeningbri84@gmail.com",
-                    "us_password": "dandi12344",
-                    "us_phone_number": "082123423432",
-                    "us_username": "dandipram"
-                  }
-                }
+                "$ref": "#/components/schemas/RegisterUserRequest"
               }
             }
           }
         },
         "responses": {
-          "200": {
-            "description": ""
+          "201": {
+            "description": "User successfully created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegisterUserResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error or duplicate data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
           }
         }
       }
     },
     "/auth/login": {
       "post": {
-        "tags": [
-          "Auth"
-        ],
-        "summary": "Login User",
-        "description": "Login User",
-        "operationId": "loginUser",
+        "tags": ["auth"],
+        "summary": "Login a user",
+        "description": "Authenticate a user with email/username and password.",
         "requestBody": {
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "properties": {
-                  "input": {
-                    "type": "string",
-                    "example": "dandipram"
-                  },
-                  "us_password": {
-                    "type": "string",
-                    "example": "dandi123"
-                  }
-                }
-              },
-              "examples": {
-                "Login User": {
-                  "value": {
-                    "input": "dandipram",
-                    "us_password": "dandi123"
-                  }
-                }
+                "$ref": "#/components/schemas/LoginUserRequest"
               }
             }
           }
         },
         "responses": {
           "200": {
-            "description": ""
+            "description": "Login success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginUserResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Login failed or validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
           }
         }
       }
     },
-    "/home/get-all-category": {
-      "get": {
-        "tags": [
-          "Category"
-        ],
-        "summary": "Get All Category",
-        "description": "Get All Category",
-        "operationId": "getAllCategory",
+    "/auth/logout": {
+      "post": {
+        "tags": ["auth"],
+        "summary": "Logout a user",
+        "description": "Logs out the user by invalidating the active token and clearing the authentication cookie.",
         "responses": {
           "200": {
-            "description": ""
+            "description": "Logout successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LogoutSuccessResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ]
+      }
+    },
+    "/auth/forgot-password": {
+      "post": {
+        "tags": ["auth"],
+        "summary": "Send forgot password email",
+        "description": "Generates a forgot password token and sends a reset password email to the user.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ForgotPasswordRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Email sent successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForgotPasswordSuccessResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
           }
         }
       }
     },
-    "/product/get-all-product": {
-      "get": {
-        "tags": [
-          "Product"
-        ],
-        "summary": "Get All Product",
-        "description": "Get All Product",
-        "operationId": "getAllProduct",
+    "/auth/verify-email": {
+      "post": {
+        "tags": ["auth"],
+        "summary": "Send email verification",
+        "description": "Generates a verification token and sends a verification email to the user.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VerificationEmailRequest"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
-            "description": ""
+            "description": "Email sent successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VerificationEmailSuccessResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Email already verified or server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
           }
         }
       }
     },
-    "/product/get-product-detail/1": {
-      "get": {
-        "tags": [
-          "Product"
-        ],
-        "summary": "Get By Id",
-        "description": "Get By Id",
-        "operationId": "getById",
+    "/auth/login/google": {
+      "post": {
+        "tags": ["auth"],
+        "summary": "Login with Google",
+        "description": "Allows users to log in using their Google account via an ID token.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginWithGoogleRequest"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
-            "description": ""
+            "description": "Login successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginWithGoogleSuccessResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid or expired token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
           }
         }
       }
     },
-    "/order/get-all-order/2": {
-      "get": {
-        "tags": [
-          "Order"
+    "/auth/reset-password": {
+      "put": {
+        "tags": ["auth"],
+        "summary": "Reset Password",
+        "description": "Allows users to reset their password using a token provided via email.",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "query",
+            "required": true,
+            "description": "Reset password token sent to the user's email.",
+            "schema": {
+              "type": "string",
+              "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+            }
+          }
         ],
-        "summary": "Get all order",
-        "description": "Get all order",
-        "operationId": "getAllOrder",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResetPasswordRequest"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
-            "description": ""
+            "description": "Password reset successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid or expired token, or other errors",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
           }
         }
       }
     },
-    "/promotion/get-all-promotion": {
+    "/categories": {
       "get": {
-        "tags": [
-          "Promotion"
-        ],
-        "summary": "New Request",
-        "description": "New Request",
-        "operationId": "newRequest",
+        "tags": ["category"],
+        "summary": "Get All Categories",
+        "description": "Retrieve a list of all categories.",
         "responses": {
           "200": {
-            "description": ""
+            "description": "Successfully fetched all categories",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetAllCategoriesResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error fetching categories",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/categories/{categoryCode}": {
+      "get": {
+        "tags": ["category"],
+        "summary": "Get Category by Code",
+        "description": "Retrieve category details using the category code.",
+        "parameters": [
+          {
+            "name": "categoryCode",
+            "in": "path",
+            "required": true,
+            "description": "The unique code of the category.",
+            "schema": {
+              "type": "string",
+              "example": "ACTGAMES"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Category details fetched successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetCategoryByCodeResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Category not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/categories/search": {
+      "get": {
+        "tags": ["category"],
+        "summary": "Search Category by Name",
+        "description": "Search categories by their name (case-insensitive).",
+        "parameters": [
+          {
+            "name": "categoryName",
+            "in": "query",
+            "required": true,
+            "description": "Category name or part of it to search for.",
+            "schema": {
+              "type": "string",
+              "example": "Action"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Categories found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SearchCategoryResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No categories found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
           }
         }
       }
     },
     "/admin/get-user-count": {
       "get": {
-        "tags": [
-          "Admin"
-        ],
-        "summary": "get user",
-        "description": "get user",
-        "operationId": "getUser",
+        "tags": ["admin"],
+        "summary": "Get total count of users",
+        "description": "Fetches the total number of users in the system.",
         "responses": {
           "200": {
-            "description": ""
+            "description": "Successfully fetched total user count.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserCountResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
           }
         }
       }
     },
-    "/admin/categories/{categoryId}/products": {
+    "/admin/get-product-count": {
       "get": {
-        "tags": [
-          "Admin"
-        ],
-        "summary": "get all product by id",
-        "description": "get all product by id",
-        "operationId": "getAllProductById",
+        "tags": ["admin"],
+        "summary": "Get total count of products",
+        "description": "Fetches the total number of products in the system.",
         "responses": {
           "200": {
-            "description": ""
+            "description": "Successfully fetched total product count.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductCountResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
           }
         }
-      },
-      "parameters": [
-        {
-          "name": "categoryId",
-          "in": "path",
-          "required": true,
-          "schema": {
-            "type": "string",
-            "example": ""
-          }
-        }
-      ]
+      }
     },
-    "/admin/get-all-product": {
+    "/admin/get-order-count": {
       "get": {
-        "tags": [
-          "Admin"
-        ],
-        "summary": "get all product",
-        "description": "get all product",
-        "operationId": "getAllProduct1",
+        "tags": ["admin"],
+        "summary": "Get total count of orders",
+        "description": "Fetches the total number of orders in the system.",
         "responses": {
           "200": {
-            "description": ""
+            "description": "Successfully fetched total order count.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrderCountResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/get-total-amount": {
+      "get": {
+        "tags": ["admin"],
+        "summary": "Get total settlement amount",
+        "description": "Fetches the total amount of orders that have payment status 'settlement'.",
+        "responses": {
+          "200": {
+            "description": "Successfully fetched the total amount of orders.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TotalAmountResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/get-all-order": {
+      "get": {
+        "tags": ["admin"],
+        "summary": "Get all orders",
+        "description": "Fetches all orders with their associated order items and updates the status based on transaction verification.",
+        "operationId": "getAllOrder",
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved all orders",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "code": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Get all orders successfully"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "or_id": {
+                            "type": "integer",
+                            "example": 1
+                          },
+                          "or_us_id": {
+                            "type": "integer",
+                            "example": 777
+                          },
+                          "or_status": {
+                            "type": "string",
+                            "example": "settlement"
+                          },
+                          "or_platform_id": {
+                            "type": "string",
+                            "example": "midtrans12345"
+                          },
+                          "or_platform_token": {
+                            "type": "string",
+                            "example": "token123"
+                          },
+                          "or_payment_status": {
+                            "type": "string",
+                            "example": "settlement"
+                          },
+                          "or_payment_type": {
+                            "type": "string",
+                            "example": "credit_card"
+                          },
+                          "or_total_amount": {
+                            "type": "integer",
+                            "example": 150000
+                          },
+                          "or_created_at": {
+                            "type": "string",
+                            "format": "date-time",
+                            "example": "2024-11-29T10:00:00Z"
+                          },
+                          "orderItem": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "oi_id": {
+                                  "type": "integer",
+                                  "example": 1
+                                },
+                                "oi_or_id": {
+                                  "type": "integer",
+                                  "example": 1
+                                },
+                                "oi_product": {
+                                  "type": "object",
+                                  "example": {
+                                    "pr_id": 2,
+                                    "pr_name": "Product Name",
+                                    "pr_price": 50000
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No orders found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "error"
+                    },
+                    "code": {
+                      "type": "integer",
+                      "example": 404
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Orders not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "error"
+                    },
+                    "code": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Internal server error"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/get-order-today": {
+      "get": {
+        "tags": ["admin"],
+        "summary": "Get orders created today",
+        "description": "Fetches all orders created today along with their associated order items.",
+        "operationId": "getOrderToday",
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved all orders created today",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "code": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Get all orders today successfully"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "or_id": {
+                            "type": "integer",
+                            "example": 1
+                          },
+                          "or_us_id": {
+                            "type": "integer",
+                            "example": 777
+                          },
+                          "or_status": {
+                            "type": "string",
+                            "example": "settlement"
+                          },
+                          "or_platform_id": {
+                            "type": "string",
+                            "example": "midtrans12345"
+                          },
+                          "or_payment_status": {
+                            "type": "string",
+                            "example": "settlement"
+                          },
+                          "or_payment_type": {
+                            "type": "string",
+                            "example": "credit_card"
+                          },
+                          "or_total_amount": {
+                            "type": "integer",
+                            "example": 150000
+                          },
+                          "or_created_at": {
+                            "type": "string",
+                            "format": "date-time",
+                            "example": "2024-11-29T10:00:00Z"
+                          },
+                          "orderItem": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "oi_id": {
+                                  "type": "integer",
+                                  "example": 1
+                                },
+                                "oi_or_id": {
+                                  "type": "integer",
+                                  "example": 1
+                                },
+                                "oi_product": {
+                                  "type": "object",
+                                  "example": {
+                                    "pr_id": 2,
+                                    "pr_name": "Product Name",
+                                    "pr_price": 50000
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No orders found for today",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "error"
+                    },
+                    "code": {
+                      "type": "integer",
+                      "example": 404
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "No orders found for today"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "error"
+                    },
+                    "code": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Internal server error"
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }
     },
     "/admin/create-user": {
       "post": {
-        "tags": [
-          "Admin"
-        ],
-        "summary": "Create User",
-        "description": "Create User",
+        "tags": ["admin"],
+        "summary": "Create a new user",
+        "description": "Creates a new user after validating input and checking for duplicates.",
         "operationId": "createUser",
         "requestBody": {
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "type": "object",
                 "properties": {
+                  "us_username": {
+                    "type": "string",
+                    "minLength": 3,
+                    "maxLength": 20,
+                    "example": "newuser"
+                  },
                   "us_email": {
                     "type": "string",
-                    "example": "rekeningbri84@gmail.com"
-                  },
-                  "us_password": {
-                    "type": "string",
-                    "example": "dandi123"
+                    "format": "email",
+                    "example": "user@example.com"
                   },
                   "us_phone_number": {
                     "type": "string",
-                    "example": "08221133411"
+                    "minLength": 10,
+                    "maxLength": 15,
+                    "example": "1234567890"
                   },
-                  "us_username": {
+                  "us_password": {
                     "type": "string",
-                    "example": "dandipram"
+                    "minLength": 8,
+                    "example": "securepassword123"
                   }
-                }
-              },
-              "examples": {
-                "Create User": {
-                  "value": {
-                    "us_email": "rekeningbri84@gmail.com",
-                    "us_password": "dandi123",
-                    "us_phone_number": "08221133411",
-                    "us_username": "dandipram"
-                  }
-                }
+                },
+                "required": [
+                  "us_username",
+                  "us_email",
+                  "us_phone_number",
+                  "us_password"
+                ]
               }
             }
           }
         },
         "responses": {
-          "200": {
-            "description": ""
+          "201": {
+            "description": "User created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "code": {
+                      "type": "integer",
+                      "example": 201
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "User created successfully"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "us_id": {
+                          "type": "integer",
+                          "example": 1
+                        },
+                        "us_username": {
+                          "type": "string",
+                          "example": "newuser"
+                        },
+                        "us_email": {
+                          "type": "string",
+                          "example": "user@example.com"
+                        },
+                        "us_phone_number": {
+                          "type": "string",
+                          "example": "1234567890"
+                        },
+                        "us_is_active": {
+                          "type": "boolean",
+                          "example": true
+                        },
+                        "us_is_admin": {
+                          "type": "boolean",
+                          "example": false
+                        },
+                        "us_created_at": {
+                          "type": "string",
+                          "format": "date-time",
+                          "example": "2024-11-29T12:00:00Z"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - Validation error or duplicate entry",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Username is already taken"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "error"
+                    },
+                    "code": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Internal server error"
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }
     },
     "/admin/get-all-user": {
       "get": {
-        "tags": [
-          "Admin"
-        ],
-        "summary": "get all user",
-        "description": "get all user",
+        "tags": ["admin"],
+        "summary": "Get all non-admin users",
+        "description": "Retrieves a list of all users who are not admins, excluding sensitive information like password and updated date.",
         "operationId": "getAllUser",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "us_email": {
-                    "type": "string",
-                    "example": "rekeningbri84@gmail.com"
-                  },
-                  "us_password": {
-                    "type": "string",
-                    "example": "dandi123"
-                  },
-                  "us_phone_number": {
-                    "type": "string",
-                    "example": "08221133411"
-                  },
-                  "us_username": {
-                    "type": "string",
-                    "example": "dandipram"
-                  }
-                }
-              },
-              "examples": {
-                "get all user": {
-                  "value": {
-                    "us_email": "rekeningbri84@gmail.com",
-                    "us_password": "dandi123",
-                    "us_phone_number": "08221133411",
-                    "us_username": "dandipram"
+        "responses": {
+          "200": {
+            "description": "List of non-admin users retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "code": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "us_id": {
+                            "type": "integer",
+                            "example": 1
+                          },
+                          "us_username": {
+                            "type": "string",
+                            "example": "user1"
+                          },
+                          "us_email": {
+                            "type": "string",
+                            "example": "user1@example.com"
+                          },
+                          "us_phone_number": {
+                            "type": "string",
+                            "example": "1234567890"
+                          },
+                          "us_is_active": {
+                            "type": "boolean",
+                            "example": true
+                          },
+                          "us_is_admin": {
+                            "type": "boolean",
+                            "example": false
+                          },
+                          "us_created_at": {
+                            "type": "string",
+                            "format": "date-time",
+                            "example": "2024-11-29T12:00:00Z"
+                          }
+                        }
+                      }
+                    }
                   }
                 }
               }
             }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": ""
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "error"
+                    },
+                    "code": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Internal server error"
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }
     },
-    "/admin/update-user/14": {
+    "/admin/update-user/{userId}": {
       "put": {
-        "tags": [
-          "Admin"
+        "tags": ["admin"],
+        "summary": "Update a user",
+        "description": "Updates an existing user by their ID. You can update username, email, phone number, and password.",
+        "operationId": "updateUser",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "description": "ID of the user to be updated",
+            "schema": {
+              "type": "integer",
+              "example": 1
+            }
+          }
         ],
-        "summary": "Update Delete",
-        "description": "Update Delete",
-        "operationId": "updateDelete",
         "requestBody": {
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "type": "object",
                 "properties": {
+                  "us_username": {
+                    "type": "string",
+                    "minLength": 3,
+                    "maxLength": 20,
+                    "example": "newUsername"
+                  },
                   "us_email": {
                     "type": "string",
-                    "example": "rekeningbri84@gmail.com"
-                  },
-                  "us_password": {
-                    "type": "string",
-                    "example": "muhali123"
+                    "format": "email",
+                    "example": "newemail@example.com"
                   },
                   "us_phone_number": {
                     "type": "string",
-                    "example": "08221133411"
+                    "minLength": 10,
+                    "maxLength": 15,
+                    "example": "9876543210"
                   },
-                  "us_username": {
+                  "us_password": {
                     "type": "string",
-                    "example": "muhali123"
-                  }
-                }
-              },
-              "examples": {
-                "Delete User": {
-                  "value": {
-                    "us_email": "rekeningbri84@gmail.com",
-                    "us_password": "muhali123",
-                    "us_phone_number": "08221133411",
-                    "us_username": "muhali123"
-                  }
-                },
-                "Update Delete": {
-                  "value": {
-                    "us_email": "rekeningbri84@gmail.com",
-                    "us_password": "muhali123",
-                    "us_phone_number": "08221133411",
-                    "us_username": "muhali123"
+                    "minLength": 8,
+                    "example": "newpassword123"
                   }
                 }
               }
@@ -443,7 +1160,3342 @@
         },
         "responses": {
           "200": {
-            "description": ""
+            "description": "User updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "code": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "User updated successfully"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "previousData": {
+                          "type": "object",
+                          "properties": {
+                            "us_id": {
+                              "type": "integer",
+                              "example": 1
+                            },
+                            "us_username": {
+                              "type": "string",
+                              "example": "oldUsername"
+                            },
+                            "us_email": {
+                              "type": "string",
+                              "example": "oldemail@example.com"
+                            },
+                            "us_phone_number": {
+                              "type": "string",
+                              "example": "1234567890"
+                            },
+                            "us_is_active": {
+                              "type": "boolean",
+                              "example": true
+                            },
+                            "us_is_admin": {
+                              "type": "boolean",
+                              "example": false
+                            }
+                          }
+                        },
+                        "updatedData": {
+                          "type": "object",
+                          "properties": {
+                            "us_id": {
+                              "type": "integer",
+                              "example": 1
+                            },
+                            "us_username": {
+                              "type": "string",
+                              "example": "newUsername"
+                            },
+                            "us_email": {
+                              "type": "string",
+                              "example": "newemail@example.com"
+                            },
+                            "us_phone_number": {
+                              "type": "string",
+                              "example": "9876543210"
+                            },
+                            "us_is_active": {
+                              "type": "boolean",
+                              "example": true
+                            },
+                            "us_is_admin": {
+                              "type": "boolean",
+                              "example": false
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "error"
+                    },
+                    "code": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Invalid input data"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "error"
+                    },
+                    "code": {
+                      "type": "integer",
+                      "example": 404
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "User not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "error"
+                    },
+                    "code": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Internal server error"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/set-inactive-user/{userId}": {
+      "delete": {
+        "tags": ["admin"],
+        "summary": "Set user as inactive",
+        "description": "Marks the user as inactive by setting `us_is_active` to `false`.",
+        "operationId": "setToInactiveUser",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "description": "ID of the user to set as inactive",
+            "schema": {
+              "type": "integer",
+              "example": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User set to inactive successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "code": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "User set to inactive successfully"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "us_id": {
+                          "type": "integer",
+                          "example": 1
+                        },
+                        "us_username": {
+                          "type": "string",
+                          "example": "exampleUser"
+                        },
+                        "us_email": {
+                          "type": "string",
+                          "example": "example@example.com"
+                        },
+                        "us_phone_number": {
+                          "type": "string",
+                          "example": "1234567890"
+                        },
+                        "us_is_active": {
+                          "type": "boolean",
+                          "example": false
+                        },
+                        "us_is_admin": {
+                          "type": "boolean",
+                          "example": false
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "error"
+                    },
+                    "code": {
+                      "type": "integer",
+                      "example": 404
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "User not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "error"
+                    },
+                    "code": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Internal server error"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/set-active-user/{userId}": {
+      "put": {
+        "tags": ["admin"],
+        "summary": "Set user as active",
+        "description": "Marks the user as active by setting `us_is_active` to `true`.",
+        "operationId": "setActiveUser",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "description": "ID of the user to set as active",
+            "schema": {
+              "type": "integer",
+              "example": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User set to active successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "code": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "User set to active successfully"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "us_id": {
+                          "type": "integer",
+                          "example": 1
+                        },
+                        "us_username": {
+                          "type": "string",
+                          "example": "exampleUser"
+                        },
+                        "us_email": {
+                          "type": "string",
+                          "example": "example@example.com"
+                        },
+                        "us_phone_number": {
+                          "type": "string",
+                          "example": "1234567890"
+                        },
+                        "us_is_active": {
+                          "type": "boolean",
+                          "example": true
+                        },
+                        "us_is_admin": {
+                          "type": "boolean",
+                          "example": false
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "error"
+                    },
+                    "code": {
+                      "type": "integer",
+                      "example": 404
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "User not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "error"
+                    },
+                    "code": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Internal server error"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/get-name-category": {
+      "get": {
+        "tags": ["admin"],
+        "summary": "Get all categories with name and ID",
+        "description": "Fetches all categories with their ID and name.",
+        "operationId": "getNameCategory",
+        "responses": {
+          "200": {
+            "description": "Categories fetched successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "code": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Get all category successfully"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "ct_id": {
+                            "type": "integer",
+                            "example": 1
+                          },
+                          "ct_name": {
+                            "type": "string",
+                            "example": "Electronics"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "error"
+                    },
+                    "code": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Internal server error"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/create-product": {
+      "post": {
+        "tags": ["admin"],
+        "summary": "Create a new product",
+        "description": "Creates a new product by providing category ID, product name, and price.",
+        "operationId": "createProduct",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "pr_ct_id": {
+                    "type": "integer",
+                    "example": 1,
+                    "description": "The category ID to which the product belongs."
+                  },
+                  "pr_name": {
+                    "type": "string",
+                    "example": "Smartphone",
+                    "description": "The name of the product."
+                  },
+                  "pr_price": {
+                    "type": "number",
+                    "example": 500,
+                    "description": "The price of the product."
+                  }
+                },
+                "required": ["pr_ct_id", "pr_name", "pr_price"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Product created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "code": {
+                      "type": "integer",
+                      "example": 201
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Product created successfully"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "pr_id": {
+                          "type": "integer",
+                          "example": 1
+                        },
+                        "pr_ct_id": {
+                          "type": "integer",
+                          "example": 1
+                        },
+                        "pr_name": {
+                          "type": "string",
+                          "example": "Smartphone"
+                        },
+                        "pr_price": {
+                          "type": "number",
+                          "example": 500
+                        },
+                        "pr_created_at": {
+                          "type": "string",
+                          "example": "2024-11-29T10:00:00Z"
+                        },
+                        "pr_updated_at": {
+                          "type": "string",
+                          "example": "2024-11-29T10:00:00Z"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - Missing required fields or invalid values",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "error"
+                    },
+                    "code": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Please fill all required fields"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Category not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "error"
+                    },
+                    "code": {
+                      "type": "integer",
+                      "example": 404
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Category not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "error"
+                    },
+                    "code": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Internal server error"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/update-product/{productId}": {
+      "put": {
+        "tags": ["admin"],
+        "summary": "Update an existing product",
+        "description": "Updates an existing product's category, name, and price.",
+        "operationId": "updateProduct",
+        "parameters": [
+          {
+            "name": "productId",
+            "in": "path",
+            "required": true,
+            "description": "ID of the product to update",
+            "schema": {
+              "type": "integer",
+              "example": 1
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "pr_ct_id": {
+                    "type": "integer",
+                    "example": 1,
+                    "description": "The category ID to which the product belongs."
+                  },
+                  "pr_name": {
+                    "type": "string",
+                    "example": "Smartphone",
+                    "description": "The name of the product."
+                  },
+                  "pr_price": {
+                    "type": "number",
+                    "example": 500,
+                    "description": "The price of the product."
+                  }
+                },
+                "required": ["pr_ct_id", "pr_name", "pr_price"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Product updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "code": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Product updated successfully"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "previousData": {
+                          "type": "object",
+                          "properties": {
+                            "pr_id": {
+                              "type": "integer",
+                              "example": 1
+                            },
+                            "pr_ct_id": {
+                              "type": "integer",
+                              "example": 1
+                            },
+                            "pr_name": {
+                              "type": "string",
+                              "example": "Old Smartphone"
+                            },
+                            "pr_price": {
+                              "type": "number",
+                              "example": 400
+                            }
+                          }
+                        },
+                        "updatedData": {
+                          "type": "object",
+                          "properties": {
+                            "pr_id": {
+                              "type": "integer",
+                              "example": 1
+                            },
+                            "pr_ct_id": {
+                              "type": "integer",
+                              "example": 1
+                            },
+                            "pr_name": {
+                              "type": "string",
+                              "example": "Updated Smartphone"
+                            },
+                            "pr_price": {
+                              "type": "number",
+                              "example": 500
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - Missing required fields or invalid values",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "error"
+                    },
+                    "code": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Please fill all required fields"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Product not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "error"
+                    },
+                    "code": {
+                      "type": "integer",
+                      "example": 404
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Product not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "error"
+                    },
+                    "code": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Internal server error"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/delete-product/{productId}": {
+      "delete": {
+        "tags": ["admin"],
+        "summary": "Delete a product",
+        "description": "Deletes a product by its ID.",
+        "operationId": "deleteProduct",
+        "parameters": [
+          {
+            "name": "productId",
+            "in": "path",
+            "required": true,
+            "description": "ID of the product to delete",
+            "schema": {
+              "type": "integer",
+              "example": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Product deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "code": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Product deleted successfully"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "pr_id": {
+                          "type": "integer",
+                          "example": 1
+                        },
+                        "pr_ct_id": {
+                          "type": "integer",
+                          "example": 1
+                        },
+                        "pr_name": {
+                          "type": "string",
+                          "example": "Smartphone"
+                        },
+                        "pr_price": {
+                          "type": "number",
+                          "example": 500
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Product not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "error"
+                    },
+                    "code": {
+                      "type": "integer",
+                      "example": 404
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Product not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "error"
+                    },
+                    "code": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Internal server error"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/get-all-product": {
+      "get": {
+        "tags": ["admin"],
+        "summary": "Get all products",
+        "description": "Fetches all products, excluding sensitive attributes like created and updated timestamps.",
+        "operationId": "getAllProducts",
+        "responses": {
+          "200": {
+            "description": "Successfully fetched all products",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "code": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "pr_id": {
+                            "type": "integer",
+                            "example": 1
+                          },
+                          "pr_name": {
+                            "type": "string",
+                            "example": "Smartphone"
+                          },
+                          "pr_price": {
+                            "type": "number",
+                            "example": 500
+                          },
+                          "category": {
+                            "type": "object",
+                            "properties": {
+                              "ct_name": {
+                                "type": "string",
+                                "example": "Electronics"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "error"
+                    },
+                    "code": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Internal server error"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/get-all-category": {
+      "get": {
+        "tags": ["admin"],
+        "summary": "Get all categories",
+        "description": "Fetches all categories, excluding sensitive attributes like created and updated timestamps.",
+        "operationId": "getAllCategory",
+        "responses": {
+          "200": {
+            "description": "Successfully fetched all categories",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "code": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "ct_id": {
+                            "type": "integer",
+                            "example": 1
+                          },
+                          "ct_name": {
+                            "type": "string",
+                            "example": "Electronics"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "error"
+                    },
+                    "code": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Internal server error"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/create-category": {
+      "post": {
+        "tags": ["admin"],
+        "summary": "Create a new category",
+        "description": "Creates a new category with images and other details.",
+        "operationId": "createCategory",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "ct_name": {
+                    "type": "string",
+                    "description": "The name of the category",
+                    "example": "Electronics"
+                  },
+                  "ct_code": {
+                    "type": "string",
+                    "description": "The code for the category",
+                    "example": "ELEC"
+                  },
+                  "ct_game_publisher": {
+                    "type": "string",
+                    "description": "The game publisher associated with the category",
+                    "example": "Sony"
+                  },
+                  "ct_currency_type": {
+                    "type": "string",
+                    "description": "The currency type used for the category",
+                    "example": "USD"
+                  },
+                  "ct_image": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "Image for the category"
+                  },
+                  "ct_image_cover": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "Cover image for the category"
+                  },
+                  "ct_currency_type_image": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "Image representing the currency type"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Category created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "code": {
+                      "type": "integer",
+                      "example": 201
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Category created successfully"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "ct_id": {
+                          "type": "integer",
+                          "example": 1
+                        },
+                        "ct_name": {
+                          "type": "string",
+                          "example": "Electronics"
+                        },
+                        "ct_code": {
+                          "type": "string",
+                          "example": "ELEC"
+                        },
+                        "ct_game_publisher": {
+                          "type": "string",
+                          "example": "Sony"
+                        },
+                        "ct_currency_type": {
+                          "type": "string",
+                          "example": "USD"
+                        },
+                        "ct_image": {
+                          "type": "string",
+                          "example": "https://example.com/images/category_image.jpg"
+                        },
+                        "ct_image_cover": {
+                          "type": "string",
+                          "example": "https://example.com/images/category_cover_image.jpg"
+                        },
+                        "ct_currency_type_image": {
+                          "type": "string",
+                          "example": "https://example.com/images/currency_image.jpg"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "error"
+                    },
+                    "code": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Please fill all required fields"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Image upload failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "error"
+                    },
+                    "code": {
+                      "type": "integer",
+                      "example": 404
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Failed to upload image"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "error"
+                    },
+                    "code": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Internal server error"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/update-category/{categoryId}": {
+      "put": {
+        "tags": ["admin"],
+        "summary": "Update an existing category",
+        "description": "Updates the details of an existing category, including images.",
+        "operationId": "updateCategory",
+        "parameters": [
+          {
+            "name": "categoryId",
+            "in": "path",
+            "required": true,
+            "description": "ID of the category to update",
+            "schema": {
+              "type": "integer",
+              "example": 1
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "ct_name": {
+                    "type": "string",
+                    "description": "The name of the category",
+                    "example": "Electronics"
+                  },
+                  "ct_code": {
+                    "type": "string",
+                    "description": "The code for the category",
+                    "example": "ELEC"
+                  },
+                  "ct_game_publisher": {
+                    "type": "string",
+                    "description": "The game publisher associated with the category",
+                    "example": "Sony"
+                  },
+                  "ct_currency_type": {
+                    "type": "string",
+                    "description": "The currency type used for the category",
+                    "example": "USD"
+                  },
+                  "ct_image": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "Image for the category"
+                  },
+                  "ct_image_cover": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "Cover image for the category"
+                  },
+                  "ct_currency_type_image": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "Image representing the currency type"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Category updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "code": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Category updated successfully"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "previousData": {
+                          "type": "object",
+                          "properties": {
+                            "ct_id": {
+                              "type": "integer",
+                              "example": 1
+                            },
+                            "ct_name": {
+                              "type": "string",
+                              "example": "Electronics"
+                            },
+                            "ct_code": {
+                              "type": "string",
+                              "example": "ELEC"
+                            },
+                            "ct_game_publisher": {
+                              "type": "string",
+                              "example": "Sony"
+                            },
+                            "ct_currency_type": {
+                              "type": "string",
+                              "example": "USD"
+                            },
+                            "ct_image": {
+                              "type": "string",
+                              "example": "https://example.com/images/category_image.jpg"
+                            },
+                            "ct_image_cover": {
+                              "type": "string",
+                              "example": "https://example.com/images/category_cover_image.jpg"
+                            },
+                            "ct_currency_type_image": {
+                              "type": "string",
+                              "example": "https://example.com/images/currency_image.jpg"
+                            }
+                          }
+                        },
+                        "updatedData": {
+                          "type": "object",
+                          "properties": {
+                            "ct_id": {
+                              "type": "integer",
+                              "example": 1
+                            },
+                            "ct_name": {
+                              "type": "string",
+                              "example": "Electronics"
+                            },
+                            "ct_code": {
+                              "type": "string",
+                              "example": "ELEC"
+                            },
+                            "ct_game_publisher": {
+                              "type": "string",
+                              "example": "Sony"
+                            },
+                            "ct_currency_type": {
+                              "type": "string",
+                              "example": "USD"
+                            },
+                            "ct_image": {
+                              "type": "string",
+                              "example": "https://example.com/images/category_image.jpg"
+                            },
+                            "ct_image_cover": {
+                              "type": "string",
+                              "example": "https://example.com/images/category_cover_image.jpg"
+                            },
+                            "ct_currency_type_image": {
+                              "type": "string",
+                              "example": "https://example.com/images/currency_image.jpg"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "error"
+                    },
+                    "code": {
+                      "type": "integer",
+                      "example": 400
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Please fill all required fields"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Category not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "error"
+                    },
+                    "code": {
+                      "type": "integer",
+                      "example": 404
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Category not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "error"
+                    },
+                    "code": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Internal server error"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/delete-category/{categoryId}": {
+      "delete": {
+        "tags": ["admin"],
+        "summary": "Delete an existing category",
+        "description": "Deletes a category identified by the given categoryId.",
+        "operationId": "deleteCategory",
+        "parameters": [
+          {
+            "name": "categoryId",
+            "in": "path",
+            "required": true,
+            "description": "ID of the category to delete",
+            "schema": {
+              "type": "integer",
+              "example": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Category deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "code": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Category deleted successfully"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "ct_id": {
+                          "type": "integer",
+                          "example": 1
+                        },
+                        "ct_name": {
+                          "type": "string",
+                          "example": "Electronics"
+                        },
+                        "ct_code": {
+                          "type": "string",
+                          "example": "ELEC"
+                        },
+                        "ct_game_publisher": {
+                          "type": "string",
+                          "example": "Sony"
+                        },
+                        "ct_currency_type": {
+                          "type": "string",
+                          "example": "USD"
+                        },
+                        "ct_image": {
+                          "type": "string",
+                          "example": "https://example.com/images/category_image.jpg"
+                        },
+                        "ct_image_cover": {
+                          "type": "string",
+                          "example": "https://example.com/images/category_cover_image.jpg"
+                        },
+                        "ct_currency_type_image": {
+                          "type": "string",
+                          "example": "https://example.com/images/currency_image.jpg"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Category not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "error"
+                    },
+                    "code": {
+                      "type": "integer",
+                      "example": 404
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Category not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "error"
+                    },
+                    "code": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Internal server error"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/order/create-order-snap-transaction": {
+      "post": {
+        "tags": ["order"],
+        "summary": "Create an order and generate a snap transaction",
+        "description": "Creates an order with the provided products and transaction details, then generates a snap transaction.",
+        "operationId": "createOrderAndSnapTransaction",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "oi_product": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer",
+                          "example": 1
+                        },
+                        "name": {
+                          "type": "string",
+                          "example": "Product Name"
+                        },
+                        "price": {
+                          "type": "integer",
+                          "example": 10000
+                        },
+                        "quantity": {
+                          "type": "integer",
+                          "example": 2
+                        }
+                      },
+                      "required": ["id", "name", "price", "quantity"]
+                    }
+                  },
+                  "or_total_amount": {
+                    "type": "integer",
+                    "example": 20000
+                  },
+                  "userId": {
+                    "type": "integer",
+                    "example": 123
+                  },
+                  "email": {
+                    "type": "string",
+                    "example": "user@example.com"
+                  },
+                  "voucher_code": {
+                    "type": "string",
+                    "example": "DISCOUNT10"
+                  }
+                },
+                "required": ["oi_product", "or_total_amount", "userId", "email"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Order created and snap transaction generated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Order created successfully"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "order": {
+                          "type": "object",
+                          "properties": {
+                            "or_id": {
+                              "type": "integer",
+                              "example": 1
+                            },
+                            "or_us_id": {
+                              "type": "integer",
+                              "example": 123
+                            },
+                            "or_status": {
+                              "type": "string",
+                              "example": "pending"
+                            },
+                            "or_platform_id": {
+                              "type": "string",
+                              "example": "ORD123456"
+                            },
+                            "or_platform_token": {
+                              "type": "string",
+                              "example": "TOKEN12345"
+                            },
+                            "or_payment_status": {
+                              "type": "string",
+                              "example": "pending"
+                            },
+                            "or_total_amount": {
+                              "type": "integer",
+                              "example": 20000
+                            }
+                          }
+                        },
+                        "snapToken": {
+                          "type": "string",
+                          "example": "token_ABC123"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid or expired voucher code",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "error"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Invalid or expired voucher code"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Failed to create order",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "error"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Failed to create order"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/order/verify-payment/{orderId}": {
+      "get": {
+        "tags": ["order"],
+        "summary": "Verify payment transaction status",
+        "description": "Verifies the payment transaction status of an order using its order ID.",
+        "operationId": "verifyTransaction",
+        "parameters": [
+          {
+            "name": "orderId",
+            "in": "path",
+            "required": true,
+            "description": "The ID of the order to verify",
+            "schema": {
+              "type": "string",
+              "example": "ORD123456"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Transaction verified successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Transaction verified successfully"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "order_id": {
+                          "type": "string",
+                          "example": "ORD123456"
+                        },
+                        "transaction_status": {
+                          "type": "string",
+                          "example": "settlement"
+                        },
+                        "payment_type": {
+                          "type": "string",
+                          "example": "credit_card"
+                        },
+                        "order_details": {
+                          "type": "object",
+                          "properties": {
+                            "or_id": {
+                              "type": "integer",
+                              "example": 1
+                            },
+                            "or_us_id": {
+                              "type": "integer",
+                              "example": 123
+                            },
+                            "or_status": {
+                              "type": "string",
+                              "example": "settlement"
+                            },
+                            "or_platform_id": {
+                              "type": "string",
+                              "example": "ORD123456"
+                            },
+                            "or_payment_status": {
+                              "type": "string",
+                              "example": "settlement"
+                            },
+                            "or_total_amount": {
+                              "type": "integer",
+                              "example": 20000
+                            },
+                            "orderItem": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "oi_id": {
+                                    "type": "integer",
+                                    "example": 1
+                                  },
+                                  "oi_or_id": {
+                                    "type": "integer",
+                                    "example": 1
+                                  },
+                                  "oi_product": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "object",
+                                      "properties": {
+                                        "id": {
+                                          "type": "integer",
+                                          "example": 1
+                                        },
+                                        "name": {
+                                          "type": "string",
+                                          "example": "Product Name"
+                                        },
+                                        "price": {
+                                          "type": "integer",
+                                          "example": 10000
+                                        },
+                                        "quantity": {
+                                          "type": "integer",
+                                          "example": 2
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Order not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "error"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Order not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Failed to verify transaction",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "error"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Failed to verify transaction"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/order/cancel-order/{orderId}": {
+      "delete": {
+        "tags": ["order"],
+        "summary": "Cancel an order transaction",
+        "description": "Cancels an order transaction using its `orderId`.",
+        "operationId": "cancelTransaction",
+        "parameters": [
+          {
+            "name": "orderId",
+            "in": "path",
+            "required": true,
+            "description": "The ID of the order to cancel",
+            "schema": {
+              "type": "string",
+              "example": "ORD123456"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Transaction cancelled successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Transaction cancelled successfully"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "order_id": {
+                          "type": "string",
+                          "example": "ORD123456"
+                        },
+                        "transaction_status": {
+                          "type": "string",
+                          "example": "cancel"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Order not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "error"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Order not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Failed to cancel transaction",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "error"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Failed to cancel transaction"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/order/get-all-order/{userId}": {
+      "get": {
+        "tags": ["order"],
+        "summary": "Get all orders by user ID",
+        "description": "Retrieves all orders for a specific user by their `userId`.",
+        "operationId": "getAllOrderByUserId",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "description": "The ID of the user to retrieve orders for",
+            "schema": {
+              "type": "integer",
+              "example": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved orders",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Order retrieved successfully"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "or_id": {
+                            "type": "integer",
+                            "example": 123
+                          },
+                          "or_status": {
+                            "type": "string",
+                            "example": "settlement"
+                          },
+                          "or_platform_id": {
+                            "type": "string",
+                            "example": "ORD123456"
+                          },
+                          "or_platform_token": {
+                            "type": "string",
+                            "example": "someToken123"
+                          },
+                          "or_payment_status": {
+                            "type": "string",
+                            "example": "success"
+                          },
+                          "or_payment_type": {
+                            "type": "string",
+                            "example": "credit_card"
+                          },
+                          "or_total_amount": {
+                            "type": "integer",
+                            "example": 100000
+                          },
+                          "orderItem": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "oi_id": {
+                                  "type": "integer",
+                                  "example": 1
+                                },
+                                "oi_product": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "object",
+                                    "properties": {
+                                      "id": {
+                                        "type": "integer",
+                                        "example": 101
+                                      },
+                                      "name": {
+                                        "type": "string",
+                                        "example": "Product Name"
+                                      },
+                                      "price": {
+                                        "type": "integer",
+                                        "example": 50000
+                                      },
+                                      "quantity": {
+                                        "type": "integer",
+                                        "example": 2
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found or no orders for the user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "error"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "No orders found for this user"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Failed to retrieve orders",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "error"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Failed to retrieve order"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/order/getAllOrder": {
+      "get": {
+        "tags": ["order"],
+        "summary": "Get all orders",
+        "description": "Retrieves all orders from the system.",
+        "operationId": "getAllOrder",
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved all orders",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Order retrieved successfully"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "or_id": {
+                            "type": "integer",
+                            "example": 123
+                          },
+                          "or_status": {
+                            "type": "string",
+                            "example": "settlement"
+                          },
+                          "or_platform_id": {
+                            "type": "string",
+                            "example": "ORD123456"
+                          },
+                          "or_platform_token": {
+                            "type": "string",
+                            "example": "someToken123"
+                          },
+                          "or_payment_status": {
+                            "type": "string",
+                            "example": "success"
+                          },
+                          "or_payment_type": {
+                            "type": "string",
+                            "example": "credit_card"
+                          },
+                          "or_total_amount": {
+                            "type": "integer",
+                            "example": 100000
+                          },
+                          "orderItem": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "oi_id": {
+                                  "type": "integer",
+                                  "example": 1
+                                },
+                                "oi_product": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "object",
+                                    "properties": {
+                                      "id": {
+                                        "type": "integer",
+                                        "example": 101
+                                      },
+                                      "name": {
+                                        "type": "string",
+                                        "example": "Product Name"
+                                      },
+                                      "price": {
+                                        "type": "integer",
+                                        "example": 50000
+                                      },
+                                      "quantity": {
+                                        "type": "integer",
+                                        "example": 2
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Failed to retrieve orders",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "error"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Failed to retrieve order"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/product/get-all-product": {
+      "get": {
+        "tags": ["product"],
+        "summary": "Get all products",
+        "description": "Retrieves a list of all products in the system.",
+        "operationId": "getAllProduct",
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved all products",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "successfully get all products"
+                    },
+                    "code": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "pr_id": {
+                            "type": "integer",
+                            "example": 1
+                          },
+                          "pr_ct_id": {
+                            "type": "integer",
+                            "example": 10
+                          },
+                          "pr_name": {
+                            "type": "string",
+                            "example": "Product Name"
+                          },
+                          "pr_price": {
+                            "type": "integer",
+                            "example": 10000
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Products not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "error get all products"
+                    },
+                    "code": {
+                      "type": "integer",
+                      "example": 404
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Products not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Failed to retrieve products",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "error get all products"
+                    },
+                    "code": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Failed to retrieve products"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/product/get-product-detail/{categoryId}": {
+      "get": {
+        "tags": ["product"],
+        "summary": "Get product details by category",
+        "description": "Retrieves a list of products for a given category ID.",
+        "operationId": "getProductByIdCategory",
+        "parameters": [
+          {
+            "name": "categoryId",
+            "in": "path",
+            "required": true,
+            "description": "ID of the category to filter products",
+            "schema": {
+              "type": "integer",
+              "example": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved product details by category",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "code": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "pr_id": {
+                            "type": "integer",
+                            "example": 1
+                          },
+                          "pr_ct_id": {
+                            "type": "integer",
+                            "example": 1
+                          },
+                          "pr_name": {
+                            "type": "string",
+                            "example": "Product Name"
+                          },
+                          "pr_price": {
+                            "type": "integer",
+                            "example": 10000
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Product not found for the given category",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "error"
+                    },
+                    "code": {
+                      "type": "integer",
+                      "example": 404
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Product not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Failed to retrieve product details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "error"
+                    },
+                    "code": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Internal Server Error"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/promotion/get-all-promotions": {
+      "get": {
+        "tags": ["promotion"],
+        "summary": "Get all active promotions",
+        "description": "Retrieves all active promotions from the database, sorted by promotion ID in ascending order.",
+        "operationId": "getAllPromotion",
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved all active promotions",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "successfully get all promotions"
+                    },
+                    "code": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "prm_id": {
+                            "type": "integer",
+                            "example": 1
+                          },
+                          "prm_code_value": {
+                            "type": "string",
+                            "example": "PROMO123"
+                          },
+                          "prm_quantity": {
+                            "type": "integer",
+                            "example": 100
+                          },
+                          "prm_discount_percentage": {
+                            "type": "integer",
+                            "example": 10
+                          },
+                          "prm_expired_on": {
+                            "type": "string",
+                            "format": "date",
+                            "example": "2024-12-31"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No active promotions found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "code": {
+                      "type": "integer",
+                      "example": 404
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Promotions not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Failed to retrieve promotions",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "error"
+                    },
+                    "code": {
+                      "type": "integer",
+                      "example": 500
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Internal Server Error"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "RegisterUserRequest": {
+        "type": "object",
+        "properties": {
+          "us_username": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 20,
+            "example": "johndoe"
+          },
+          "us_email": {
+            "type": "string",
+            "format": "email",
+            "example": "johndoe@example.com"
+          },
+          "us_phone_number": {
+            "type": "string",
+            "minLength": 10,
+            "maxLength": 15,
+            "example": "+123456789"
+          },
+          "us_password": {
+            "type": "string",
+            "minLength": 8,
+            "example": "password123"
+          }
+        },
+        "required": [
+          "us_username",
+          "us_email",
+          "us_phone_number",
+          "us_password"
+        ]
+      },
+      "RegisterUserResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "success"
+          },
+          "code": {
+            "type": "integer",
+            "example": 201
+          },
+          "message": {
+            "type": "string",
+            "example": "User successfully created"
+          },
+          "data": {
+            "$ref": "#/components/schemas/User"
+          }
+        }
+      },
+      "BadRequestResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Validation error or duplicate data"
+          }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Internal server error"
+          }
+        }
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "us_id": {
+            "type": "integer",
+            "example": 1
+          },
+          "us_username": {
+            "type": "string",
+            "example": "johndoe"
+          },
+          "us_email": {
+            "type": "string",
+            "example": "johndoe@example.com"
+          },
+          "us_phone_number": {
+            "type": "string",
+            "example": "+123456789"
+          },
+          "us_is_active": {
+            "type": "boolean",
+            "example": false
+          },
+          "us_is_admin": {
+            "type": "boolean",
+            "example": false
+          },
+          "us_created_at": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2023-11-29T10:00:00Z"
+          },
+          "us_updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2023-11-29T10:00:00Z"
+          }
+        }
+      },
+      "LoginUserRequest": {
+        "type": "object",
+        "properties": {
+          "input": {
+            "type": "string",
+            "description": "Username or email for login",
+            "example": "johndoe or johndoe@example.com"
+          },
+          "us_password": {
+            "type": "string",
+            "format": "password",
+            "description": "User's password",
+            "example": "password123"
+          },
+          "rememberMe": {
+            "type": "boolean",
+            "description": "Remember login duration (30 days if true, 7 days otherwise)",
+            "example": true
+          }
+        },
+        "required": ["input", "us_password"]
+      },
+      "LoginUserResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "success"
+          },
+          "code": {
+            "type": "integer",
+            "example": 200
+          },
+          "message": {
+            "type": "string",
+            "example": "Login success"
+          },
+          "data": {
+            "$ref": "#/components/schemas/UserWithToken"
+          }
+        }
+      },
+      "UserWithToken": {
+        "type": "object",
+        "properties": {
+          "us_id": {
+            "type": "integer",
+            "example": 1
+          },
+          "us_username": {
+            "type": "string",
+            "example": "johndoe"
+          },
+          "us_email": {
+            "type": "string",
+            "example": "johndoe@example.com"
+          },
+          "us_phone_number": {
+            "type": "string",
+            "example": "+123456789"
+          },
+          "us_is_active": {
+            "type": "boolean",
+            "example": true
+          },
+          "us_is_admin": {
+            "type": "boolean",
+            "example": false
+          },
+          "token": {
+            "type": "string",
+            "description": "JWT token for authentication",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+          },
+          "rememberMe": {
+            "type": "integer",
+            "description": "Token duration in days",
+            "example": 30
+          }
+        }
+      },
+      "LogoutSuccessResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "success"
+          },
+          "code": {
+            "type": "integer",
+            "example": 200
+          },
+          "message": {
+            "type": "string",
+            "example": "Logout successfully"
+          }
+        }
+      },
+      "ForgotPasswordRequest": {
+        "type": "object",
+        "properties": {
+          "us_email": {
+            "type": "string",
+            "format": "email",
+            "description": "User's email address to send the reset password link.",
+            "example": "johndoe@example.com"
+          }
+        },
+        "required": ["us_email"]
+      },
+      "ForgotPasswordSuccessResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "success"
+          },
+          "code": {
+            "type": "integer",
+            "example": 200
+          },
+          "message": {
+            "type": "string",
+            "example": "Email sent successfully"
+          }
+        }
+      },
+      "VerificationEmailRequest": {
+        "type": "object",
+        "properties": {
+          "us_email": {
+            "type": "string",
+            "format": "email",
+            "description": "User's email address to send the verification link.",
+            "example": "johndoe@example.com"
+          }
+        },
+        "required": ["us_email"]
+      },
+      "VerificationEmailSuccessResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "success"
+          },
+          "code": {
+            "type": "integer",
+            "example": 200
+          },
+          "message": {
+            "type": "string",
+            "example": "Email sent successfully"
+          }
+        }
+      },
+      "LoginWithGoogleRequest": {
+        "type": "object",
+        "properties": {
+          "idToken": {
+            "type": "string",
+            "description": "Google ID token obtained from client-side authentication.",
+            "example": "eyJhbGciOiJSUzI1NiIsImtpZCI6Ik..."
+          },
+          "rememberMe": {
+            "type": "boolean",
+            "description": "Flag to indicate if the user wants a longer session duration.",
+            "example": true
+          }
+        },
+        "required": ["idToken"]
+      },
+      "LoginWithGoogleSuccessResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "success"
+          },
+          "code": {
+            "type": "integer",
+            "example": 200
+          },
+          "message": {
+            "type": "string",
+            "example": "Login success"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "us_id": {
+                "type": "integer",
+                "description": "User ID",
+                "example": 1
+              },
+              "us_username": {
+                "type": "string",
+                "description": "User's Google name",
+                "example": "John Doe"
+              },
+              "us_email": {
+                "type": "string",
+                "description": "User's Google email",
+                "example": "johndoe@example.com"
+              },
+              "us_phone_number": {
+                "type": "string",
+                "description": "Placeholder phone number for new Google users",
+                "example": "08xxxxxxxxxx"
+              },
+              "token": {
+                "type": "string",
+                "description": "JWT token for the session",
+                "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+              },
+              "rememberMe": {
+                "type": "integer",
+                "description": "Token duration in days",
+                "example": 7
+              }
+            }
+          }
+        }
+      },
+      "ResetPasswordRequest": {
+        "type": "object",
+        "properties": {
+          "us_password": {
+            "type": "string",
+            "description": "New password to set for the user.",
+            "example": "newSecurePassword123!"
+          }
+        },
+        "required": ["us_password"]
+      },
+      "SuccessResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Password updated successfully"
+          },
+          "status": {
+            "type": "string",
+            "example": "success"
+          },
+          "code": {
+            "type": "integer",
+            "example": 200
+          }
+        }
+      },
+      "GetAllCategoriesResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "success"
+          },
+          "code": {
+            "type": "integer",
+            "example": 200
+          },
+          "message": {
+            "type": "string",
+            "example": "Successfully fetched all categories"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Category"
+            }
+          }
+        }
+      },
+      "Category": {
+        "type": "object",
+        "properties": {
+          "ct_id": {
+            "type": "integer",
+            "description": "Category ID",
+            "example": 1
+          },
+          "ct_name": {
+            "type": "string",
+            "description": "Category name",
+            "example": "Action Games"
+          },
+          "ct_code": {
+            "type": "string",
+            "description": "Category code",
+            "example": "ACTGAMES"
+          },
+          "ct_game_publisher": {
+            "type": "string",
+            "description": "Game publisher",
+            "example": "Ubisoft"
+          },
+          "ct_image": {
+            "type": "string",
+            "description": "URL of category image",
+            "example": "https://example.com/image.jpg"
+          },
+          "ct_image_cover": {
+            "type": "string",
+            "description": "URL of category cover image",
+            "example": "https://example.com/cover.jpg"
+          },
+          "ct_currency_type": {
+            "type": "string",
+            "description": "Currency type for the category",
+            "example": "USD"
+          },
+          "ct_currency_type_image": {
+            "type": "string",
+            "description": "URL of currency type image",
+            "example": "https://example.com/currency-image.jpg"
+          },
+          "ct_created_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Category creation date",
+            "example": "2024-11-29T08:00:00Z"
+          },
+          "ct_updated_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Category last update date",
+            "example": "2024-11-29T09:00:00Z"
+          }
+        }
+      },
+      "GetCategoryByCodeResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "success"
+          },
+          "code": {
+            "type": "integer",
+            "example": 200
+          },
+          "data": {
+            "$ref": "#/components/schemas/Category"
+          }
+        }
+      },
+      "SearchCategoryResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "success"
+          },
+          "code": {
+            "type": "integer",
+            "example": 200
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Category"
+            }
+          }
+        }
+      },
+      "UserCountResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "success"
+          },
+          "code": {
+            "type": "integer",
+            "example": 200
+          },
+          "message": {
+            "type": "string",
+            "example": "Get all user count successfully"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "totalUser": {
+                "type": "integer",
+                "example": 1200
+              }
+            }
+          }
+        }
+      },
+      "ProductCountResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "success"
+          },
+          "message": {
+            "type": "string",
+            "example": "Get all product count successfully"
+          },
+          "code": {
+            "type": "integer",
+            "example": 200
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "totalProduct": {
+                "type": "integer",
+                "example": 150
+              }
+            }
+          }
+        }
+      },
+      "OrderCountResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "success"
+          },
+          "message": {
+            "type": "string",
+            "example": "Get all order count successfully"
+          },
+          "code": {
+            "type": "integer",
+            "example": 200
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "totalOrder": {
+                "type": "integer",
+                "example": 120
+              }
+            }
+          }
+        }
+      },
+      "TotalAmountResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "success"
+          },
+          "message": {
+            "type": "string",
+            "example": "Get total amount successfully"
+          },
+          "code": {
+            "type": "integer",
+            "example": 200
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "totalAmount": {
+                "type": "integer",
+                "example": 1500000
+              }
+            }
+          }
+        }
+      },
+      "Order": {
+        "type": "object",
+        "properties": {
+          "or_id": {
+            "type": "integer",
+            "description": "Order ID",
+            "example": 1
+          },
+          "or_us_id": {
+            "type": "integer",
+            "description": "User ID associated with the order",
+            "example": 777
+          },
+          "or_status": {
+            "type": "string",
+            "description": "Status of the order",
+            "example": "settlement"
+          },
+          "or_platform_id": {
+            "type": "string",
+            "description": "Platform ID of the order",
+            "example": "midtrans12345"
+          },
+          "or_payment_status": {
+            "type": "string",
+            "description": "Payment status of the order",
+            "example": "settlement"
+          },
+          "orderItem": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "oi_id": {
+                  "type": "integer",
+                  "description": "Order Item ID",
+                  "example": 1
+                },
+                "oi_or_id": {
+                  "type": "integer",
+                  "description": "Order ID associated with the order item",
+                  "example": 1
+                },
+                "oi_product": {
+                  "type": "object",
+                  "description": "Product details in the order item",
+                  "example": {
+                    "pr_id": 2,
+                    "pr_name": "Product Name",
+                    "pr_price": 50000
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -451,22 +4503,28 @@
   },
   "tags": [
     {
-      "name": "Auth"
+      "name": "auth",
+      "description": "Authentication routes"
     },
     {
-      "name": "Category"
+      "name": "category",
+      "description": "Category routes"
     },
     {
-      "name": "Product"
+      "name": "admin",
+      "description": "Admin routes"
     },
     {
-      "name": "Order"
+      "name": "order",
+      "description": "Order routes"
     },
     {
-      "name": "Promotion"
+      "name": "product",
+      "description": "Product routes"
     },
     {
-      "name": "Admin"
+      "name": "promotion",
+      "description": "Promotion routes"
     }
   ]
 }

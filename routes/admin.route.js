@@ -13,7 +13,7 @@ const {
   setActiveUser,
   getAllUser,
   updateUser,
-  deleteUser,
+  setToInactiveUser,
   getNameCategory,
   createProduct,
   deleteProduct,
@@ -55,7 +55,7 @@ router.put(
   registerBodyValidation,
   registerCheckDuplicate
 );
-router.delete("/delete-user/:userId", deleteUser);
+router.delete("/set-inactive-user/:userId", setToInactiveUser);
 router.put("/set-active-user/:userId", setActiveUser);
 
 // products

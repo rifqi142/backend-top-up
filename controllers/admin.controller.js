@@ -345,8 +345,8 @@ const updateUser = async (req, res) => {
   }
 };
 
-// delete user
-const deleteUser = async (req, res) => {
+// set to inactive user
+const setToInactiveUser = async (req, res) => {
   try {
     const { userId } = req.params;
 
@@ -858,7 +858,7 @@ module.exports = {
   setActiveUser,
   getAllUser,
   updateUser,
-  deleteUser,
+  setToInactiveUser,
   getNameCategory,
   createProduct,
   updateProduct,
