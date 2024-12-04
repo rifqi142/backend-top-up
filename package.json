@@ -18,7 +18,7 @@
   "dependencies": {
     "@sequelize/postgres": "^7.0.0-alpha.43",
     "axios": "^1.7.7",
-    "bcrypt": "^5.1.1",
+    "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.3",
     "cloudinary": "^2.5.1",
     "cookie-parser": "^1.4.7",
