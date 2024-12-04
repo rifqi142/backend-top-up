@@ -1,6 +1,6 @@
 const { user, product, Order, OrderItem, category } = require("@/models");
 const { Op } = require("sequelize");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const { midtransVerifyTransaction } = require("@/services/midtrans");
 const { uploadImage } = require("@/services/cloudinary.service");
 

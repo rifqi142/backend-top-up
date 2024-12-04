@@ -2,7 +2,7 @@ const request = require("supertest");
 const app = require("@/index");
 
 const admin = require("@/controllers/firebaseController");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { user, token } = require("@/models");
 
@@ -18,7 +18,7 @@ jest.mock("@/models", () => ({
     update: jest.fn(),
   },
 }));
-jest.mock("bcrypt", () => ({
+jest.mock("bcryptjs", () => ({
   hash: jest.fn(),
   compare: jest.fn(),
   decode: jest.fn(),

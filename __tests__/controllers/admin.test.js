@@ -4,7 +4,7 @@ const app = require("@/index");
 const multer = require("multer");
 const { user, product, Order, OrderItem, category } = require("@/models");
 const { Op } = require("sequelize");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const { midtransVerifyTransaction } = require("@/services/midtrans");
 const { uploadImage } = require("@/services/cloudinary.service");
 
@@ -55,7 +55,7 @@ jest.mock("@/models", () => ({
   },
 }));
 
-jest.mock("bcrypt", () => ({
+jest.mock("bcryptjs", () => ({
   hash: jest.fn(),
   compare: jest.fn(),
   decode: jest.fn(),
@@ -893,12 +893,12 @@ describe("PUT /admin/set-active0user/:userId", () => {
   });
 });
 
-describe("DELETE /admin/delete-user/:userId", () => {
+describe("DELETE /admin/set-inactive-user/:userId", () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  it("should delete a user successfully", async () => {
+  it("should set to inactive a user successfully", async () => {
     const mockUser = {
       us_id: 1,
       us_username: "John Doe",
@@ -911,7 +911,7 @@ describe("DELETE /admin/delete-user/:userId", () => {
     user.findOne.mockResolvedValue(mockUser);
     user.destroy.mockResolvedValue(1);
 
-    const response = await request(app).delete("/admin/delete-user/1");
+    const response = await request(app).delete("/admin/set-inactive-user/1");
 
     expect(response.statusCode).toBe(200);
     expect(response.body).toHaveProperty("status", "success");
@@ -926,7 +926,7 @@ describe("DELETE /admin/delete-user/:userId", () => {
   it("should return 404 if user not found", async () => {
     user.findOne.mockResolvedValue(null);
 
-    const response = await request(app).delete("/admin/delete-user/999");
+    const response = await request(app).delete("/admin/set-inactive-user/999");
 
     expect(response.statusCode).toBe(404);
     expect(response.body).toHaveProperty("status", "error");
@@ -937,7 +937,7 @@ describe("DELETE /admin/delete-user/:userId", () => {
   it("should return 500 if an error occurs", async () => {
     user.findOne.mockRejectedValue(new Error("Database error"));
 
-    const response = await request(app).delete("/admin/delete-user/1");
+    const response = await request(app).delete("/admin/set-inactive-user/1");
 
     expect(response.statusCode).toBe(500);
     expect(response.body).toHaveProperty("status", "error");

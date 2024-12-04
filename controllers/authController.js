@@ -1,5 +1,5 @@
 const admin = require("@/controllers/firebaseController");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { Op } = require("sequelize");
 const { user, token } = require("@/models");
