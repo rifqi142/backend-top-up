@@ -2,20 +2,65 @@
 
 Backend project for Rifqi Top Up service, providing functionalities for user management, product handling, orders, and more. Built using Node.js and Express.js with various integrations for authentication, payments, and media handling.
 
+## 🧾 Table of Contents
+
+- [📝 Api Documentation Preview](#-api-documentation-preview)
+- [🧑🏻‍💻 Author](#-author)
+- [🛠️ Tech Stack](#️-tech-stack)
+
+  - [Core Frameworks & Language](#core-frameworks--language)
+  - [Authentication & Security](#authentication--security)
+  - [Database](#database)
+  - [Payment Gateway](#payment-gateway)
+  - [Media Storage](#media-storage)
+  - [Testing & Utilities](#testing--utilities)
+
+- [🌐 Environment Variables](#environment-variables)
+- [🚀 Getting Started](#getting-started)
+- [🤝 Contribution](#contribution)
+- [🔧 Frontend Repository](#frontend-repository)
+- [📝 License](#license)
+
 ## 📝 Preview of the API Documentation
 
 ![Preview](./assets/preview-swagger.png)
 
+## 🧑🏻‍💻 Author
+
+- [@Muhammad Rifqi Setiawan](https://github.com/rifqi142)
+
 ## ⚡️ Tech Stack
 
-- **Node.js**: Backend runtime environment.
-- **Express.js**: Web framework for building APIs.
-- **Sequelize ORM**: Database ORM for PostgreSQL.
-- **JWT**: Authentication with JSON Web Tokens.
-- **Firebase**: Google login integration.
-- **Midtrans**: Payment gateway integration.
-- **Cloudinary**: Media storage and management.
-- **Jest & Supertest**: Testing framework for API endpoints.
+![Tech-Stack](./assets/tech-stack-backend.jpg)
+
+### Core Frameworks & Language
+
+- **Node.js**: Backend runtime environment for building fast, scalable applications.
+- **Express.js**: Web framework for building APIs in Node.js, simplifies routing and middleware integration.
+
+### Authentication & Security
+
+- **JWT (JSON Web Tokens)**: Secure authentication system for handling user login and verification.
+- **bcrypt**: Library for hashing passwords before storing them in the database to ensure security.
+- **Joi**: Schema validation for request data to ensure correct and secure data handling.
+
+### Database
+
+- **Sequelize ORM**: Object-relational mapping (ORM) tool for PostgreSQL, simplifying database interaction with easy-to-use models and queries.
+- **PostgreSQL**: Relational database for storing user data, product details, and transaction records.
+
+### Payment Gateway
+
+- **Midtrans**: Payment gateway integration for handling secure transactions and order payments.
+
+### Media Storage
+
+- **Cloudinary**: A media storage solution for handling file uploads such as images and videos, and managing media assets in the cloud.
+
+### Testing & Utilities
+
+- **Jest & Supertest**: Jest is a testing framework for running unit tests, while Supertest is used for testing HTTP APIs to ensure endpoints are functioning as expected.
+- **Swagger**: Tool for API documentation, making it easier for developers to test and interact with the API.
 
 ## 🧩 Features
 
@@ -36,6 +81,9 @@ This project uses the following environment variables:
 - DB_NAME: Name of the database.
 - DB_USER: Database username.
 - DB_PASSWORD: Database password.
+- etc.
+
+you can see the full list of environment variables in the `.env.example` file.
 
 ---
 
@@ -153,7 +201,9 @@ Use an API client like Postman or curl to test the API. Example requests and sam
    DB_NAME=your_db_name
    DB_USER=your_db_user
    DB_PASSWORD=your_db_password
+   etc.
    ```
+   you can see the full list of environment variables in the `.env.example` file.
 4. **Run the migrations, and seeders for data**:
    ```bash
    npm run migration:up
@@ -168,17 +218,17 @@ Use an API client like Postman or curl to test the API. Example requests and sam
 
 ---
 
-## 📂 Contributing
+## 📂 Contribution
 
 1. Fork the repository.
 2. Create a new branch for your feature or bug fix.
 3. Commit your changes and push them.
 4. Open a pull request.
 
-## 📄License
+## 🔧 Frontend Repository
 
-This project is licensed under the MIT License.
+The frontend repository for this project can be found [here](https://github.com/rifqi142/frontend-top-up)
 
-## 🧑🏻‍💻 Author
+## 📝 License
 
-- [@Muhammad Rifqi Setiawan](https://github.com/rifqi142)
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
