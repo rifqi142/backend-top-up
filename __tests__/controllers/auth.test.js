@@ -1,7 +1,7 @@
 const request = require("supertest");
 const app = require("@/index");
 
-const admin = require("@/controllers/firebaseController");
+const admin = require("@/controllers/firebase.controller");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { user, token } = require("@/models");
@@ -35,7 +35,7 @@ jest.mock("nodemailer", () => ({
   }),
 }));
 
-jest.mock("@/controllers/firebaseController", () => ({
+jest.mock("@/controllers/firebase.controller", () => ({
   auth: jest.fn().mockReturnValue({
     verifyIdToken: jest.fn(),
   }),

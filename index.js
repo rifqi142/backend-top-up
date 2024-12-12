@@ -24,11 +24,11 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
-const authRouter = require("@/routes/authRouter");
-const categoryRouter = require("@/routes/categoryRouter");
-const productRouter = require("@/routes/productRouter");
-const orderRouter = require("@/routes/orderRouter");
-const promotionRouter = require("@/routes/promotionRouter");
+const authRouter = require("@/routes/auth.route");
+const categoryRouter = require("@/routes/category.route");
+const productRouter = require("@/routes/product.route");
+const orderRouter = require("@/routes/order.route");
+const promotionRouter = require("@/routes/promotion.route");
 const adminRouter = require("@/routes/admin.route");
 
 app.get("/", (req, res) => {

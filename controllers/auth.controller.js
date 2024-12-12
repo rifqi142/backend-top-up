@@ -1,9 +1,9 @@
-const admin = require("@/controllers/firebaseController");
+const admin = require("@/controllers/firebase.controller");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { Op } = require("sequelize");
 const { user, token } = require("@/models");
-const { generateToken, sendEmail } = require("@/controllers/tokenController");
+const { generateToken, sendEmail } = require("@/controllers/token.controller");
 const generateRandomCharacter = require("@/helpers/generateRandomCharacter");
 
 const authRegisterUser = async (req, res) => {

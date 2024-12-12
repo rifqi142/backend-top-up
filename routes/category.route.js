@@ -5,7 +5,7 @@ const {
   getAllCategory,
   getCategoryByCode,
   searchCategory,
-} = require("@/controllers/categoryController");
+} = require("@/controllers/category.controller");
 
 router.get("/get-all-category", getAllCategory);
 router.get("/get-category-detail/:categoryCode", getCategoryByCode);

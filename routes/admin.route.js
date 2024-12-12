@@ -27,9 +27,9 @@ const {
 const {
   registerBodyValidation,
   registerCheckDuplicate,
-} = require("@/validations/authValidation");
+} = require("@/validations/auth.validation");
 
-const { categoryBodyValidation } = require("@/validations/categoryValidation");
+const { categoryBodyValidation } = require("@/validations/category.validation");
 
 // dashboard
 router.get("/get-user-count", getUserCount);

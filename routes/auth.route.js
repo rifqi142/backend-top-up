@@ -8,15 +8,15 @@ const {
   sendEmailforgotPassword,
   sendEmailVerification,
   updateResetPassword,
-} = require("@/controllers/authController");
+} = require("@/controllers/auth.controller");
 
-const { verifyEmail } = require("@/controllers/tokenController");
+const { verifyEmail } = require("@/controllers/token.controller");
 
 const {
   registerBodyValidation,
   registerCheckDuplicate,
   loginBodyValidation,
-} = require("@/validations/authValidation");
+} = require("@/validations/auth.validation");
 
 router.post(
   "/register",

@@ -1,6 +1,6 @@
 const app = require("@/index");
 const request = require("supertest");
-const { getAllCategory } = require("@/controllers/categoryController");
+const { getAllCategory } = require("@/controllers/category.controller");
 const { category } = require("@/models");
 const { Op } = require("sequelize");
 
