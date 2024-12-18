@@ -2,11 +2,16 @@ const { product } = require("@/models");
 
 const getAllProduct = async (req, res) => {
   try {
-    const products = await product.findAll({
-      attributes: {
-        exclude: ["pr_createdAt", "pr_updatedAt"],
+    const products = await product.findAll(
+      {
+        where: { pr_is_active: "true" },
       },
-    });
+      {
+        attributes: {
+          exclude: ["pr_createdAt", "pr_updatedAt"],
+        },
+      }
+    );
     if (!products) {
       return res.status(404).json({ message: "Products not found" });
     }
@@ -29,10 +34,11 @@ const getProductByIdCategory = async (req, res) => {
 
   try {
     const productDetail = await product.findAll({
-      where: { pr_ct_id: categoryId },
+      where: { pr_ct_id: categoryId, pr_is_active: "true" },
       attributes: {
         exclude: ["pr_created_at", "pr_updated_at"],
       },
+      order: [["pr_id", "ASC"]],
     });
 
     if (!productDetail) {

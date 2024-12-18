@@ -3,7 +3,9 @@ const { Op } = require("sequelize");
 
 const getAllCategory = async (req, res) => {
   try {
-    const categories = await category.findAll();
+    const categories = await category.findAll({
+      where: { ct_is_active: "true" },
+    });
     if (!categories) {
       return res.status(404).json({ message: "Categories not found" });
     }

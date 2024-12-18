@@ -603,15 +603,15 @@ const updateProduct = async (req, res) => {
   }
 };
 
-const deleteProduct = async (req, res) => {
+const setToInactiveProduct = async (req, res) => {
   try {
     const { productId } = req.params;
 
-    const productToDelete = await product.findOne({
+    const productToInactive = await product.findOne({
       where: { pr_id: productId },
     });
 
-    if (!productToDelete) {
+    if (!productToInactive) {
       return res.status(404).json({
         status: "error",
         code: 404,
@@ -619,15 +619,60 @@ const deleteProduct = async (req, res) => {
       });
     }
 
-    await product.destroy({
-      where: { pr_id: productId },
-    });
+    await product.update(
+      {
+        pr_is_active: false,
+      },
+      {
+        where: { pr_id: productId },
+      }
+    );
 
     return res.status(200).json({
       status: "success",
       code: 200,
-      message: "Product deleted successfully",
-      data: productToDelete,
+      message: "Product set to inactive successfully",
+      data: productToInactive,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      status: "error",
+      code: 500,
+      message: error.message,
+    });
+  }
+};
+
+const setToActiveProduct = async (req, res) => {
+  try {
+    const { productId } = req.params;
+
+    const productToActive = await product.findOne({
+      where: { pr_id: productId },
+    });
+
+    if (!productToActive) {
+      return res.status(404).json({
+        status: "error",
+        code: 404,
+        message: "Product not found",
+      });
+    }
+
+    await product.update(
+      {
+        pr_is_active: true,
+      },
+      {
+        where: { pr_id: productId },
+      }
+    );
+
+    return res.status(200).json({
+      status: "success",
+      code: 200,
+      message: "Product set to active successfully",
+      data: productToActive,
     });
   } catch (error) {
     return res.status(500).json({
@@ -651,6 +696,7 @@ const getAllProducts = async (req, res) => {
           attributes: ["ct_name"],
         },
       ],
+      order: [["pr_id", "ASC"]],
     });
 
     return res.status(200).json({
@@ -811,7 +857,7 @@ const updateCategory = async (req, res) => {
   }
 };
 
-const deleteCategory = async (req, res) => {
+const setToInactiveCategory = async (req, res) => {
   try {
     const { categoryId } = req.params;
 
@@ -827,15 +873,60 @@ const deleteCategory = async (req, res) => {
       });
     }
 
-    await category.destroy({
-      where: { ct_id: categoryId },
-    });
+    await category.update(
+      {
+        ct_is_active: false,
+      },
+      {
+        where: { ct_id: categoryId },
+      }
+    );
 
     return res.status(200).json({
       status: "success",
       code: 200,
-      message: "Category deleted successfully",
+      message: "Category set to inactive successfully",
       data: categoryToDelete,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      status: "error",
+      code: 500,
+      message: error.message,
+    });
+  }
+};
+
+const setToActiveCategory = async (req, res) => {
+  try {
+    const { categoryId } = req.params;
+
+    const categoryToActive = await category.findOne({
+      where: { ct_id: categoryId },
+    });
+
+    if (!categoryToActive) {
+      return res.status(404).json({
+        status: "error",
+        code: 404,
+        message: "Category not found",
+      });
+    }
+
+    await category.update(
+      {
+        ct_is_active: true,
+      },
+      {
+        where: { ct_id: categoryId },
+      }
+    );
+
+    return res.status(200).json({
+      status: "success",
+      code: 200,
+      message: "Category set to active successfully",
+      data: categoryToActive,
     });
   } catch (error) {
     return res.status(500).json({
@@ -861,10 +952,12 @@ module.exports = {
   getNameCategory,
   createProduct,
   updateProduct,
-  deleteProduct,
+  setToInactiveProduct,
+  setToActiveProduct,
   getAllProducts,
   getAllCategory,
   createCategory,
   updateCategory,
-  deleteCategory,
+  setToInactiveCategory,
+  setToActiveCategory,
 };

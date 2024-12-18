@@ -44,6 +44,11 @@ module.exports = (sequelize, DataTypes) => {
       ct_currency_type_image: {
         type: DataTypes.STRING,
       },
+      ct_is_active: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: true,
+        allowNull: false,
+      },
       ct_created_at: {
         type: DataTypes.DATE,
         allowNull: false,

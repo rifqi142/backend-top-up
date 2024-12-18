@@ -16,13 +16,15 @@ const {
   setToInactiveUser,
   getNameCategory,
   createProduct,
-  deleteProduct,
+  setToInactiveProduct,
+  setToActiveProduct,
   updateProduct,
   getAllProducts,
   getAllCategory,
   createCategory,
   updateCategory,
-  deleteCategory,
+  setToInactiveCategory,
+  setToActiveCategory,
 } = require("@/controllers/admin.controller");
 const {
   registerBodyValidation,
@@ -62,7 +64,8 @@ router.put("/set-active-user/:userId", setActiveUser);
 router.get("/get-name-category", getNameCategory);
 router.post("/create-product", createProduct);
 router.put("/update-product/:productId", updateProduct);
-router.delete("/delete-product/:productId", deleteProduct);
+router.delete("/set-inactive-product/:productId", setToInactiveProduct);
+router.put("/set-active-product/:productId", setToActiveProduct);
 router.get("/get-all-product", getAllProducts);
 
 // categories
@@ -87,6 +90,7 @@ router.put(
   categoryBodyValidation,
   updateCategory
 );
-router.delete("/delete-category/:categoryId", deleteCategory);
+router.delete("/set-inactive-category/:categoryId", setToInactiveCategory);
+router.put("/set-active-category/:categoryId", setToActiveCategory);
 
 module.exports = router;
