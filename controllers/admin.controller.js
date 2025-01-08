@@ -696,7 +696,10 @@ const getAllProducts = async (req, res) => {
           attributes: ["ct_name"],
         },
       ],
-      order: [["pr_id", "ASC"]],
+      order: [
+        ["pr_ct_id", "ASC"],
+        ["pr_id", "ASC"],
+      ],
     });
 
     return res.status(200).json({
